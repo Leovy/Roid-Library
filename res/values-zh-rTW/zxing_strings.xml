@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="scan_tip">請將二維碼置於取景框內掃描</string>
+    <string name="scan_retry">二維碼掃描出錯啦,請重新掃描</string>
+    <string name="scan_result">掃描結果</string>
+</resources>

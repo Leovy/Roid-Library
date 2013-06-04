@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  -->
+    <declare-styleable name="ViewFlow">
+        <attr name="bufferedItemCount" format="integer" />
+        <attr name="autoScrollDuration" format="integer" />
+    </declare-styleable>
+    <!--  -->
+    <declare-styleable name="Indicator">
+        <attr name="innerMargin" format="dimension" />
+		<attr name="fadeOutTime" format="integer" />
+		<!-- CircleIndicator -->
+		<attr name="circleRadius" format="dimension" />
+        <attr name="circleActiveColor" format="reference|color" />
+        <attr name="circleInactiveColor" format="reference|color" />
+		<attr name="circleActiveType">
+			<flag name="stroke" value="0" />
+			<flag name="fill" value="1" />
+		</attr>
+		<attr name="circleInactiveType">
+			<flag name="stroke" value="0" />
+			<flag name="fill" value="1" />
+		</attr>
+		<!-- BitmapIndicator -->
+		<attr name="bitmapActive" format="reference" />
+        <attr name="bitmapInactive" format="reference" />
+    </declare-styleable> 
+</resources>

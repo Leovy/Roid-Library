@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>	
+    
+	<string-array name="webview_items">
+        <item>Clean cache</item>
+        <item>Clean cookie</item>
+        <item>Clean history</item>
+    </string-array>
+    
+</resources>

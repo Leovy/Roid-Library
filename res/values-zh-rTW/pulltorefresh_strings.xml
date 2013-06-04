@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="dt_ptr_pull_label_start">拖動可以刷新</string>
+    <string name="dt_ptr_release_label_start">釋放可以刷新</string>
+    <string name="dt_ptr_pull_label_end">拖動可以查看更多</string>
+    <string name="dt_ptr_release_label_end">釋放可以查看更多</string>
+    <string name="dt_ptr_refreshing_label">加載中&#8230;</string>
+    <string name="dt_ptr_no_data">沒有數據</string>
+
+</resources>

@@ -1,0 +1,19 @@
+<resources>
+
+    <!-- Base theme for the menu drawer. -->
+    <style name="MenuDrawerBase" parent="COMMON_PAGE_THEME">
+        <item name="mdMenuBackground">@color/md__defaultBackground</item>
+        <item name="mdContentBackground">?android:attr/windowBackground</item>
+    </style>
+    
+    <style name="MenuDrawerStyle" parent="MenuDrawerBase">
+        <item name="mdActiveIndicator">@drawable/md_arrow</item>
+        <item name="mdMenuSize">250dp</item>
+    </style>
+
+    <style name="MenuDrawerStyle.Right" parent="MenuDrawerBase">
+        <item name="mdActiveIndicator">@drawable/md_arrow_right</item>
+        <item name="mdMenuSize">150dp</item>
+    </style>
+
+</resources>

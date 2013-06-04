@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="UMBreak_Network">未聯網</string>
+	<string name="UMUpdateTitle">應用程序有新版本更新</string>
+	<string name="UMNewVersion">最新版本: </string>
+	<string name="UMUpdateSize">更新包大小：</string>
+	<string name="UMTargetSize">新版本大小：</string>
+	<string name="UMGprsCondition">（提示：非WIFI環境）</string>
+	<string name="UMUpdateNow">立即更新</string>
+	<string name="UMAppUpdate">應用更新</string>
+	<string name="UMNotNow">以後再說</string>
+	<string name="UMToast_IsUpdating">正在更新中&#8230;</string>
+	<string name="UMDialog_InstallAPK">最新版本已下載，是否安裝？</string>
+	<string name="UMNoUpdate">没有更新</string>
+	<string name="UMTimeout">請求超時</string>
+	<string name="UMNoWifi">沒有wifi連接， 只在wifi下更新</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="bdloc_error_first">首次定位失敗</string>
+    <string name="bdloc_error_62">掃描整合定位依據失敗</string>
+    <string name="bdloc_error_63">網絡異常</string>
+    <string name="bdloc_error_67">離線定位失敗</string>
+    <string name="bdloc_error_162">服務端定位失敗</string>
+
+</resources>

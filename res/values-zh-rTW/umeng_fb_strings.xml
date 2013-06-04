@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="UMEmptyFbNotAllowed">請輸入你的反饋內容</string>
+	<string name="UMContentTooLong">超過140字了，再簡短一些吧</string>
+	<string name="UMFbList_ListItem_State_ReSend">失敗,輕觸以重發</string>
+	<string name="UMFbList_ListItem_State_Sending">發送中&#8230;</string>
+	<string name="UMFbList_ListItem_State_Resending">重發</string>
+	<string name="UMFbList_ListItem_State_Fail">發送失敗</string>
+	<string name="UMFb_Atom_State_Fail">發送失敗</string>
+	<string name="UMFb_Atom_State_Sending">發送中&#8230;</string>
+	<string name="UMFb_Atom_State_Resending">發送失敗,輕觸以重發</string>
+	<string name="UMFeedbackUmengTitle">反饋意見</string>
+	<string name="UMFeedbackListTitle">我的反饋</string>
+	<string name="UMFeedbackConversationTitle">反饋問題</string>
+	<string name="UMFeedbackTitle">每條建議都將幫助我們做得更好。</string>
+	<string name="UMFeedbackContent">請輸入您的反饋意見</string>
+	<string name="UMFeedbackSummit">提交</string>
+	<string name="UMFeedbackGoBack">返回</string>
+	
+	<string name="UMFeedbackGotIt">知道了</string>
+	<string name="UMFeedbackSeeDetail">去看看</string>
+	
+	<string-array name="UMageList">
+		<item>年齡</item>
+		<item>&lt;18</item>
+		<item>18-24</item>
+		<item>25-30</item>
+		<item>31-35</item>
+		<item>36-40</item>
+		<item>41-50</item>
+		<item>51-59</item>
+		<item>&#8805;60</item>
+	</string-array>
+	<string-array name="UMgenderList">
+		<item>性别</item>
+		<item>男</item>
+		<item>女</item>
+	</string-array>
+	<string name="UMViewThread">查看反饋</string>
+	<string name="UMNewReplyAlertTitle">您的反饋收到了回复</string>
+	<string name="UMDeleteThread">删除反馈</string>
+	<string name="UMViewFeedback">查看反馈</string>
+	<string name="UMDeleteFeedback">删除反馈</string>
+	<string name="UMResendFeedback">重发反馈</string>
+	<string name="UMDeleteMsg">删除信息</string>
+	<string name="UMNewReplyFlick">有新的回复</string>
+	<string name="UMNewReplyTitle">有新的回复</string>
+	<string name="UMNewReplyHint">点击查看</string>
+</resources>

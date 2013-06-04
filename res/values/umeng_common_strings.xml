@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="umeng_common_action_info_exist">downloading&#8230;</string>
+	<string name="umeng_common_info_interrupt">Download failed.Please check your network.</string>
+	<string name="umeng_common_action_pause">Pause</string>
+	<string name="umeng_common_action_continue">Continue</string>
+	<string name="umeng_common_action_cancel">Cancel</string>
+	<string name="umeng_common_download_notification_prefix">downloading: </string>
+    <string name="umeng_common_network_break_alert">Please check your network and try again！</string>
+	<string name="umeng_common_download_failed">Download failed.</string>
+</resources>

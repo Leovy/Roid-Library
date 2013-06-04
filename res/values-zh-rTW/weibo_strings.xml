@@ -1,0 +1,23 @@
+<resources>
+    <string name="weibosdk_attention">注意</string>
+    <string name="weibosdk_delete_all">是否要刪除這條微博？</string>
+    <string name="weibosdk_ok">是</string>
+    <string name="weibosdk_cancel">否</string>
+    <string name="weibosdk_app_name">com_weibo_android</string>
+    <string name="weibosdk_send">發送</string>
+    <string name="weibosdk_photo">拍照</string>
+    <string name="weibosdk_close">關閉</string>
+    <string name="weibosdk_share_dialog_title">新浪微博</string>
+    <string name="weibosdk_please_login">請登錄！</string>
+    <string name="weibosdk_send_sucess">分享成功！</string>
+    <string name="weibosdk_send_failed">分享失敗！</string>
+    <string name="weibosdk_del_pic">是否刪除圖片？</string>
+    <string name="weibosdk_comment">評論</string>
+    <string name="weibosdk_forward">轉發</string>
+    <string name="weibosdk_fav">收藏</string>
+    <string name="testcontent"></string>
+    
+    <string name="weibo_unknow_error">未知錯誤</string>
+    <string name="weibo_io_error">IO錯誤</string>
+    <string name="weibo_auth_cancel">授權已取消</string>
+</resources>
