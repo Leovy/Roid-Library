@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.rinc.library"
+    package="com.rincliu.library"
     android:versionCode="1"
     android:versionName="1.0">
     
@@ -93,12 +93,12 @@
     <!--#################### BAIDU_PLAYER PERMISSIONS END ####################-->
     
     <application
-        android:name="net.rinc.library.base.RCApplication"
+        android:name="com.rincliu.library.app.RLApplication"
         android:label="@string/app_name">
         
         
         <activity
-            android:name=".base.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -190,9 +190,9 @@
         <receiver android:name="cn.jpush.android.service.AlarmReceiver"/>
         <!-- Custom: -->
         <activity
-            android:name="net.rinc.library.common.reference.push.NotificationActivity"/>
+            android:name="com.rincliu.library.common.reference.push.RLNotificationActivity"/>
         <receiver
-            android:name="net.rinc.library.common.reference.push.RCPushReceiver"
+            android:name="com.rincliu.library.common.reference.push.RLPushReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.REGISTRATION"/>
@@ -218,7 +218,7 @@
         
         <!--#################### ZXING COMPONENTS START ####################-->
         <activity 
-            android:name="net.rinc.library.common.persistence.zxing.ScanActivity"
+            android:name="com.rincliu.library.common.persistence.zxing.ScanActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:screenOrientation="portrait"/>
         <!--#################### ZXING COMPONENTS END ####################-->
