@@ -4,6 +4,8 @@ import java.lang.Thread.UncaughtExceptionHandler;
 
 import com.rincliu.library.R;
 import com.rincliu.library.util.RLUiUtil;
+
+import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Looper;
 
@@ -47,6 +49,8 @@ public class RLCrashHandler implements UncaughtExceptionHandler {
 			e.printStackTrace();
 		}
 		android.os.Process.killProcess(android.os.Process.myPid());
+		((ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE))
+    		.killBackgroundProcesses(mContext.getPackageName());
 		System.exit(0);
 	}
 }
