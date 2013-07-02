@@ -51,6 +51,5 @@ public class RLCrashHandler implements UncaughtExceptionHandler {
 		android.os.Process.killProcess(android.os.Process.myPid());
 		((ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE))
     		.killBackgroundProcesses(mContext.getPackageName());
-		System.exit(0);
 	}
 }
