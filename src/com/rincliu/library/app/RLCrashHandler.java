@@ -7,6 +7,7 @@ import com.rincliu.library.util.RLUiUtil;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Looper;
 
 public class RLCrashHandler implements UncaughtExceptionHandler {
@@ -48,6 +49,9 @@ public class RLCrashHandler implements UncaughtExceptionHandler {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		Intent intent=new Intent(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		mContext.startActivity(intent);
 		android.os.Process.killProcess(android.os.Process.myPid());
 		((ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE))
     		.killBackgroundProcesses(mContext.getPackageName());
