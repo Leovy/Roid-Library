@@ -6,20 +6,43 @@ import com.rincliu.library.common.persistence.afinal.RLFinalActivity;
 import com.rincliu.library.common.reference.analytics.RLAnalyticsHelper;
 import com.rincliu.library.common.reference.feedback.RLFeedbackHelper;
 import com.rincliu.library.util.RLSysUtil;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
 public class RLActivity extends RLFinalActivity{
+	private boolean isEnableCrashHandler=true;
+	private boolean isEnableAnalytics=false;
+	private boolean isEnableFeedback=false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		RLCrashHandler.getInstance().init(this);
-		RLAnalyticsHelper.init(this, BuildConfig.DEBUG);
-		RLFeedbackHelper.init(this, BuildConfig.DEBUG);
+		String enableCrashHandler=RLSysUtil.getApplicationMetaData(this, "ENABLE_CRASH_HANDLER");
+		if(enableCrashHandler!=null&&enableCrashHandler.equals("false")){
+			isEnableCrashHandler=false;
+		}
+		String enableAnalytics=RLSysUtil.getApplicationMetaData(this, "ENABLE_ANALYTICS");
+		if(enableAnalytics!=null&&enableAnalytics.equals("true")){
+			isEnableAnalytics=true;
+		}
+		String enableFeedback=RLSysUtil.getApplicationMetaData(this, "ENABLE_FEEDBACK");
+		if(enableFeedback!=null&&enableFeedback.equals("true")){
+			isEnableFeedback=true;
+		}
+		
+		if(isEnableCrashHandler){
+			RLCrashHandler.getInstance().init(this);
+		}
+		if(isEnableAnalytics){
+			RLAnalyticsHelper.init(this, BuildConfig.DEBUG);
+		}
+		if(isEnableFeedback){
+			RLFeedbackHelper.init(this, BuildConfig.DEBUG);
+		}
 		
 		((RLApplication)getApplication()).setDisplayInfo(RLSysUtil.getDisplayInfo(this));
 	}
@@ -42,13 +65,17 @@ public class RLActivity extends RLFinalActivity{
 	@Override
 	protected void onResume(){
 		super.onResume();
-		RLAnalyticsHelper.onResume(this);
+		if(isEnableAnalytics){
+			RLAnalyticsHelper.onResume(this);
+		}
 	}
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
-		RLAnalyticsHelper.onPause(this);
+		if(isEnableAnalytics){
+			RLAnalyticsHelper.onPause(this);
+		}
 	}
 	
 	@Override
