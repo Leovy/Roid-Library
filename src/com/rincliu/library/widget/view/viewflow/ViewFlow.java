@@ -4,7 +4,7 @@ import java.util.EnumSet;
 import java.util.LinkedList;
 
 import com.rincliu.library.R;
-import com.rincliu.library.widget.RLViewCompat;
+import com.rincliu.library.widget.RLAPICompat;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -79,7 +79,7 @@ public class ViewFlow extends AdapterView<Adapter>{
 	private OnGlobalLayoutListener orientationChangeListener=new OnGlobalLayoutListener(){
 		@Override
 		public void onGlobalLayout(){
-			RLViewCompat.removeGlobalLayoutListener(getViewTreeObserver(), orientationChangeListener);
+			RLAPICompat.removeGlobalLayoutListener(getViewTreeObserver(), orientationChangeListener);
 			setSelection(mCurrentAdapterIndex);
 		}
 	};

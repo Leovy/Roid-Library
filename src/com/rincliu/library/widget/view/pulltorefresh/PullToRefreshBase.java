@@ -34,7 +34,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.rincliu.library.R;
-import com.rincliu.library.widget.RLViewCompat;
+import com.rincliu.library.widget.RLAPICompat;
 import com.rincliu.library.widget.view.pulltorefresh.FlipLoadingLayout;
 import com.rincliu.library.widget.view.pulltorefresh.LoadingLayout;
 import com.rincliu.library.widget.view.pulltorefresh.RotateLoadingLayout;
@@ -777,7 +777,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 		 * all. We don't use them on the Header/Footer Views as they change
 		 * often, which would negate any HW layer performance boost.
 		 */
-		RLViewCompat.setLayerType(mRefreshableViewWrapper, value != 0 ? View.LAYER_TYPE_HARDWARE : View.LAYER_TYPE_NONE);
+		RLAPICompat.setLayerType(mRefreshableViewWrapper, value != 0 ? View.LAYER_TYPE_HARDWARE : View.LAYER_TYPE_NONE);
 
 		switch (getPullToRefreshScrollDirection()) {
 			case VERTICAL:
@@ -1409,7 +1409,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 
 			// If we're not at the target Y, keep going...
 			if (mContinueRunning && mScrollToY != mCurrentY) {
-				RLViewCompat.postOnAnimation(PullToRefreshBase.this, this);
+				RLAPICompat.postOnAnimation(PullToRefreshBase.this, this);
 			} else {
 				if (null != mListener) {
 					mListener.onSmoothScrollFinished();

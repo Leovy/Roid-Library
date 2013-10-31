@@ -1,7 +1,7 @@
 package com.rincliu.library.widget.view.menudrawer;
 
 import com.rincliu.library.R;
-import com.rincliu.library.widget.RLViewCompat;
+import com.rincliu.library.widget.RLAPICompat;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -517,12 +517,12 @@ public abstract class MenuDrawer extends ViewGroup {
 
         mMenuContainer = new BuildLayerFrameLayout(context);
         mMenuContainer.setId(R.id.md__menu);
-        RLViewCompat.setBackground(mMenuContainer, menuBackground);
+        RLAPICompat.setBackground(mMenuContainer, menuBackground);
         super.addView(mMenuContainer, -1, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         mContentContainer = new NoClickThroughFrameLayout(context);
         mContentContainer.setId(R.id.md__content);
-        RLViewCompat.setBackground(mContentContainer, contentBackground);
+        RLAPICompat.setBackground(mContentContainer, contentBackground);
         super.addView(mContentContainer, -1, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         mMenuOverlay = new ColorDrawable(0xFF000000);
@@ -1052,7 +1052,7 @@ public abstract class MenuDrawer extends ViewGroup {
     
     @Override
     public void postOnAnimation(Runnable runnable) {
-        RLViewCompat.postOnAnimation(this, runnable);
+        RLAPICompat.postOnAnimation(this, runnable);
     }
     
 	@Override

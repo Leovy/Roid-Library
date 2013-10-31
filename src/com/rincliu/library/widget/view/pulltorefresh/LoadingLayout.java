@@ -34,7 +34,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.rincliu.library.widget.RLViewCompat;
+import com.rincliu.library.widget.RLAPICompat;
 import com.rincliu.library.widget.view.pulltorefresh.ILoadingLayout;
 import com.rincliu.library.widget.view.pulltorefresh.PullToRefreshBase.Mode;
 import com.rincliu.library.widget.view.pulltorefresh.PullToRefreshBase.Orientation;
@@ -103,7 +103,7 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderBackground)) {
 			Drawable background = attrs.getDrawable(R.styleable.PullToRefresh_ptrHeaderBackground);
 			if (null != background) {
-				RLViewCompat.setBackground(this, background);
+				RLAPICompat.setBackground(this, background);
 			}
 		}
 

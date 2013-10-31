@@ -2,12 +2,14 @@ package com.rincliu.library.widget;
 
 import android.annotation.TargetApi;
 import android.graphics.drawable.Drawable;
+import android.os.Environment;
+import android.os.StatFs;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 
 @SuppressWarnings("deprecation")
-public class RLViewCompat {
+public class RLAPICompat {
 	
 	private static final int VERSION=android.os.Build.VERSION.SDK_INT;
 	
@@ -61,14 +63,38 @@ public class RLViewCompat {
 		}
 	}
 	
-	@TargetApi(9)
-	private static class SDK9 {
-		
+	/**
+	 * 
+	 * @return
+	 */
+	public static long getAvailableExternalStorageSize(){
+		long size=0;
+		if(VERSION>=18){
+			size=SDK18.getAvailableExternalStorageSize();
+		}else{
+			if(Environment.getExternalStorageDirectory()!=null){
+				StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+				size=(long)stat.getAvailableBlocks()*(long)stat.getBlockSize();
+			}
+		}
+		return size;
 	}
 	
-	@TargetApi(10)
-	private static class SDK10 {
-		
+	/**
+	 * 
+	 * @return
+	 */
+	public static long getTotalExternalStorageSize(){
+		long size=0;
+		if(VERSION>=18){
+			size=SDK18.getTotalExternalStorageSize();
+		}else{
+			if(Environment.getExternalStorageDirectory()!=null){
+				StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+				size=(long)stat.getFreeBlocks()*(long)stat.getBlockSize();
+			}
+		}
+		return size;
 	}
 
 	@TargetApi(11)
@@ -76,26 +102,6 @@ public class RLViewCompat {
 		public static void setLayerType(View view, int layerType) {
 			view.setLayerType(layerType, null);
 		}
-	}
-	
-	@TargetApi(12)
-	private static class SDK12 {
-		
-	}
-	
-	@TargetApi(13)
-	private static class SDK13 {
-		
-	}
-	
-	@TargetApi(14)
-	private static class SDK14 {
-		
-	}
-	
-	@TargetApi(15)
-	private static class SDK15 {
-		
 	}
 
 	@TargetApi(16)
@@ -108,6 +114,26 @@ public class RLViewCompat {
 		}
 		public static void removeGlobalLayoutListener(ViewTreeObserver observer, OnGlobalLayoutListener listener){
 			observer.removeOnGlobalLayoutListener(listener);
+		}
+	}
+	
+	@TargetApi(18)
+	private static class SDK18 {
+		public static long getAvailableExternalStorageSize(){
+			long size=0;
+			if(Environment.getExternalStorageDirectory()!=null){
+				StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+				size=stat.getAvailableBlocksLong()*stat.getBlockSizeLong();
+			}
+			return size;
+		}
+		public static long getTotalExternalStorageSize(){
+			long size=0;
+			if(Environment.getExternalStorageDirectory()!=null){
+				StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+				size=stat.getFreeBlocksLong()*stat.getBlockSizeLong();
+			}
+			return size;
 		}
 	}
 }
