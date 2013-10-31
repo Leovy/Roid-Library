@@ -1,4 +1,4 @@
-package com.rincliu.library.widget;
+package com.rincliu.library.app;
 
 import android.annotation.TargetApi;
 import android.graphics.drawable.Drawable;

@@ -4,7 +4,7 @@ import java.util.EnumSet;
 import java.util.LinkedList;
 
 import com.rincliu.library.R;
-import com.rincliu.library.widget.RLAPICompat;
+import com.rincliu.library.app.RLAPICompat;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
