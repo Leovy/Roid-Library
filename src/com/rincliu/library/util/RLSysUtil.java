@@ -5,8 +5,14 @@ import java.io.File;
 import java.io.OutputStream;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.ServiceInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -16,9 +22,99 @@ import android.os.StatFs;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Window;
+
 import com.rincliu.library.entity.RLDisplayInfo;
 
 public class RLSysUtil {
+	
+	/**
+	 * 
+	 * @param context
+	 * @param key
+	 * @return
+	 */
+	public static String getApplicationMetaData(Context context, String key){
+		String data=null;
+		ApplicationInfo info=null;
+		try {
+			info=context.getPackageManager().getApplicationInfo(context.getPackageName(), 
+					PackageManager.GET_META_DATA);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		if(info!=null){
+			data=info.metaData.get(key).toString();
+		}
+		return data;
+	}
+	
+	/**
+	 * 
+	 * @param activity
+	 * @param key
+	 * @return
+	 */
+	public static String getActivityMetaData(Activity activity, String key){
+		String data=null;
+		ActivityInfo info=null;
+		try {
+			info=activity.getPackageManager().getActivityInfo(activity.getComponentName(),
+			        PackageManager.GET_META_DATA);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		if(info!=null){
+			data=info.metaData.get(key).toString();
+		}
+		return data;
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param serviceClass
+	 * @param key
+	 * @return
+	 */
+	public static String getServiceMetaData(Context context, Class<?> serviceClass, String key){
+		String data=null;
+		ServiceInfo info=null;
+		try {
+			info=context.getPackageManager().getServiceInfo(
+					new ComponentName(context, serviceClass), 
+					PackageManager.GET_META_DATA);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		if(info!=null){
+			data=info.metaData.get(key).toString();
+		}
+		return data;
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param receiverClass
+	 * @param key
+	 * @return
+	 */
+	public static String getReceiverMetaData(Context context, Class<?> receiverClass, String key){
+		String data=null;
+		ActivityInfo info=null;
+		try {
+			info=context.getPackageManager().getReceiverInfo(
+					new ComponentName(context, receiverClass), 
+					PackageManager.GET_META_DATA);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		if(info!=null){
+			data=info.metaData.get(key).toString();
+		}
+		return data;
+	}
+	
 	/**
 	 * 
 	 * @param activity
