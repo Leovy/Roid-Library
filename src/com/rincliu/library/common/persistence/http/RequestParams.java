@@ -1,25 +1,29 @@
-/**
- * Copyright (c) 2012-2013, Michael Yang 杨福海 (www.yangfuhai.com).
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package com.rincliu.library.common.persistence.afinal.http;
+/*
+    Android Asynchronous Http Client
+    Copyright (c) 2011 James Smith <james@loopj.com>
+    http://loopj.com
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+package com.rincliu.library.common.persistence.http;
 
 import java.io.InputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -31,43 +35,44 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
 /**
+ * A collection of string request parameters or files to send along with
+ * requests made from an {@link AsyncHttpClient} instance.
  * <p>
- * 使用方法:
+ * For example:
  * <p>
  * <pre>
- * AjaxParams params = new AjaxParams();
- * params.put("username", "michael");
+ * RequestParams params = new RequestParams();
+ * params.put("username", "james");
  * params.put("password", "123456");
- * params.put("email", "test@tsz.net");
- * params.put("profile_picture", new File("/mnt/sdcard/pic.jpg")); // 上传文件
- * params.put("profile_picture2", inputStream); // 上传数据流
- * params.put("profile_picture3", new ByteArrayInputStream(bytes)); // 提交字节流
+ * params.put("email", "my&#064;email.com");
+ * params.put("profile_picture", new File("pic.jpg")); // Upload a File
+ * params.put("profile_picture2", someInputStream); // Upload an InputStream
+ * params.put("profile_picture3", new ByteArrayInputStream(someBytes)); // Upload some bytes
  *
- * RLFinalHttp fh = new RLFinalHttp();
- * fh.post("http://www.yangfuhai.com", params, new AjaxCallBack<String>(){
- * 		@Override
- *		public void onLoading(long count, long current) {
- *				textView.setText(current+"/"+count);
- *		}
- *
- *		@Override
- *		public void onSuccess(String t) {
- *			textView.setText(t==null?"null":t);
- *		}
- * });
+ * AsyncHttpClient client = new AsyncHttpClient();
+ * client.post("http://myendpoint.com", params, responseHandler);
  * </pre>
  */
-public class AjaxParams {
+public class RequestParams {
     private static String ENCODING = "UTF-8";
 
     protected ConcurrentHashMap<String, String> urlParams;
     protected ConcurrentHashMap<String, FileWrapper> fileParams;
+    protected ConcurrentHashMap<String, ArrayList<String>> urlParamsWithArray;
 
-    public AjaxParams() {
+    /**
+     * Constructs a new empty <code>RequestParams</code> instance.
+     */
+    public RequestParams() {
         init();
     }
 
-    public AjaxParams(Map<String, String> source) {
+    /**
+     * Constructs a new RequestParams instance containing the key/value
+     * string params from the specified map.
+     * @param source the source key/value string map to add.
+     */
+    public RequestParams(Map<String, String> source) {
         init();
 
         for(Map.Entry<String, String> entry : source.entrySet()) {
@@ -75,12 +80,26 @@ public class AjaxParams {
         }
     }
 
-    public AjaxParams(String key, String value) {
+    /**
+     * Constructs a new RequestParams instance and populate it with a single
+     * initial key/value string param.
+     * @param key the key name for the intial param.
+     * @param value the value string for the initial param.
+     */
+    public RequestParams(String key, String value) {
         init();
+
         put(key, value);
     }
 
-    public AjaxParams(Object... keysAndValues) {
+    /**
+     * Constructs a new RequestParams instance and populate it with multiple
+     * initial key/value string param.
+     * @param keysAndValues a sequence of keys and values. Objects are
+     * automatically converted to Strings (including the value {@code null}).
+     * @throws IllegalArgumentException if the number of arguments isn't even.
+     */
+    public RequestParams(Object... keysAndValues) {
       init();
       int len = keysAndValues.length;
       if (len % 2 != 0)
@@ -92,26 +111,58 @@ public class AjaxParams {
       }
     }
 
+    /**
+     * Adds a key/value string pair to the request.
+     * @param key the key name for the new param.
+     * @param value the value string for the new param.
+     */
     public void put(String key, String value){
         if(key != null && value != null) {
             urlParams.put(key, value);
         }
     }
 
+    /**
+     * Adds a file to the request.
+     * @param key the key name for the new param.
+     * @param file the file to add.
+     */
     public void put(String key, File file) throws FileNotFoundException {
         put(key, new FileInputStream(file), file.getName());
     }
 
+    /**
+     * Adds param with more than one value.
+     * @param key the key name for the new param.
+     * @param values is the ArrayList with values for the param.
+     */
+    public void put(String key, ArrayList<String> values)  {
+        if(key != null && values != null) {
+            urlParamsWithArray.put(key, values);
+        }
+    }
+
+    /**
+     * Adds an input stream to the request.
+     * @param key the key name for the new param.
+     * @param stream the input stream to add.
+     */
     public void put(String key, InputStream stream) {
         put(key, stream, null);
     }
 
+    /**
+     * Adds an input stream to the request.
+     * @param key the key name for the new param.
+     * @param stream the input stream to add.
+     * @param fileName the name of the file.
+     */
     public void put(String key, InputStream stream, String fileName) {
         put(key, stream, fileName, null);
     }
 
     /**
-     * 添加 inputStream 到请求中.
+     * Adds an input stream to the request.
      * @param key the key name for the new param.
      * @param stream the input stream to add.
      * @param fileName the name of the file.
@@ -123,9 +174,14 @@ public class AjaxParams {
         }
     }
 
+    /**
+     * Removes a parameter from the request.
+     * @param key the key name for the parameter to remove.
+     */
     public void remove(String key){
         urlParams.remove(key);
         fileParams.remove(key);
+        urlParamsWithArray.remove(key);
     }
 
     @Override
@@ -149,6 +205,20 @@ public class AjaxParams {
             result.append("FILE");
         }
 
+        for(ConcurrentHashMap.Entry<String, ArrayList<String>> entry : urlParamsWithArray.entrySet()) {
+            if(result.length() > 0)
+                result.append("&");
+
+            ArrayList<String> values = entry.getValue();
+            for (String value : values) {
+                if (values.indexOf(value) != 0)
+                    result.append("&");
+                result.append(entry.getKey());
+                result.append("=");
+                result.append(value);
+            }
+        }
+
         return result.toString();
     }
 
@@ -159,11 +229,19 @@ public class AjaxParams {
         HttpEntity entity = null;
 
         if(!fileParams.isEmpty()) {
-            MultipartEntity multipartEntity = new MultipartEntity();
+            SimpleMultipartEntity multipartEntity = new SimpleMultipartEntity();
 
             // Add string params
             for(ConcurrentHashMap.Entry<String, String> entry : urlParams.entrySet()) {
                 multipartEntity.addPart(entry.getKey(), entry.getValue());
+            }
+
+            // Add dupe params
+            for(ConcurrentHashMap.Entry<String, ArrayList<String>> entry : urlParamsWithArray.entrySet()) {
+                ArrayList<String> values = entry.getValue();
+                for (String value : values) {
+                    multipartEntity.addPart(entry.getKey(), value);
+                }
             }
 
             // Add file params
@@ -197,6 +275,7 @@ public class AjaxParams {
     private void init(){
         urlParams = new ConcurrentHashMap<String, String>();
         fileParams = new ConcurrentHashMap<String, FileWrapper>();
+        urlParamsWithArray = new ConcurrentHashMap<String, ArrayList<String>>();
     }
 
     protected List<BasicNameValuePair> getParamsList() {
@@ -206,10 +285,17 @@ public class AjaxParams {
             lparams.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
         }
 
+        for(ConcurrentHashMap.Entry<String, ArrayList<String>> entry : urlParamsWithArray.entrySet()) {
+            ArrayList<String> values = entry.getValue();
+            for (String value : values) {
+                lparams.add(new BasicNameValuePair(entry.getKey(), value));
+            }
+        }
+
         return lparams;
     }
 
-    public String getParamString() {
+    protected String getParamString() {
         return URLEncodedUtils.format(getParamsList(), ENCODING);
     }
 

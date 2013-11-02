@@ -4,10 +4,7 @@ import java.lang.Thread.UncaughtExceptionHandler;
 
 import com.rincliu.library.R;
 import com.rincliu.library.util.RLUiUtil;
-
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Looper;
 
 public class RLCrashHandler implements UncaughtExceptionHandler {

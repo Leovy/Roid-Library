@@ -16,6 +16,7 @@
 
 package com.rincliu.library.common.persistence.zxing.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -24,12 +25,9 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
-
 import com.google.zxing.ResultPoint;
-
 import java.util.Collection;
 import java.util.HashSet;
-
 import com.rincliu.library.R;
 import com.rincliu.library.common.persistence.zxing.camera.CameraManager;
 
@@ -40,9 +38,9 @@ import com.rincliu.library.common.persistence.zxing.camera.CameraManager;
  */
 public final class ViewfinderView extends View {
 
-    private static final int[] SCANNER_ALPHA = {
-            0, 64, 128, 192, 255, 192, 128, 64
-    };
+//    private static final int[] SCANNER_ALPHA = {
+//            0, 64, 128, 192, 255, 192, 128, 64
+//    };
     private static final long ANIMATION_DELAY = 100L;
     private static final int OPAQUE = 0xFF;
 
@@ -70,7 +68,8 @@ public final class ViewfinderView extends View {
         possibleResultPoints = new HashSet<ResultPoint>(5);
     }
 
-    @Override
+    @SuppressLint("DrawAllocation")
+	@Override
     public void onDraw(Canvas canvas) {
         Rect frame = CameraManager.get().getFramingRect();
         if (frame == null) {

@@ -1,26 +1,27 @@
-/**
- * Copyright (c) 2012-2013, Michael Yang 杨福海 (www.yangfuhai.com).
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package com.rincliu.library.common.persistence.afinal.http;
+/*
+    Android Asynchronous Http Client
+    Copyright (c) 2011 James Smith <james@loopj.com>
+    http://loopj.com
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+package com.rincliu.library.common.persistence.http;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,19 +29,22 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.http.client.CookieStore;
 import org.apache.http.cookie.Cookie;
-import org.apache.http.impl.cookie.BasicClientCookie;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 /**
- * 保存到 Preferences 的cookie
- * @author michael yang
- *
+ * A persistent cookie store which implements the Apache HttpClient
+ * {@link CookieStore} interface. Cookies are stored and will persist on the
+ * user's device between application sessions since they are serialized and
+ * stored in {@link SharedPreferences}.
+ * <p>
+ * Instances of this class are designed to be used with
+ * {@link AsyncHttpClient#setCookieStore}, but can also be used with a 
+ * regular old apache HttpClient/HttpContext if you prefer.
  */
-public class PreferencesCookieStore implements CookieStore {
-	
+public class PersistentCookieStore implements CookieStore {
     private static final String COOKIE_PREFS = "CookiePrefsFile";
     private static final String COOKIE_NAME_STORE = "names";
     private static final String COOKIE_NAME_PREFIX = "cookie_";
@@ -51,7 +55,7 @@ public class PreferencesCookieStore implements CookieStore {
     /**
      * Construct a persistent cookie store.
      */
-    public PreferencesCookieStore(Context context) {
+    public PersistentCookieStore(Context context) {
         cookiePrefs = context.getSharedPreferences(COOKIE_PREFS, 0);
         cookies = new ConcurrentHashMap<String, Cookie>();
 
@@ -76,7 +80,7 @@ public class PreferencesCookieStore implements CookieStore {
 
     @Override
     public void addCookie(Cookie cookie) {
-        String name = cookie.getName();
+        String name = cookie.getName() + cookie.getDomain();
 
         // Save cookie into local store, or remove if expired
         if(!cookie.isExpired(new Date())) {
@@ -94,9 +98,6 @@ public class PreferencesCookieStore implements CookieStore {
 
     @Override
     public void clear() {
-        // Clear cookies from local store
-        cookies.clear();
-
         // Clear cookies from persistent store
         SharedPreferences.Editor prefsWriter = cookiePrefs.edit();
         for(String name : cookies.keySet()) {
@@ -104,6 +105,9 @@ public class PreferencesCookieStore implements CookieStore {
         }
         prefsWriter.remove(COOKIE_NAME_STORE);
         prefsWriter.commit();
+
+        // Clear cookies from local store
+        cookies.clear();
     }
 
     @Override
@@ -115,7 +119,7 @@ public class PreferencesCookieStore implements CookieStore {
             String name = entry.getKey();
             Cookie cookie = entry.getValue();
             if(cookie.isExpired(date)) {
-                // 清除cookies
+                // Clear cookies from local store
                 cookies.remove(name);
 
                 // Clear cookies from persistent store
@@ -141,6 +145,9 @@ public class PreferencesCookieStore implements CookieStore {
     }
 
 
+    //
+    // Cookie serialization/deserialization
+    //
 
     protected String encodeCookie(SerializableCookie cookie) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -170,7 +177,7 @@ public class PreferencesCookieStore implements CookieStore {
 
     // Using some super basic byte array <-> hex conversions so we don't have
     // to rely on any large Base64 libraries. Can be overridden if you like!
-	protected String byteArrayToHexString(byte[] b) {
+    protected String byteArrayToHexString(byte[] b) {
         StringBuffer sb = new StringBuffer(b.length * 2);
         for (byte element : b) {
             int v = element & 0xff;
@@ -189,48 +196,5 @@ public class PreferencesCookieStore implements CookieStore {
             data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i+1), 16));
         }
         return data;
-    }
-    
-    
-    public class SerializableCookie implements Serializable {
-        private static final long serialVersionUID = 6374381828722046732L;
-
-        private transient final Cookie cookie;
-        private transient BasicClientCookie clientCookie;
-
-        public SerializableCookie(Cookie cookie) {
-            this.cookie = cookie;
-        }
-
-        public Cookie getCookie() {
-            Cookie bestCookie = cookie;
-            if(clientCookie != null) {
-                bestCookie = clientCookie;
-            }
-            return bestCookie;
-        }
-
-        private void writeObject(ObjectOutputStream out) throws IOException {
-            out.writeObject(cookie.getName());
-            out.writeObject(cookie.getValue());
-            out.writeObject(cookie.getComment());
-            out.writeObject(cookie.getDomain());
-            out.writeObject(cookie.getExpiryDate());
-            out.writeObject(cookie.getPath());
-            out.writeInt(cookie.getVersion());
-            out.writeBoolean(cookie.isSecure());
-        }
-
-        private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-            String name = (String)in.readObject();
-            String value = (String)in.readObject();
-            clientCookie = new BasicClientCookie(name, value);
-            clientCookie.setComment((String)in.readObject());
-            clientCookie.setDomain((String)in.readObject());
-            clientCookie.setExpiryDate((Date)in.readObject());
-            clientCookie.setPath((String)in.readObject());
-            clientCookie.setVersion(in.readInt());
-            clientCookie.setSecure(in.readBoolean());
-        }
     }
 }
