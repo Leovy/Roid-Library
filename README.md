@@ -1,7 +1,7 @@
 <h2>常用功能模块：</h2>
 Android持久化框架<a target="_blank" href="https://github.com/RincLiu/afinal">Afinal</a>中的FinalActivity（支持组件事件注解）和FinalDb（SQLite操作）；<BR/>
-HTTP框架AsyncHttpClient；<BR/>
-Bitmap处理框架<a target"_blank" href="https://github.com/nostra13/Android-Universal-Image-Loader">UniversalImageLoader</a>;<BR/>
+HTTP框架<a target="_blank" href="https://github.com/loopj/android-async-http">AsyncHttpClient</a>；<BR/>
+图片处理框架<a target"_blank" href="https://github.com/nostra13/Android-Universal-Image-Loader">UniversalImageLoader</a>;<BR/>
 
 <h2>第三方SDK模块：</h2>
 基于<a target="_blank" href="http://www.duomeng.net/developers/developers.htm">多盟</a>的广告模块；<BR/>
