@@ -2,6 +2,7 @@
 Android持久化框架<a target="_blank" href="https://github.com/RincLiu/afinal">Afinal</a>中的FinalActivity（支持组件事件注解）和FinalDb（SQLite操作）；<BR/>
 HTTP框架<a target="_blank" href="https://github.com/loopj/android-async-http">AsyncHttpClient</a>；<BR/>
 图片处理框架<a target"_blank" href="https://github.com/nostra13/Android-Universal-Image-Loader">UniversalImageLoader</a>;<BR/>
+ROOT相关操作模块<a target="_blank" href="https://github.com/Chrisplus/RootManager">RootManager</a>；<BR/>
 
 <h2>第三方SDK模块：</h2>
 基于<a target="_blank" href="http://www.duomeng.net/developers/developers.htm">多盟</a>的广告模块；<BR/>
@@ -13,7 +14,6 @@ HTTP框架<a target="_blank" href="https://github.com/loopj/android-async-http">
 社会化组件：新浪微博SSO登录、微博分享、微信分享；<BR/>
 
 <h2>组件及工具类：</h2>
-ROOT管理模块RootManager；<BR/>
 经过简化和定制的二维码扫描模块zxing；<BR/>
 全局异常处理模块CrashHandler；<BR/>
 API兼容类RLAPICompat；<BR/>
