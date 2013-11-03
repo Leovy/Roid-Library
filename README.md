@@ -1,11 +1,11 @@
-<h2>集成常用组件：</h2>
-集成Android持久化框架<a target="_blank" href="https://github.com/RincLiu/afinal">Afinal</a>，包括FinalActivity（支持组件事件注解）和FinalDb（SQLite操作）；<BR/>
-集成专业的HTTP框架AsyncHttpClient；<BR/>
-集成专业的Bitmap处理框架UniversalImageLoader<BR/>
-集成ROOT管理模块RootManager；<BR/>
+<h2>集成常用功能模块：</h2>
+Android持久化框架<a target="_blank" href="https://github.com/RincLiu/afinal">Afinal</a>，包括FinalActivity（支持组件事件注解）和FinalDb（SQLite操作）；<BR/>
+HTTP框架AsyncHttpClient；<BR/>
+Bitmap处理框架UniversalImageLoader<BR/>
+ROOT管理模块RootManager；<BR/>
 经过简化和定制的二维码扫描模块zxing；<BR/>
 
-<h2>集成常用第三方功能模块：</h2>
+<h2>集成第三方模块：</h2>
 基于<a target="_blank" href="http://www.duomeng.net/developers/developers.htm">多盟</a>的广告模块；<BR/>
 基于<a target="_blank" href="http://www.umeng.com">友盟</a>的数据分析统计模块、用户反馈、版本更新等模块；<BR/>
 基于<a target="_blank" href="http://www.jpush.cn/">极光推送</a>的消息推送模块；<BR/>
@@ -14,7 +14,7 @@
 基于<a target="_blank" href="http://open.voicecloud.cn/developer.php">科大讯飞</a>的语音引擎模块，支持语音识别和语音朗读；<BR/>
 社会化组件：新浪微博SSO登录、微博分享、微信分享；<BR/>
 
-<h2>其他：</h2>
+<h2>组件及工具类：</h2>
 全局异常处理模块CrashHandler；<BR/>
 API兼容类RLAPICompat；<BR/>
 定制的下拉刷新组件，包括PullToRefreshGridView、PullToRefreshListView、PullToRefreshScrollView；<BR/>
