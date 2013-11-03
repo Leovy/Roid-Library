@@ -1,3 +1,6 @@
+适合个人开发者的Android集成框架， 包含HTTP、Bitmap处理、SQLite、ROOT管理、二维码识别、LBS、语音服务、视频播放、移动广告、数据分析、消息推送、社会化分享等常用模块以及一些工具类。<BR/>
+
+
 <h2>常用功能模块：</h2>
 Android持久化框架<a target="_blank" href="https://github.com/RincLiu/afinal">Afinal</a>中的FinalActivity（支持组件事件注解）和FinalDb（SQLite操作）；<BR/>
 HTTP框架<a target="_blank" href="https://github.com/loopj/android-async-http">AsyncHttpClient</a>；<BR/>
