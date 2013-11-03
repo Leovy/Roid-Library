@@ -1,11 +1,9 @@
-<h2>集成常用功能模块：</h2>
-Android持久化框架<a target="_blank" href="https://github.com/RincLiu/afinal">Afinal</a>，包括FinalActivity（支持组件事件注解）和FinalDb（SQLite操作）；<BR/>
+<h2>常用功能模块：</h2>
+Android持久化框架<a target="_blank" href="https://github.com/RincLiu/afinal">Afinal</a>中的FinalActivity（支持组件事件注解）和FinalDb（SQLite操作）；<BR/>
 HTTP框架AsyncHttpClient；<BR/>
-Bitmap处理框架UniversalImageLoader<BR/>
-ROOT管理模块RootManager；<BR/>
-经过简化和定制的二维码扫描模块zxing；<BR/>
+Bitmap处理框架<a target"_blank" href="https://github.com/nostra13/Android-Universal-Image-Loader">UniversalImageLoader</a>;<BR/>
 
-<h2>集成第三方模块：</h2>
+<h2>第三方SDK模块：</h2>
 基于<a target="_blank" href="http://www.duomeng.net/developers/developers.htm">多盟</a>的广告模块；<BR/>
 基于<a target="_blank" href="http://www.umeng.com">友盟</a>的数据分析统计模块、用户反馈、版本更新等模块；<BR/>
 基于<a target="_blank" href="http://www.jpush.cn/">极光推送</a>的消息推送模块；<BR/>
@@ -15,6 +13,8 @@ ROOT管理模块RootManager；<BR/>
 社会化组件：新浪微博SSO登录、微博分享、微信分享；<BR/>
 
 <h2>组件及工具类：</h2>
+ROOT管理模块RootManager；<BR/>
+经过简化和定制的二维码扫描模块zxing；<BR/>
 全局异常处理模块CrashHandler；<BR/>
 API兼容类RLAPICompat；<BR/>
 定制的下拉刷新组件，包括PullToRefreshGridView、PullToRefreshListView、PullToRefreshScrollView；<BR/>
