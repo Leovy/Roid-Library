@@ -21,6 +21,7 @@ ROOT相关操作模块<a target="_blank" href="https://github.com/Chrisplus/Root
 经过简化和定制的二维码扫描模块zxing；<BR/>
 全局异常处理模块CrashHandler；<BR/>
 API兼容类RLAPICompat；<BR/>
+列表分页组件ListPagerView；<BR/>
 定制的下拉刷新组件，包括PullToRefreshGridView、PullToRefreshListView、PullToRefreshScrollView；<BR/>
 改进的轮播组件ViewFlow，增加了BitmapIndicator(可设置图片指针)、可设置播放模式（手动、自动向左、自动向右）；<BR/>
 定制的侧滑菜单组件MenuDrawer；<BR/>
