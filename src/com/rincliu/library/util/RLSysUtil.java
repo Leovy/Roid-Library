@@ -30,6 +30,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ServiceInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.media.MediaScannerConnection;
+import android.media.MediaScannerConnection.OnScanCompletedListener;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -41,6 +43,20 @@ import android.view.Window;
 import com.rincliu.library.entity.RLDisplayInfo;
 
 public class RLSysUtil {
+	/**
+	 * 
+	 * @param context
+	 * @param files
+	 * @param mimeTypes
+	 */
+	public static void scanMediaFiles(final Context context, String[] files, String[] mimeTypes){
+		MediaScannerConnection.scanFile(context, files, mimeTypes, new OnScanCompletedListener(){
+			@Override
+			public void onScanCompleted(String arg0, Uri arg1) {
+				//TODO
+			}
+		});
+    }
 	
 	/**
 	 * 
@@ -204,6 +220,28 @@ public class RLSysUtil {
 	public static int px2dip(Context context, float px){
 		final float scale=context.getResources().getDisplayMetrics().density;
 		return(int)(px/scale+0.5f);
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param spValue
+	 * @return
+	 */
+	public static int sp2px(Context context, float spValue){
+		final float scale = context.getResources().getDisplayMetrics().scaledDensity;  
+		return (int) (spValue*scale + 0.5f);
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param pxValue
+	 * @return
+	 */
+	public static int px2sp(Context context, float pxValue){
+		final float scale = context.getResources().getDisplayMetrics().scaledDensity;  
+		return (int) (pxValue/scale + 0.5f);
 	}
 	
 	/**

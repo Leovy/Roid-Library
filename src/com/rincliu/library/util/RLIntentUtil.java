@@ -17,6 +17,7 @@ package com.rincliu.library.util;
 
 import java.io.File;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -42,5 +43,47 @@ public class RLIntentUtil {
 		intent.setAction(Intent.ACTION_PICK);
 		intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
         return intent;
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param chooserTitle
+	 * @param shareTitle
+	 * @param shareText
+	 * @param mime
+	 * @param uri
+	 */
+	public static void callSysShare(Context context, String chooserTitle, String shareTitle, String shareText, String mime, Uri uri){
+		Intent intent = new Intent();
+		intent.setAction(Intent.ACTION_SEND);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);  
+        intent.putExtra(Intent.EXTRA_TEXT, shareText); 
+        intent.putExtra(Intent.EXTRA_SUBJECT, shareTitle);
+        intent.setType(mime);
+        if(uri!=null){
+        	intent.putExtra(Intent.EXTRA_STREAM, uri);
+        }
+        context.startActivity(Intent.createChooser(intent,chooserTitle));
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static Intent getSysAppSearchIntent(String key){
+		return new Intent(Intent.ACTION_VIEW,
+       		 Uri.parse("market://search?q="+key));
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static Intent getSysAppDetailIntent(Context context){
+		return new Intent(Intent.ACTION_VIEW,
+       		 Uri.parse("market://details?id="+context.getPackageName()));
 	}
 }
