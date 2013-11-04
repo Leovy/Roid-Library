@@ -18,13 +18,13 @@ ROOT相关操作模块<a target="_blank" href="https://github.com/Chrisplus/Root
 社会化组件：新浪微博SSO登录、微博分享、微信分享；<BR/>
 
 <h2>组件及工具类：</h2>
-经过简化和定制的二维码扫描模块zxing；<BR/>
-全局异常处理模块CrashHandler；<BR/>
-API兼容类RLAPICompat；<BR/>
-列表分页组件ListPagerView；<BR/>
-定制的下拉刷新组件，包括PullToRefreshGridView、PullToRefreshListView、PullToRefreshScrollView；<BR/>
-改进的轮播组件ViewFlow，增加了BitmapIndicator(可设置图片指针)、可设置播放模式（手动、自动向左、自动向右）；<BR/>
-定制的侧滑菜单组件MenuDrawer；<BR/>
-定制的手势缩放图片视图组件GestureImageView；<BR/>
-自定义组件：RLDialog、RLAlertDialog、RLListDialog、RLLoadingDialog、RLFileExplorer、RLSpinner、RLWebView、RLOnClickListener；<BR/>
-工具类：RLAppUtil(应用管理)、RLFileUtil(IO操作)、RLImgUtil(图像处理)、RLIntentUtil(系统服务调用)、RLJsonUtil(JSON解析)、RLNetUtil(网络服务)、RLStrUtil(字符串处理)、RLSysUtil(系统参数配置)、RLUiUtil(UI相关，自定义toast等)；<BR/>
+1. 经过简化和定制的二维码扫描模块zxing；<BR/>
+2. 全局异常处理模块CrashHandler；<BR/>
+3. API兼容类RLAPICompat；<BR/>
+4. 列表分页组件ListPagerView；<BR/>
+5. 定制的下拉刷新组件，包括PullToRefreshGridView、PullToRefreshListView、PullToRefreshScrollView；<BR/>
+6. 改进的轮播组件ViewFlow，增加了BitmapIndicator(可设置图片指针)、可设置播放模式（手动、自动向左、自动向右）；<BR/>
+7. 定制的侧滑菜单组件MenuDrawer；<BR/>
+8. 定制的手势缩放图片视图组件GestureImageView；<BR/>
+9. 其他自定义组件：RLDialog、RLAlertDialog、RLListDialog、RLLoadingDialog、RLFileExplorer、RLSpinner、RLWebView、RLOnClickListener；<BR/>
+10. 工具类：RLAppUtil(应用管理)、RLFileUtil(IO操作)、RLImgUtil(图像处理)、RLIntentUtil(系统服务调用)、RLJsonUtil(JSON解析)、RLNetUtil(网络服务)、RLStrUtil(字符串处理)、RLSysUtil(系统参数配置)、RLUiUtil(UI相关，自定义toast等)；<BR/>
