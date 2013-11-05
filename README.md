@@ -3,19 +3,19 @@ Android集成开发框架， 包含HttpClient、ImageLoader、SQLite、RootManag
 
 
 <h2>常用功能模块：</h2>
-Android持久化框架<a target="_blank" href="https://github.com/RincLiu/afinal">Afinal</a>中的FinalActivity（支持组件事件注解）和FinalDb（SQLite操作）；<BR/>
-HTTP框架<a target="_blank" href="https://github.com/loopj/android-async-http">AsyncHttpClient</a>；<BR/>
-图片处理框架<a target"_blank" href="https://github.com/nostra13/Android-Universal-Image-Loader">UniversalImageLoader</a>;<BR/>
-ROOT相关操作模块<a target="_blank" href="https://github.com/Chrisplus/RootManager">RootManager</a>；<BR/>
+1. Android持久化框架<a target="_blank" href="https://github.com/RincLiu/afinal">Afinal</a>中的FinalActivity（支持组件事件注解）和FinalDb（SQLite操作）；<BR/>
+2. HTTP框架<a target="_blank" href="https://github.com/loopj/android-async-http">AsyncHttpClient</a>；<BR/>
+3. 图片处理框架<a target"_blank" href="https://github.com/nostra13/Android-Universal-Image-Loader">UniversalImageLoader</a>;<BR/>
+4. ROOT相关操作模块<a target="_blank" href="https://github.com/Chrisplus/RootManager">RootManager</a>；<BR/>
 
 <h2>第三方SDK模块：</h2>
-基于<a target="_blank" href="http://www.duomeng.net/developers/developers.htm">多盟</a>的广告模块；<BR/>
-基于<a target="_blank" href="http://www.umeng.com">友盟</a>的数据分析统计模块、用户反馈、版本更新等模块；<BR/>
-基于<a target="_blank" href="http://www.jpush.cn/">极光推送</a>的消息推送模块；<BR/>
-基于<a target="_blank" href="http://developer.baidu.com/map/">百度地图API</a>的定位模块；<BR/>
-基于<a target="_blank" href="http://developer.baidu.com/wiki/index.php?title=docs/cplat/media">百度媒体云</a>的视频播放模块，支持本地视频文件和网络视频资源播放；<BR/>
-基于<a target="_blank" href="http://open.voicecloud.cn/developer.php">科大讯飞</a>的语音引擎模块，支持语音识别和语音朗读；<BR/>
-社会化组件：新浪微博SSO登录、微博分享、微信分享；<BR/>
+1. 基于<a target="_blank" href="http://www.duomeng.net/developers/developers.htm">多盟</a>的广告模块；<BR/>
+2. 基于<a target="_blank" href="http://www.umeng.com">友盟</a>的数据分析统计模块、用户反馈、版本更新等模块；<BR/>
+3. 基于<a target="_blank" href="http://www.jpush.cn/">极光推送</a>的消息推送模块；<BR/>
+4. 基于<a target="_blank" href="http://developer.baidu.com/map/">百度地图API</a>的定位模块；<BR/>
+5. 基于<a target="_blank" href="http://developer.baidu.com/wiki/index.php?title=docs/cplat/media">百度媒体云</a>的视频播放模块，支持本地视频文件和网络视频资源播放；<BR/>
+6. 基于<a target="_blank" href="http://open.voicecloud.cn/developer.php">科大讯飞</a>的语音引擎模块，支持语音识别和语音朗读；<BR/>
+7. 社会化组件：新浪微博SSO登录、微博分享、微信分享；<BR/>
 
 <h2>组件及工具类：</h2>
 1. 经过简化和定制的二维码扫描模块zxing；<BR/>
