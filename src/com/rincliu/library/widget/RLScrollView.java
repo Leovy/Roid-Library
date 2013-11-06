@@ -35,25 +35,25 @@ public class RLScrollView extends ScrollView{
 		super(context, attrs, defStyle);
 	}
 	
-	public interface OnScrollListener{
+	public interface OnScrollChangedListener{
 		public void onScrollChanged(int x, int y, int oldxX, int oldY);
 	}
 	
-	private OnScrollListener onScrollListener;
+	private OnScrollChangedListener onScrollChangedListener;
 	
 	/**
 	 * 
-	 * @param onScrollListener
+	 * @param onScrollChangedListener
 	 */
-	public void setOnScrollListener(OnScrollListener onScrollListener){
-		this.onScrollListener=onScrollListener;
+	public void setOnScrollListener(OnScrollChangedListener onScrollChangedListener){
+		this.onScrollChangedListener=onScrollChangedListener;
 	}
 	
 	@Override
 	protected void onScrollChanged(int x, int y, int oldX, int oldY){
 		super.onScrollChanged(x, y, oldX, oldY);
-		if(onScrollListener!=null){
-			onScrollListener.onScrollChanged(x, y, oldX, oldY);
+		if(onScrollChangedListener!=null){
+			onScrollChangedListener.onScrollChanged(x, y, oldX, oldY);
 		}
 	}
 	
