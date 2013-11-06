@@ -36,7 +36,7 @@ public class RLScrollView extends ScrollView{
 	}
 	
 	public interface OnScrollChangedListener{
-		public void onScrollChanged();
+		public void onScrollChanged(int l, int t, int oldl, int oldt);
 	}
 	
 	private OnScrollChangedListener onScrollChangedListener;
@@ -53,7 +53,7 @@ public class RLScrollView extends ScrollView{
 	protected void onScrollChanged(int l, int t, int oldl, int oldt){
 		super.onScrollChanged(l, t, oldl, oldt);
 		if(onScrollChangedListener!=null){
-			onScrollChangedListener.onScrollChanged();
+			onScrollChangedListener.onScrollChanged(l, t, oldl, oldt);
 		}
 	}
 	
