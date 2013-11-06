@@ -22,6 +22,8 @@ import android.view.View;
 import android.widget.ScrollView;
 
 public class RLScrollView extends ScrollView{
+	
+	private static final int MIN_VERTICAL_SCROLL=10;
 
 	public RLScrollView(Context context) {
 		super(context);
@@ -57,13 +59,15 @@ public class RLScrollView extends ScrollView{
 		super.onScrollChanged(x, y, oldX, oldY);
 		if(onScrollListener!=null){
 			onScrollListener.onScrollChanged(x, y, oldX, oldY);
-			onScrollListener.onScrollStopped();
-            if(isAtTop()){
-            	onScrollListener.onScrollStoppedAtTop();
-    		}
-            if(isAtBottom()){
-    	    	onScrollListener.onScrollStoppedAtBottom();
-    	    }
+			if(Math.abs(y-oldY)<=MIN_VERTICAL_SCROLL){
+				onScrollListener.onScrollStopped();
+	            if(isAtTop()){
+	            	onScrollListener.onScrollStoppedAtTop();
+	    		}
+	            if(isAtBottom()){
+	    	    	onScrollListener.onScrollStoppedAtBottom();
+	    	    }
+			}
 		}
 	}
 	
