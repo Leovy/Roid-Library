@@ -16,15 +16,16 @@
 package com.rincliu.library.widget.view.pulltorefresh;
 
 import com.rincliu.library.R;
+import com.rincliu.library.widget.RLScrollView;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.ScrollView;
 
-public class PullToRefreshScrollView extends PullToRefreshBase<ScrollView> {
+public class PullToRefreshScrollView extends PullToRefreshBase<RLScrollView> {
 
 	public PullToRefreshScrollView(Context context) {
 		super(context);
@@ -48,12 +49,12 @@ public class PullToRefreshScrollView extends PullToRefreshBase<ScrollView> {
 	}
 
 	@Override
-	protected ScrollView createRefreshableView(Context context, AttributeSet attrs) {
-		ScrollView scrollView;
+	protected RLScrollView createRefreshableView(Context context, AttributeSet attrs) {
+		RLScrollView scrollView;
 		if (VERSION.SDK_INT >= VERSION_CODES.GINGERBREAD) {
 			scrollView = new InternalScrollViewSDK9(context, attrs);
 		} else {
-			scrollView = new ScrollView(context, attrs);
+			scrollView = new RLScrollView(context, attrs);
 		}
 
 		scrollView.setId(R.id.scrollview);
@@ -75,7 +76,7 @@ public class PullToRefreshScrollView extends PullToRefreshBase<ScrollView> {
 	}
 
 	@TargetApi(9)
-	final class InternalScrollViewSDK9 extends ScrollView {
+	final class InternalScrollViewSDK9 extends RLScrollView {
 
 		public InternalScrollViewSDK9(Context context, AttributeSet attrs) {
 			super(context, attrs);
