@@ -35,25 +35,35 @@ public class RLScrollView extends ScrollView{
 		super(context, attrs, defStyle);
 	}
 	
-	public interface OnScrollChangedListener{
-		public void onScrollChanged(int l, int t, int oldl, int oldt);
+	public interface OnScrollListener{
+		public void onScrollChanged(int x, int y, int oldxX, int oldY);
+		public void onScrollStopped();
+		public void onScrollStoppedAtTop();
+		public void onScrollStoppedAtBottom();
 	}
 	
-	private OnScrollChangedListener onScrollChangedListener;
+	private OnScrollListener onScrollListener;
 	
 	/**
 	 * 
-	 * @param onScrollChangedListener
+	 * @param onScrollListener
 	 */
-	public void setOnScrollChangedListener(OnScrollChangedListener onScrollChangedListener){
-		this.onScrollChangedListener=onScrollChangedListener;
+	public void setOnScrollListener(OnScrollListener onScrollListener){
+		this.onScrollListener=onScrollListener;
 	}
 	
 	@Override
-	protected void onScrollChanged(int l, int t, int oldl, int oldt){
-		super.onScrollChanged(l, t, oldl, oldt);
-		if(onScrollChangedListener!=null){
-			onScrollChangedListener.onScrollChanged(l, t, oldl, oldt);
+	protected void onScrollChanged(int x, int y, int oldX, int oldY){
+		super.onScrollChanged(x, y, oldX, oldY);
+		if(onScrollListener!=null){
+			onScrollListener.onScrollChanged(x, y, oldX, oldY);
+			onScrollListener.onScrollStopped();
+            if(isAtTop()){
+            	onScrollListener.onScrollStoppedAtTop();
+    		}
+            if(isAtBottom()){
+    	    	onScrollListener.onScrollStoppedAtBottom();
+    	    }
 		}
 	}
 	
