@@ -3,18 +3,18 @@ Android集成开发框架， 包含HttpClient、ImageLoader、SQLite、RootManag
 
 
 ### 常用功能模块
-* Android持久化框架<a target="_blank" href="https://github.com/RincLiu/afinal">Afinal</a>中的FinalActivity（支持组件事件注解）和FinalDb（SQLite操作）；<BR/>
-* HTTP框架<a target="_blank" href="https://github.com/loopj/android-async-http">AsyncHttpClient</a>；<BR/>
-* 图片处理框架<a target"_blank" href="https://github.com/nostra13/Android-Universal-Image-Loader">UniversalImageLoader</a>;<BR/>
-* ROOT相关操作模块<a target="_blank" href="https://github.com/Chrisplus/RootManager">RootManager</a>；<BR/>
+* Android持久化框架[Afinal](https://github.com/RincLiu/afinal)中的FinalActivity（支持组件事件注解）和FinalDb（SQLite操作）；<BR/>
+* HTTP框架[AsyncHttpClient](https://github.com/loopj/android-async-http)</a>；<BR/>
+* 图片处理框架[UniversalImageLoader](https://github.com/nostra13/Android-Universal-Image-Loader)</a>;<BR/>
+* ROOT相关操作模块[RootManager](https://github.com/Chrisplus/RootManager)</a>；<BR/>
 
 ### 第三方SDK模块
-* 基于<a target="_blank" href="http://www.duomeng.net/developers/developers.htm">多盟</a>的广告模块；<BR/>
-* 基于<a target="_blank" href="http://www.umeng.com">友盟</a>的数据分析统计模块、用户反馈、版本更新等模块；<BR/>
-* 基于<a target="_blank" href="http://www.jpush.cn/">极光推送</a>的消息推送模块；<BR/>
-* 基于<a target="_blank" href="http://developer.baidu.com/map/">百度地图API</a>的定位模块；<BR/>
-* 基于<a target="_blank" href="http://developer.baidu.com/wiki/index.php?title=docs/cplat/media">百度媒体云</a>的视频播放模块，支持本地视频文件和网络视频资源播放；<BR/>
-* 基于<a target="_blank" href="http://open.voicecloud.cn/developer.php">科大讯飞</a>的语音引擎模块，支持语音识别和语音朗读；<BR/>
+* 基于[多盟](http://www.duomeng.net/developers/developers.htm)的广告模块；<BR/>
+* 基于[友盟](http://www.umeng.com)的数据分析统计模块、用户反馈、版本更新等模块；<BR/>
+* 基于[极光推送](http://www.jpush.cn/)的消息推送模块；<BR/>
+* 基于[百度地图API](http://developer.baidu.com/map/)的定位模块；<BR/>
+* 基于[百度媒体云](http://developer.baidu.com/wiki/index.php?title=docs/cplat/media)的视频播放模块，支持本地视频文件和网络视频资源播放；<BR/>
+* 基于[科大讯飞](http://open.voicecloud.cn/developer.php)的语音引擎模块，支持语音识别和语音朗读；<BR/>
 * 社会化组件：新浪微博SSO登录、微博分享、微信分享；<BR/>
 
 ### 组件及工具类
@@ -33,11 +33,11 @@ Android集成开发框架， 包含HttpClient、ImageLoader、SQLite、RootManag
 
 ### 使用注意
 * Analytics、CrashHandler、Feedback、Push这些需要在Application或Activity创建时初始化的组件可以在AndroidManifest.xml中配置是否启用：<BR/>
-        <application>
-            ...
-            <meta-data  android:name="ENABLE_CRASH_HANDLER" android:value="true"/>
-            <meta-data  android:name="ENABLE_PUSH" android:value="false"/>
-            <meta-data  android:name="ENABLE_FEEDBACK" android:value="false"/>
-            <meta-data  android:name="ENABLE_ANALYTICS" android:value="false"/>
-            ...
-        </application>
+                <application>
+                ...
+                <meta-data  android:name="ENABLE_CRASH_HANDLER" android:value="true"/>
+                <meta-data  android:name="ENABLE_PUSH" android:value="false"/>
+                <meta-data  android:name="ENABLE_FEEDBACK" android:value="false"/>
+                <meta-data  android:name="ENABLE_ANALYTICS" android:value="false"/>
+                ...
+                </application>
