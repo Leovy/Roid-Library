@@ -33,6 +33,7 @@ Android集成开发框架， 包含HttpClient、ImageLoader、SQLite、RootManag
 
 <h2>使用注意：</h2>
 1. Analytics、CrashHandler、Feedback、Push这些需要在Application或Activity创建时初始化的组件可以在AndroidManifest.xml中配置是否启用：<BR/>
+...xml
 <application>
 ...
   <meta-data  android:name="ENABLE_CRASH_HANDLER" android:value="true"/>
@@ -41,3 +42,4 @@ Android集成开发框架， 包含HttpClient、ImageLoader、SQLite、RootManag
   <meta-data  android:name="ENABLE_ANALYTICS" android:value="false"/>
 ...
 </application>
+...
