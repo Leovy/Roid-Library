@@ -30,3 +30,14 @@ Android集成开发框架， 包含HttpClient、ImageLoader、SQLite、RootManag
 10. 定制的手势缩放图片视图组件GestureImageView；<BR/>
 11. 其他自定义组件：RLDialog、RLAlertDialog、RLListDialog、RLLoadingDialog、RLFileExplorer、RLSpinner、RLWebView、RLOnClickListener；<BR/>
 12. 工具类：RLAppUtil(应用管理)、RLFileUtil(IO操作)、RLImgUtil(图像处理)、RLIntentUtil(系统服务调用)、RLJsonUtil(JSON解析)、RLNetUtil(网络服务)、RLStrUtil(字符串处理)、RLSysUtil(系统参数配置)、RLUiUtil(UI相关，自定义toast等)；<BR/>
+
+<h2>使用注意：</h2>
+1. Analytics、CrashHandler、Feedback、Push这些需要在Application或Activity创建时初始化的组件可以在AndroidManifest.xml中配置是否启用：<BR/>
+<application>
+...
+  <meta-data  android:name="ENABLE_CRASH_HANDLER" android:value="true"/>
+  <meta-data  android:name="ENABLE_PUSH" android:value="false"/>
+  <meta-data  android:name="ENABLE_FEEDBACK" android:value="false"/>
+  <meta-data  android:name="ENABLE_ANALYTICS" android:value="false"/>
+...
+</application>
