@@ -3,9 +3,9 @@ Android集成开发框架， 包含HttpClient、ImageLoader、SQLite、RootManag
 
 ### 常用功能模块
 * Android持久化框架[Afinal](https://github.com/RincLiu/afinal)中的FinalActivity（支持组件事件注解）和FinalDb（SQLite操作）；
-* HTTP框架[AsyncHttpClient](https://github.com/loopj/android-async-http)</a>；
-* 图片处理框架[UniversalImageLoader](https://github.com/nostra13/Android-Universal-Image-Loader)</a>;
-* ROOT相关操作模块[RootManager](https://github.com/Chrisplus/RootManager)</a>；
+* HTTP框架[AsyncHttpClient](https://github.com/loopj/android-async-http)；
+* 图片处理框架[UniversalImageLoader](https://github.com/nostra13/Android-Universal-Image-Loader);
+* ROOT相关操作模块[RootManager](https://github.com/Chrisplus/RootManager)；
 
 ### 第三方SDK模块
 * 基于[多盟](http://www.duomeng.net/developers/developers.htm)的广告模块；
