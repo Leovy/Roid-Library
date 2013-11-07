@@ -18,14 +18,15 @@ Android集成开发框架， 包含HttpClient、ImageLoader、SQLite、RootManag
 7. 社会化组件：新浪微博SSO登录、微博分享、微信分享；<BR/>
 
 <h2>组件及工具类：</h2>
-1. 经过简化和定制的二维码扫描模块zxing；<BR/>
-2. 全局异常处理模块CrashHandler；<BR/>
-3. API兼容类RLAPICompat；<BR/>
-4. RLScrollView，新增了滚动相关方法；<BR/>
-5. 列表分页组件ListPagerView；<BR/>
-6. 定制的下拉刷新组件，包括PullToRefreshGridView、PullToRefreshListView、PullToRefreshScrollView；<BR/>
-7. 改进的轮播组件ViewFlow，增加了BitmapIndicator(可设置图片指针)、可设置播放模式（手动、自动向左、自动向右）；<BR/>
-8. 定制的侧滑菜单组件MenuDrawer；<BR/>
-9. 定制的手势缩放图片视图组件GestureImageView；<BR/>
-10. 其他自定义组件：RLDialog、RLAlertDialog、RLListDialog、RLLoadingDialog、RLFileExplorer、RLSpinner、RLWebView、RLOnClickListener；<BR/>
-11. 工具类：RLAppUtil(应用管理)、RLFileUtil(IO操作)、RLImgUtil(图像处理)、RLIntentUtil(系统服务调用)、RLJsonUtil(JSON解析)、RLNetUtil(网络服务)、RLStrUtil(字符串处理)、RLSysUtil(系统参数配置)、RLUiUtil(UI相关，自定义toast等)；<BR/>
+1. 国际化：支持English、简体中文、繁體中文；<BR/>
+2. 经过简化和定制的二维码扫描模块zxing；<BR/>
+3. 全局异常处理模块CrashHandler；<BR/>
+4. API兼容类RLAPICompat；<BR/>
+5. RLScrollView，新增了滚动相关方法；<BR/>
+6. 列表分页组件ListPagerView；<BR/>
+7. 定制的下拉刷新组件，包括PullToRefreshGridView、PullToRefreshListView、PullToRefreshScrollView；<BR/>
+8. 改进的轮播组件ViewFlow，增加了BitmapIndicator(可设置图片指针)、可设置播放模式（手动、自动向左、自动向右）；<BR/>
+9. 定制的侧滑菜单组件MenuDrawer；<BR/>
+10. 定制的手势缩放图片视图组件GestureImageView；<BR/>
+11. 其他自定义组件：RLDialog、RLAlertDialog、RLListDialog、RLLoadingDialog、RLFileExplorer、RLSpinner、RLWebView、RLOnClickListener；<BR/>
+12. 工具类：RLAppUtil(应用管理)、RLFileUtil(IO操作)、RLImgUtil(图像处理)、RLIntentUtil(系统服务调用)、RLJsonUtil(JSON解析)、RLNetUtil(网络服务)、RLStrUtil(字符串处理)、RLSysUtil(系统参数配置)、RLUiUtil(UI相关，自定义toast等)；<BR/>
