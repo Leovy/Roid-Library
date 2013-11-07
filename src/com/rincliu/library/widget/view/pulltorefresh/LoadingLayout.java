@@ -83,20 +83,20 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		mHeaderProgress = (ProgressBar) findViewById(R.id.pull_to_refresh_progress);
 		mSubHeaderText = (TextView) findViewById(R.id.pull_to_refresh_sub_text);
 		mHeaderImage = (ImageView) findViewById(R.id.pull_to_refresh_image);
-		mRefreshingLabel = context.getString(R.string.dt_ptr_refreshing_label);
+		mRefreshingLabel = context.getString(R.string.ptr_refreshing_label);
 		
 		switch (mode) {
 			case PULL_FROM_END:
 				// Load in labels
-				mPullLabel = context.getString(R.string.dt_ptr_pull_label_end);
-				mReleaseLabel = context.getString(R.string.dt_ptr_release_label_end);
+				mPullLabel = context.getString(R.string.ptr_pull_label_end);
+				mReleaseLabel = context.getString(R.string.ptr_release_label_end);
 				break;
 
 			case PULL_FROM_START:
 			default:
 				// Load in labels
-				mPullLabel = context.getString(R.string.dt_ptr_pull_label_start);
-				mReleaseLabel = context.getString(R.string.dt_ptr_release_label_start);
+				mPullLabel = context.getString(R.string.ptr_pull_label_start);
+				mReleaseLabel = context.getString(R.string.ptr_release_label_start);
 				break;
 		}
 
@@ -308,8 +308,8 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 
 	private void resetPadding() {
 		Resources res = getResources();
-		final int tbPadding = res.getDimensionPixelSize(R.dimen.dt_ptr_header_footer_top_bottom_padding);
-		final int lrPadding = res.getDimensionPixelSize(R.dimen.dt_ptr_header_footer_left_right_padding);
+		final int tbPadding = res.getDimensionPixelSize(R.dimen.ptr_header_footer_top_bottom_padding);
+		final int lrPadding = res.getDimensionPixelSize(R.dimen.ptr_header_footer_left_right_padding);
 		setPadding(lrPadding, tbPadding, lrPadding, tbPadding);
 
 	}

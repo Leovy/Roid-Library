@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
+
+import com.rincliu.library.R;
 import com.rincliu.library.app.RLAsyncTask;
 import com.rincliu.library.util.RLFileUtil;
 import com.rincliu.library.util.RLUiUtil;
@@ -267,8 +269,8 @@ public abstract class ListPagerAdapter implements ListPagerView.DataObserver{
 			}
 		}
 		if(layout!=null){
-			layout.setLastUpdatedLabel("Updated at "
-					+new SimpleDateFormat("MM-dd HH:mm:ss",Locale.CHINA)
+			layout.setLastUpdatedLabel(pager.context.getString(R.string.ptr_updated_at)
+					+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA)
 					.format(new Date(System.currentTimeMillis())));
 		}
 		pager.notifyFinish(isReset);
