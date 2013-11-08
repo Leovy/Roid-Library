@@ -32,7 +32,9 @@ Android集成开发框架， 包含HttpClient、ImageLoader、SQLite、RootManag
 
 ### 使用注意
 * Analytics、CrashHandler、Feedback、Push这些需要在Application或Activity创建时初始化的组件可以在AndroidManifest.xml中配置是否启用:
+
 ```
+...
 <application
         android:name="com.rincliu.library.app.RLApplication"
         android:label="@string/app_name">
@@ -42,4 +44,5 @@ Android集成开发框架， 包含HttpClient、ImageLoader、SQLite、RootManag
         <meta-data  android:name="ENABLE_ANALYTICS" android:value="false"/>
         ...
 </application>
+...
 ```
