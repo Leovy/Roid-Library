@@ -36,7 +36,8 @@
 
 ```xml
 ...
-<application android:name="com.rincliu.library.app.RLApplication" android:label="@string/app_name">
+<application android:name="com.rincliu.library.app.RLApplication" 
+        android:label="@string/app_name">
         <meta-data  android:name="ENABLE_CRASH_HANDLER" android:value="true"/>
         <meta-data  android:name="ENABLE_PUSH" android:value="false"/>
         <meta-data  android:name="ENABLE_FEEDBACK" android:value="false"/>
