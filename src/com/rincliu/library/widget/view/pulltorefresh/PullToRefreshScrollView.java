@@ -16,7 +16,7 @@
 package com.rincliu.library.widget.view.pulltorefresh;
 
 import com.rincliu.library.R;
-import com.rincliu.library.widget.RLScrollView;
+import com.rincliu.library.widget.view.RLScrollView;
 
 import android.annotation.TargetApi;
 import android.content.Context;
