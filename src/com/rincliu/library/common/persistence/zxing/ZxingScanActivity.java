@@ -42,7 +42,7 @@ import com.rincliu.library.common.persistence.zxing.decoding.CaptureActivityHand
 import com.rincliu.library.common.persistence.zxing.decoding.InactivityTimer;
 import com.rincliu.library.common.persistence.zxing.view.ViewfinderView;
 
-public class RLScanQRActivity extends RLActivity implements Callback {
+public class ZxingScanActivity extends RLActivity implements Callback {
 
     private CaptureActivityHandler handler;
     private ViewfinderView viewfinderView;

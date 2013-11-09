@@ -251,7 +251,7 @@
         
         <!--#################### ZXING COMPONENTS START ####################-->
         <activity 
-            android:name="com.rincliu.library.common.persistence.zxing.RLScanQRActivity"
+            android:name="com.rincliu.library.common.persistence.zxing.ZxingScanActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:screenOrientation="portrait"/>
         <!--#################### ZXING COMPONENTS END ####################-->

@@ -24,13 +24,13 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.util.Linkify;
 
-public class ScanQRDemoActivity extends RLActivity {
+public class ScanDemoActivity extends RLActivity {
 	private static final int MSG_SCAN=888;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		startActivityForResult(new Intent(ScanQRDemoActivity.this,RLScanQRActivity.class),MSG_SCAN);
+		startActivityForResult(new Intent(ScanDemoActivity.this,ZxingScanActivity.class),MSG_SCAN);
 	}
 	
 	@Override

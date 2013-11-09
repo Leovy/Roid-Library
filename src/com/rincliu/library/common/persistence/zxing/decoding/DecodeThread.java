@@ -27,7 +27,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 
-import com.rincliu.library.common.persistence.zxing.RLScanQRActivity;
+import com.rincliu.library.common.persistence.zxing.ZxingScanActivity;
 
 /**
  * This thread does all the heavy lifting of decoding the images.
@@ -35,12 +35,12 @@ import com.rincliu.library.common.persistence.zxing.RLScanQRActivity;
 final class DecodeThread extends Thread {
 
     public static final String BARCODE_BITMAP = "barcode_bitmap";
-    private final RLScanQRActivity activity;
+    private final ZxingScanActivity activity;
     private final Hashtable<DecodeHintType, Object> hints;
     private Handler handler;
     private final CountDownLatch handlerInitLatch;
 
-    DecodeThread(RLScanQRActivity activity,
+    DecodeThread(ZxingScanActivity activity,
             Vector<BarcodeFormat> decodeFormats,
             String characterSet,
             ResultPointCallback resultPointCallback) {
