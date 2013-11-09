@@ -31,7 +31,7 @@ import com.google.zxing.Result;
 import java.util.Vector;
 
 import com.rincliu.library.R;
-import com.rincliu.library.common.persistence.zxing.RLScanActivity;
+import com.rincliu.library.common.persistence.zxing.RLScanQRActivity;
 import com.rincliu.library.common.persistence.zxing.camera.CameraManager;
 import com.rincliu.library.common.persistence.zxing.view.ViewfinderResultPointCallback;
 
@@ -43,7 +43,7 @@ public final class CaptureActivityHandler extends Handler {
 
     private static final String TAG = CaptureActivityHandler.class.getSimpleName();
 
-    private final RLScanActivity activity;
+    private final RLScanQRActivity activity;
     private final DecodeThread decodeThread;
     private State state;
 
@@ -53,7 +53,7 @@ public final class CaptureActivityHandler extends Handler {
         DONE
     }
 
-    public CaptureActivityHandler(RLScanActivity activity, Vector<BarcodeFormat> decodeFormats,
+    public CaptureActivityHandler(RLScanQRActivity activity, Vector<BarcodeFormat> decodeFormats,
             String characterSet) {
         this.activity = activity;
         decodeThread = new DecodeThread(activity, decodeFormats, characterSet,

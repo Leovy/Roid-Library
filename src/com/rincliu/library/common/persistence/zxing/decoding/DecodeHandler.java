@@ -32,7 +32,7 @@ import com.google.zxing.common.HybridBinarizer;
 import java.util.Hashtable;
 
 import com.rincliu.library.R;
-import com.rincliu.library.common.persistence.zxing.RLScanActivity;
+import com.rincliu.library.common.persistence.zxing.RLScanQRActivity;
 import com.rincliu.library.common.persistence.zxing.camera.CameraManager;
 import com.rincliu.library.common.persistence.zxing.camera.PlanarYUVLuminanceSource;
 
@@ -40,10 +40,10 @@ final class DecodeHandler extends Handler {
 
     private static final String TAG = DecodeHandler.class.getSimpleName();
 
-    private final RLScanActivity activity;
+    private final RLScanQRActivity activity;
     private final MultiFormatReader multiFormatReader;
 
-    DecodeHandler(RLScanActivity activity, Hashtable<DecodeHintType, Object> hints) {
+    DecodeHandler(RLScanQRActivity activity, Hashtable<DecodeHintType, Object> hints) {
         multiFormatReader = new MultiFormatReader();
         multiFormatReader.setHints(hints);
         this.activity = activity;
