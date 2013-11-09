@@ -116,6 +116,14 @@ public class RLSpinner extends ViewGroup{
 	
 	/**
 	 * 
+	 * @param defaultText
+	 */
+	public void setDefaultText(String defaultText){
+		tv.setText(defaultText);
+	}
+	
+	/**
+	 * 
 	 * @param color
 	 */
 	public void setTextColor(int color){
