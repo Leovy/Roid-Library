@@ -43,9 +43,7 @@ public abstract class RLOnClickListener implements View.OnClickListener{
 	 */
 	public abstract void onClickX(View view);
 
-	/**
-	 * 
-	 */
+	@Override
 	public void onClick(View view){
 		 if (processFlag) {
              setProcessFlag();
