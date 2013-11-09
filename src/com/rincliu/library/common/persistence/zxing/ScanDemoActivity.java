@@ -30,7 +30,7 @@ public class ScanDemoActivity extends RLActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		startActivityForResult(new Intent(ScanDemoActivity.this,ScanActivity.class),MSG_SCAN);
+		startActivityForResult(new Intent(ScanDemoActivity.this,RLScanActivity.class),MSG_SCAN);
 	}
 	
 	@Override
