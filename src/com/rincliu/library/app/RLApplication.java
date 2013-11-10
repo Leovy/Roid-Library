@@ -91,7 +91,7 @@ public class RLApplication extends Application{
 			.memoryCacheSize((int)(availableMemory/10))
 			.memoryCacheSizePercentage(10);
 		}
-		long availableStorage=RLAPICompat.getAvailableExternalStorageSize();
+		long availableStorage=RLSysUtil.getAvailableExternalStorageSize();
 		if(availableStorage>0){
 			builder.discCache(new TotalSizeLimitedDiscCache(
 					StorageUtils.getCacheDirectory(this), (int)(availableStorage/10)))
@@ -106,7 +106,7 @@ public class RLApplication extends Application{
 		imgLoader.init(builder.build());
 		defaultDisplayImageOptions=new DisplayImageOptions.Builder()
 		 .cacheInMemory(Runtime.getRuntime().freeMemory()>0)
-		 .cacheOnDisc(RLAPICompat.getAvailableExternalStorageSize()>0)
+		 .cacheOnDisc(RLSysUtil.getAvailableExternalStorageSize()>0)
 		 .resetViewBeforeLoading(true)
 		 .bitmapConfig(Bitmap.Config.RGB_565)
 		 .displayer(new FadeInBitmapDisplayer(300))

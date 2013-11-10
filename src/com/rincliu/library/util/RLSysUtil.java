@@ -35,7 +35,6 @@ import android.media.MediaScannerConnection.OnScanCompletedListener;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.StatFs;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.util.DisplayMetrics;
@@ -43,6 +42,7 @@ import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.rincliu.library.app.RLAPICompat;
 import com.rincliu.library.entity.RLDisplayInfo;
 
 public class RLSysUtil {
@@ -292,25 +292,16 @@ public class RLSysUtil {
      * 
      * @return
      */
-	public static long getAvailableExternalSpace(){
-		File path=new File(Environment.getExternalStorageDirectory().getAbsolutePath());
-		StatFs stat=new StatFs(path.getPath());
-		long blockSize=stat.getBlockSize();
-		long availableBlocks=stat.getAvailableBlocks();
-		return availableBlocks * blockSize;
+    public static long getAvailableExternalStorageSize(){
+    	return RLAPICompat.getAvailableBlocks()*RLAPICompat.getBlockSize();
 	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public static long getAvailableInnerSpace(){
-		File path=Environment.getDataDirectory();
-		StatFs stat=new StatFs(path.getPath());
-		long blockSize=stat.getBlockSize();
-		long availableBlocks=stat.getAvailableBlocks();
-		long realSize=blockSize * availableBlocks;
-		return realSize;
+    
+    /**
+     * 
+     * @return
+     */
+	public static long getTotalExternalStorageSize(){
+		return RLAPICompat.getFreeBlocks()*RLAPICompat.getBlockSize();
 	}
     
     /**

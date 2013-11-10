@@ -82,15 +82,11 @@ public class RLAPICompat {
 	 * 
 	 * @return
 	 */
-	public static long getAvailableExternalStorageSize(){
+	public static long getBlockSize(){
 		long size=0;
-		if(VERSION>=18){
-			size=SDK18.getAvailableExternalStorageSize();
-		}else{
-			if(Environment.getExternalStorageDirectory()!=null){
-				StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
-				size=(long)stat.getAvailableBlocks()*(long)stat.getBlockSize();
-			}
+		if(Environment.getExternalStorageDirectory()!=null){
+			StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+			size=VERSION>=18?SDK18.getBlockSize():(long)stat.getBlockSize();
 		}
 		return size;
 	}
@@ -99,15 +95,37 @@ public class RLAPICompat {
 	 * 
 	 * @return
 	 */
-	public static long getTotalExternalStorageSize(){
+	public static long getBlockCount(){
 		long size=0;
-		if(VERSION>=18){
-			size=SDK18.getTotalExternalStorageSize();
-		}else{
-			if(Environment.getExternalStorageDirectory()!=null){
-				StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
-				size=(long)stat.getFreeBlocks()*(long)stat.getBlockSize();
-			}
+		if(Environment.getExternalStorageDirectory()!=null){
+			StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+			size=VERSION>=18?SDK18.getBlockCount():(long)stat.getBlockCount();
+		}
+		return size;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public static long getFreeBlocks(){
+		long size=0;
+		if(Environment.getExternalStorageDirectory()!=null){
+			StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+			size=VERSION>=18?SDK18.getFreeBlocks():(long)stat.getFreeBlocks();
+		}
+		return size;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public static long getAvailableBlocks(){
+		long size=0;
+		if(Environment.getExternalStorageDirectory()!=null){
+			StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+			size=VERSION>=18?SDK18.getAvailableBlocks():(long)stat.getAvailableBlocks();
 		}
 		return size;
 	}
@@ -134,19 +152,35 @@ public class RLAPICompat {
 	
 	@TargetApi(18)
 	private static class SDK18 {
-		public static long getAvailableExternalStorageSize(){
+		public static long getBlockSize(){
 			long size=0;
 			if(Environment.getExternalStorageDirectory()!=null){
 				StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
-				size=stat.getAvailableBlocksLong()*stat.getBlockSizeLong();
+				size=stat.getBlockSizeLong();
 			}
 			return size;
 		}
-		public static long getTotalExternalStorageSize(){
+		public static long getBlockCount(){
 			long size=0;
 			if(Environment.getExternalStorageDirectory()!=null){
 				StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
-				size=stat.getFreeBlocksLong()*stat.getBlockSizeLong();
+				size=stat.getBlockCountLong();
+			}
+			return size;
+		}
+		public static long getFreeBlocks(){
+			long size=0;
+			if(Environment.getExternalStorageDirectory()!=null){
+				StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+				size=stat.getFreeBlocksLong();
+			}
+			return size;
+		}
+		public static long getAvailableBlocks(){
+			long size=0;
+			if(Environment.getExternalStorageDirectory()!=null){
+				StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+				size=stat.getAvailableBlocksLong();
 			}
 			return size;
 		}
