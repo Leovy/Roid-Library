@@ -16,8 +16,11 @@
 package com.rincliu.library.util;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
@@ -32,8 +35,54 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.provider.MediaStore;
 
 public class RLImgUtil {
+	
+	/**
+	 * 
+	 * @param context
+	 * @param uri
+	 * @return
+	 */
+	public static String getPathFromUri(Context context,Uri uri){  
+		String path=null;
+        String[] proj={ MediaStore.Images.Media.DATA };  
+        Cursor cursor=context.getContentResolver().query(uri,proj,null,null,null);
+        if(cursor!=null&&cursor.getCount()>0&&cursor.getColumnCount()>0){
+        	int column_index=-1;
+        	try{
+        		column_index=cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA); 
+        	}catch(IllegalArgumentException e){
+        		e.printStackTrace();
+        		cursor.close();
+        	}
+        	if(column_index!=-1){
+        		cursor.moveToFirst();    
+        		path=cursor.getString(column_index);
+        	}
+            cursor.close();
+        }
+        return path;
+    }
+	
+	/**
+	 * 
+	 * @param context
+	 * @param uri
+	 * @return
+	 */
+	public static Bitmap decodeFromUri(Context context, Uri uri){
+		Bitmap bitmap = null;
+		try {
+			bitmap = BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return bitmap;
+	}
 	
 	/**
 	 * 
@@ -76,18 +125,13 @@ public class RLImgUtil {
 	 * @return
 	 */
 	public static Bitmap drawableToBitmap(Drawable drawable) {
-        // 取 drawable 的长宽
         int w = drawable.getIntrinsicWidth();
         int h = drawable.getIntrinsicHeight();
-        // 取 drawable 的颜色格式
         Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
                 : Bitmap.Config.RGB_565;
-        // 建立对应 bitmap
         Bitmap bitmap = Bitmap.createBitmap(w, h, config);
-        // 建立对应 bitmap 的画布
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, w, h);
-        // 把 drawable 内容画到画布中
         drawable.draw(canvas);
         return bitmap;
     }

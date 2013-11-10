@@ -19,6 +19,7 @@ import java.io.File;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 
@@ -31,6 +32,29 @@ public class RLIntentUtil {
 	public static Intent getCameraIntent(String outputFile){
 		Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(outputFile)));
+		return intent;
+	}
+	
+	/**
+	 * 
+	 * @param uri
+	 * @param outputX
+	 * @param outputY
+	 * @return
+	 */
+	public static Intent getCutPicIntent(Uri uri, int outputX, int outputY){
+		Intent intent = new Intent("com.android.camera.action.CROP");
+		intent.setDataAndType(uri, "image/*");
+		intent.putExtra("crop", "true");
+		intent.putExtra("aspectX", 2);
+		intent.putExtra("aspectY", 1);
+		intent.putExtra("outputX", outputX);
+		intent.putExtra("outputY", outputY);
+		intent.putExtra("scale", true);
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+		intent.putExtra("return-data", false);
+		intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+		intent.putExtra("noFaceDetection", true);
 		return intent;
 	}
 	

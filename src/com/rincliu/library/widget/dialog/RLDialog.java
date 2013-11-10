@@ -54,7 +54,7 @@ public abstract class RLDialog extends Dialog{
         window.addFlags(LayoutParams.FLAG_DIM_BEHIND);  
         layoutParams.alpha=0.98765f;
         layoutParams.dimAmount=0.4321f;
-		window.setWindowAnimations(R.style.ANIMATIONS_FADE);
+		window.setWindowAnimations(R.style.ANIMATIONS_SCALE_FADE);
 	}
 	
 	/**
