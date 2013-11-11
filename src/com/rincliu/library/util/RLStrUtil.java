@@ -15,11 +15,27 @@
  */
 package com.rincliu.library.util;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RLStrUtil {
 	private static final String URL_REG_EXPRESSION = "^(https?://)?([a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]+)+(/*[A-Za-z0-9/\\-_&:?\\+=//.%]*)*";
 	private static final String EMAIL_REG_EXPRESSION = "\\w+(\\.\\w+)*@\\w+(\\.\\w+)+";
+	
+	/**
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static String replaceBlank(String str) {
+		String dest = "";
+		if (str!=null) {
+			Pattern p = Pattern.compile("\\s*|\t|\r|\n");
+			Matcher m = p.matcher(str);
+			dest = m.replaceAll("");
+		}
+		return dest;
+	}
 	
 	/**
 	 * 
