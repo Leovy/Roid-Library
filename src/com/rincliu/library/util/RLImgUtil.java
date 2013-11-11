@@ -17,11 +17,13 @@ package com.rincliu.library.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -39,6 +41,57 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 public class RLImgUtil {
+	
+	/**
+	 * 
+	 * @param srcPath
+	 * @param dstPath
+	 * @param maxWidth
+	 * @param maxHeight
+	 * @param maxSize
+	 * @param format
+	 */
+	public static void compress(String srcPath, String dstPath, int maxWidth, int maxHeight, long maxSize, CompressFormat format) {
+		BitmapFactory.Options newOpts=new BitmapFactory.Options();
+		newOpts.inJustDecodeBounds=true;
+		Bitmap bitmap=BitmapFactory.decodeFile(srcPath, newOpts);
+		newOpts.inJustDecodeBounds=false;
+		int w=newOpts.outWidth;
+		int h=newOpts.outHeight;
+		int be=1;
+		if(w>h&&w>maxWidth){
+			be=newOpts.outWidth/maxWidth;
+		}else if(w<h&&h>maxHeight){
+			be=newOpts.outHeight/maxHeight;
+		}
+		if(be<=0){
+			be=1;
+		}
+		newOpts.inSampleSize=be;
+		bitmap=BitmapFactory.decodeFile(srcPath, newOpts);
+		ByteArrayOutputStream baos=new ByteArrayOutputStream();
+		int quality=100;
+		bitmap.compress(format, quality, baos);
+		while(baos.toByteArray().length>maxSize){		
+			baos.reset();
+			bitmap.compress(format, quality, baos);
+			quality-=10;
+		}
+		try {
+			baos.writeTo(new FileOutputStream(dstPath));
+		}catch(FileNotFoundException e) {
+			e.printStackTrace();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				baos.flush();
+				baos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	
 	/**
 	 * 
