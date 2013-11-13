@@ -176,6 +176,15 @@ public class RLWebBrowser extends ViewGroup{
         webView.setDownloadListener(myDownLoadListener);
 	}
 	
+	/**
+	 * 
+	 */
+	public void destroy(){
+		webView.getSettings().setBlockNetworkImage(true);
+    	webView.getSettings().setBlockNetworkLoads(true);
+		webView.destroy();
+	}
+	
 	private DownloadListener myDownLoadListener=new DownloadListener(){
 		@Override  
 	    public void onDownloadStart(final String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {  
