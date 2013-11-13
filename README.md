@@ -1,11 +1,11 @@
-常用功能模块
+Common Modules
 ==========
 * Android持久化框架[Afinal](https://github.com/RincLiu/afinal)中的FinalActivity（支持组件事件注解）和FinalDb（SQLite操作）；
 * HTTP框架[AsyncHttpClient](https://github.com/loopj/android-async-http)；
 * 图片处理框架[UniversalImageLoader](https://github.com/nostra13/Android-Universal-Image-Loader);
 * ROOT相关操作模块[RootManager](https://github.com/Chrisplus/RootManager)；
 
-第三方SDK模块
+3rd Party Modules
 ==========
 * 基于[多盟](http://www.duomeng.net/developers/developers.htm)的广告模块；
 * 基于[友盟](http://www.umeng.com)的数据分析统计模块、用户反馈、版本更新等模块；
@@ -15,7 +15,7 @@
 * 基于[科大讯飞](http://open.voicecloud.cn/developer.php)的语音引擎模块，支持语音识别和语音朗读；
 * 社会化组件：新浪微博SSO登录、微博分享、微信分享；
 
-组件及工具类
+Widgets and Utils
 ==========
 * 国际化：支持English、简体中文、繁體中文；
 * 经过简化和定制的二维码扫描模块zxing；
@@ -30,7 +30,7 @@
 * 其他自定义组件：RLDialog、RLAlertDialog、RLListDialog、RLLoadingDialog、RLFileExplorer、RLSpinner、RLWebView、RLOnClickListener；
 * 工具类：RLAppUtil(应用管理)、RLFileUtil(IO操作)、RLImgUtil(图像处理)、RLIntentUtil(系统服务调用)、RLJsonUtil(JSON解析)、RLNetUtil(网络服务)、RLStrUtil(字符串处理)、RLSysUtil(系统参数配置)、RLUiUtil(UI相关，自定义toast等)；
 
-使用注意
+Usage
 ==========
 * Analytics、CrashHandler、Feedback、Push这些需要在Application或Activity创建时初始化的组件可以在AndroidManifest.xml中配置是否启用:
 
