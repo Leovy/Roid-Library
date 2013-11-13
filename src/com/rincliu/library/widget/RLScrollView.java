@@ -79,10 +79,7 @@ public class RLScrollView extends ScrollView{
 		return getScrollY()<=0;
 	}
 	
-	/**
-	 * 
-	 * @return
-	 */
+	@Deprecated
 	public boolean isAtBottom(){
 		return getChildAt(getChildCount()-1).getBottom()+getPaddingBottom()
 				==getHeight()+getScrollY();
