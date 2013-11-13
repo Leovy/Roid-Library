@@ -32,6 +32,8 @@ Widgets and Utils
 
 Usage
 ==========
+* Android 4.4下编译(targetSdkVersion=19)，最低支持Android 2.3(minSdkVersion=9);
+* 作为Library project引用，AndroidManifest.xml中application须指定为RLApplication或其子类；
 * Analytics、CrashHandler、Feedback、Push这些需要在Application或Activity创建时初始化的组件可以在AndroidManifest.xml中配置是否启用:
 
 ```xml
