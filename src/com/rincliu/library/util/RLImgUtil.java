@@ -52,23 +52,27 @@ public class RLImgUtil {
 	 * @param format
 	 */
 	public static void compress(String srcPath, String dstPath, int maxWidth, int maxHeight, long maxSize, CompressFormat format) {
-		BitmapFactory.Options newOpts=new BitmapFactory.Options();
-		newOpts.inJustDecodeBounds=true;
-		Bitmap bitmap=BitmapFactory.decodeFile(srcPath, newOpts);
-		newOpts.inJustDecodeBounds=false;
-		int w=newOpts.outWidth;
-		int h=newOpts.outHeight;
-		int be=1;
-		if(w>h&&w>maxWidth){
-			be=newOpts.outWidth/maxWidth;
-		}else if(w<h&&h>maxHeight){
-			be=newOpts.outHeight/maxHeight;
+		BitmapFactory.Options opts=new BitmapFactory.Options();
+		opts.inJustDecodeBounds=true;
+		Bitmap bitmap=BitmapFactory.decodeFile(srcPath, opts);
+		opts.inJustDecodeBounds=false;
+		int w=opts.outWidth;
+		int h=opts.outHeight;
+		int size=0;
+		if(w<=maxWidth&&h<=maxHeight){
+			size=1;
+		}else{
+			//The decoder uses a final value based on powers of 2, 
+			//any other value will be rounded down to the nearest power of 2.
+			//So we use a ceil log value to keep both of them under limits.
+			//See doc: http://developer.android.com/reference/android/graphics/BitmapFactory.Options.html#inSampleSize
+			double scale=w>=h?w/maxWidth:h/maxHeight;
+			double log=Math.log(scale)/Math.log(2);
+			double logCeil=Math.ceil(log);
+			size=(int) Math.pow(2, logCeil);
 		}
-		if(be<=0){
-			be=1;
-		}
-		newOpts.inSampleSize=be;
-		bitmap=BitmapFactory.decodeFile(srcPath, newOpts);
+		opts.inSampleSize=size;
+		bitmap=BitmapFactory.decodeFile(srcPath, opts);
 		ByteArrayOutputStream baos=new ByteArrayOutputStream();
 		int quality=100;
 		bitmap.compress(format, quality, baos);
