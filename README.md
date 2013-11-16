@@ -23,7 +23,7 @@ Widgets and Utils
 * View switcher: ViewFlow；
 * Sliding menu: MenuDrawer；
 * GestureImageView；
-* Other：RLDialog、RLAlertDialog、RLListDialog、RLLoadingDialog、RLFileExplorer、RLSpinner、RLWebView、RLOnClickListener；
+* Other custom widgets：RLDialog、RLAlertDialog、RLListDialog、RLLoadingDialog、RLFileExplorer、RLSpinner、RLWebView、RLOnClickListener；
 * Utils：RLAppUtil、RLFileUtil、RLImgUtil、RLIntentUtil、RLJsonUtil、RLNetUtil、RLStrUtil、RLSysUtil、RLUiUtil；
 
 Usage
