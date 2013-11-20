@@ -16,10 +16,10 @@
 package com.rincliu.library.common.reference.social.weibo;
 
 import com.weibo.sdk.android.sso.SsoHandler;
-
-import com.rincliu.library.app.RLActivity;
+import com.rincliu.library.activity.RLActivity;
 import com.rincliu.library.common.reference.social.weibo.RLWeiboHelper.ReqHandler;
 import com.rincliu.library.util.RLUiUtil;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;

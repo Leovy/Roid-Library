@@ -16,9 +16,10 @@
 package com.rincliu.library.common.persistence.zxing;
 
 import com.rincliu.library.R;
-import com.rincliu.library.app.RLActivity;
+import com.rincliu.library.activity.RLActivity;
 import com.rincliu.library.util.RLUiUtil;
 import com.rincliu.library.widget.dialog.RLAlertDialog;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;

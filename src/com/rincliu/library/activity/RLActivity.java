@@ -13,10 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.rincliu.library.app;
+package com.rincliu.library.activity;
 
 import com.rincliu.library.BuildConfig;
 import com.rincliu.library.R;
+import com.rincliu.library.app.RLApplication;
+import com.rincliu.library.app.RLCrashHandler;
+import com.rincliu.library.common.persistence.afinal.RLFinalActivity;
 import com.rincliu.library.common.reference.analytics.RLAnalyticsHelper;
 import com.rincliu.library.common.reference.feedback.RLFeedbackHelper;
 import com.rincliu.library.util.RLSysUtil;
@@ -25,9 +28,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 
-public class RLFragmentActivity extends FragmentActivity{
+public class RLActivity extends RLFinalActivity{
 	private boolean isEnableCrashHandler=true;
 	private boolean isEnableAnalytics=false;
 	private boolean isEnableFeedback=false;
@@ -63,7 +65,7 @@ public class RLFragmentActivity extends FragmentActivity{
 	}
 	
 	@Override
-	public void onNewIntent(Intent intent){
+	protected void onNewIntent(Intent intent){
 		super.onNewIntent(intent);
 	}
 	

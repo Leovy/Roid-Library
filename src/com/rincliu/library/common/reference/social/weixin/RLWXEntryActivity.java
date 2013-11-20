@@ -22,8 +22,9 @@ import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import com.rincliu.library.R;
-import com.rincliu.library.app.RLActivity;
+import com.rincliu.library.activity.RLActivity;
 import com.rincliu.library.util.RLUiUtil;
 
 public class RLWXEntryActivity extends RLActivity implements IWXAPIEventHandler{

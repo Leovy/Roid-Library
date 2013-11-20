@@ -20,10 +20,12 @@ Widgets and Utils
 * QR bar scanning: zxing；
 * Global CrashHandler；
 * API compatibility Util: RLAPICompat；
+* RLCameraActivity: A custom camera.
 * View switcher: ViewFlow；
 * Sliding menu: MenuDrawer；
-* GestureImageView；
-* Other custom widgets：RLDialog、RLAlertDialog、RLListDialog、RLLoadingDialog、RLFileExplorer、RLSpinner、RLWebView、RLOnClickListener；
+* GestureImageView: Support to scale ImageView with gesture；
+* Custom dialogs：RLDialog、RLAlertDialog、RLListDialog、RLLoadingDialog;
+* Other custom widgets: RLFileExplorer、RLSpinner、RLWebView、RLOnClickListener；
 * Utils：RLAppUtil、RLFileUtil、RLImgUtil、RLIntentUtil、RLJsonUtil、RLNetUtil、RLStrUtil、RLSysUtil、RLUiUtil；
 
 Usage

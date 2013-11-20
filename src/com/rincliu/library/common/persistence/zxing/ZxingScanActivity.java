@@ -36,7 +36,7 @@ import java.io.IOException;
 import java.util.Vector;
 
 import com.rincliu.library.R;
-import com.rincliu.library.app.RLActivity;
+import com.rincliu.library.activity.RLActivity;
 import com.rincliu.library.common.persistence.zxing.camera.CameraManager;
 import com.rincliu.library.common.persistence.zxing.decoding.CaptureActivityHandler;
 import com.rincliu.library.common.persistence.zxing.decoding.InactivityTimer;
