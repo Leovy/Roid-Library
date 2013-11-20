@@ -142,6 +142,14 @@
         </activity>
         
         
+        <!--#################### RLCameraActivity START ####################-->
+        <activity
+            android:name="com.rincliu.library.activity.RLCameraActivity"
+            android:theme="@style/COMMON_PAGE_THEME"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="sensor"/>
+        <!--#################### RLCameraActivity START ####################-->
+        
         <!--#################### WEIXIN COMPONENTS START ####################-->
         <activity
             android:name=".wxapi.WXEntryActivity"
