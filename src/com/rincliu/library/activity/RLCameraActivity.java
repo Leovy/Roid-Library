@@ -46,7 +46,8 @@ public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callba
 	
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		this.setContentView(R.layout.activity_camera);
+		setContentView(R.layout.activity_camera);
+		rotation=getWindowManager().getDefaultDisplay().getRotation();
 		iv_flash=(ImageView)findViewById(R.id.iv_flash);
 		iv_flash.setOnClickListener(new RLOnClickListener(){
 			@Override
