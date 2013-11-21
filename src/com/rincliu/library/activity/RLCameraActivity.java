@@ -38,11 +38,10 @@ import android.widget.ImageView;
 
 public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callback, Camera.PictureCallback, AutoFocusCallback{
 	private Camera camera;
-	private ImageView iv_flash, iv_yes, iv_no;
+	private ImageView iv_flash, iv_yes, iv_no, iv_camera;
 	private byte[] data;
 	private boolean isFlashEnabled=false;
 	public static int rotation = 0;
-	private boolean isReady=false;
 	private String flashMode=Parameters.FLASH_MODE_OFF;
 	
 	public void onCreate(Bundle savedInstanceState){
@@ -108,9 +107,10 @@ public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callba
 	            }catch(Exception e){    
 	                e.printStackTrace();
 	                camera.release();
-	            }    
-				iv_yes.setVisibility(View.GONE);
-				iv_no.setVisibility(View.GONE);
+	            	iv_yes.setVisibility(View.GONE);
+	            	iv_no.setVisibility(View.GONE);
+	            	iv_camera.setVisibility(View.VISIBLE);
+	            }
 			}
 		});
 		iv_no=(ImageView)findViewById(R.id.iv_no);
@@ -120,21 +120,17 @@ public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callba
 				camera.startPreview();
 				iv_yes.setVisibility(View.GONE);
 				iv_no.setVisibility(View.GONE);
+				iv_camera.setVisibility(View.VISIBLE);
 			}
 		});
 		SurfaceView surfaceView = (SurfaceView)this.findViewById(R.id.sv_camera);
 		surfaceView.setFocusable(true); 
 		surfaceView.setFocusableInTouchMode(true);
-		findViewById(R.id.iv_camera).setOnClickListener(new View.OnClickListener() {
+		iv_camera=(ImageView)findViewById(R.id.iv_camera);
+		iv_camera.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(!isReady){  
-		            camera.autoFocus(RLCameraActivity.this);  
-		            isReady = true;  
-		        }else{  
-		            camera.startPreview();
-		            isReady = false;  
-		        }  
+				camera.takePicture(null, null, RLCameraActivity.this);
 			}
 		});
 		SurfaceHolder holder = surfaceView.getHolder();
@@ -150,7 +146,6 @@ public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callba
             params.setPictureFormat(ImageFormat.JPEG);  
             params.setPreviewSize(640,480);  
             camera.setParameters(params);  
-            camera.takePicture(null, null, RLCameraActivity.this);  
         }
 	}
 	
@@ -187,6 +182,8 @@ public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callba
 		camera = Camera.open();
 		try {
 			camera.setPreviewDisplay(holder);
+			camera.startPreview();
+			camera.autoFocus(this); 
 		} catch (Exception e) {
 			camera.release();
 		}
@@ -204,6 +201,7 @@ public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callba
 	public void onPictureTaken(byte[] data, Camera camera) {
 		iv_yes.setVisibility(View.VISIBLE);
 		iv_no.setVisibility(View.VISIBLE);
+		iv_camera.setVisibility(View.GONE);
 		this.data=data;
 	}
 	
