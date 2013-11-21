@@ -42,7 +42,7 @@ public class RLCameraActivity extends RLActivity{
 	private Camera camera;
 	private byte[] mData;
 	private boolean isFlashEnabled=false;
-	private int rotation = 0;
+	private int rotation=0;
 	private String flashMode=Parameters.FLASH_MODE_OFF;
 	private ImageView iv_flash, iv_yes, iv_no, iv_camera;
 	
@@ -59,7 +59,7 @@ public class RLCameraActivity extends RLActivity{
 		iv_yes=(ImageView)findViewById(R.id.iv_yes);
 		iv_no=(ImageView)findViewById(R.id.iv_no);
 		iv_camera=(ImageView)findViewById(R.id.iv_camera);
-		SurfaceView surfaceView = (SurfaceView)this.findViewById(R.id.sv_camera);
+		SurfaceView surfaceView=(SurfaceView)this.findViewById(R.id.sv_camera);
 		
 		if(getIntent().getBooleanExtra("isAutoFlash", false)){
 			iv_flash.setVisibility(View.GONE);
@@ -71,8 +71,8 @@ public class RLCameraActivity extends RLActivity{
 				isFlashEnabled=!isFlashEnabled;
 				flashMode=isFlashEnabled?Parameters.FLASH_MODE_ON:Parameters.FLASH_MODE_OFF;
 				Parameters params=camera.getParameters(); 
-				params.setFlashMode(flashMode); 
-                camera.setParameters(params);  
+				params.setFlashMode(flashMode);
+				camera.setParameters(params);  
 				iv_flash.setImageDrawable(getResources().getDrawable(
 						isFlashEnabled?R.drawable.btn_camera_flash_on:R.drawable.btn_camera_flash_off));
 			}
@@ -80,42 +80,42 @@ public class RLCameraActivity extends RLActivity{
 		iv_yes.setOnClickListener(new RLOnClickListener(){
 			@Override
 			public void onClickX(View arg0) {
-				try{    
-	                Bitmap bMap=BitmapFactory.decodeByteArray(mData, 0, mData.length);
-	                Bitmap bMapRotate; 
-	                float degrees=0f;
-	                switch(rotation){
-	                case Surface.ROTATION_0:
-	                	degrees=90f;
-	                	break;
-	                case Surface.ROTATION_90:
-	                	degrees=0f;
-	                	break;
-	                case Surface.ROTATION_180:
-	                	degrees=270f;
-	                	break;
-	                case Surface.ROTATION_270:
-	                	degrees=180f;
-	                	break;
-	                }
-	                Matrix matrix = new Matrix();  
-    	            matrix.reset();  
-    	            matrix.postRotate(degrees);  
-    	            bMapRotate = Bitmap.createBitmap(bMap, 0, 0, bMap.getWidth(),  
-    	                    bMap.getHeight(), matrix, true); 
-    	            bMap = bMapRotate;
-	                String savePath=getIntent().getStringExtra("savePath");
-	                BufferedOutputStream bos=new BufferedOutputStream(new FileOutputStream(savePath));    
-	                bMap.compress(Bitmap.CompressFormat.JPEG,100,bos);    
-	                bos.flush();    
-	                bos.close();
-	                setResult(RESULT_OK, getIntent());
-	            }catch(Exception e){    
-	                e.printStackTrace();
-	                setResult(RESULT_CANCELED, getIntent());
+				try{
+					Bitmap bMap=BitmapFactory.decodeByteArray(mData, 0, mData.length);
+					Bitmap bMapRotate;
+					float degrees=0f;
+					switch(rotation){
+					case Surface.ROTATION_0:
+						degrees=90f;
+						break;
+					case Surface.ROTATION_90:
+						degrees=0f;
+						break;
+					case Surface.ROTATION_180:
+						degrees=270f;
+						break;
+					case Surface.ROTATION_270:
+						degrees=180f;
+						break;
+					}
+					Matrix matrix=new Matrix();
+					matrix.reset();
+					matrix.postRotate(degrees);
+					bMapRotate=Bitmap.createBitmap(bMap, 0, 0, bMap.getWidth(), 
+							bMap.getHeight(), matrix, true);
+					bMap=bMapRotate;
+					String savePath=getIntent().getStringExtra("savePath");
+					BufferedOutputStream bos=new BufferedOutputStream(new FileOutputStream(savePath));
+					bMap.compress(Bitmap.CompressFormat.JPEG,100,bos);
+					bos.flush();
+					bos.close();
+					setResult(RESULT_OK, getIntent());
+	            }catch(Exception e){
+	            	e.printStackTrace();
+	            	setResult(RESULT_CANCELED, getIntent());
 	            }finally{
 	            	finish();
-	                overridePendingTransition(R.anim.reload, R.anim.reload);
+	            	overridePendingTransition(R.anim.reload, R.anim.reload);
 	            }
 			}
 		});
@@ -147,14 +147,14 @@ public class RLCameraActivity extends RLActivity{
 		
 		surfaceView.setFocusable(true); 
 		surfaceView.setFocusableInTouchMode(true);
-		SurfaceHolder holder = surfaceView.getHolder();
+		SurfaceHolder holder=surfaceView.getHolder();
 		if(android.os.Build.VERSION.SDK_INT<11){
 			holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		}
 		holder.addCallback(new SurfaceHolder.Callback() {
 			@Override
 			public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-		        Camera.Parameters params = camera.getParameters(); 
+		        Camera.Parameters params=camera.getParameters(); 
 		        params.setFlashMode(flashMode);
 		        params.setPictureFormat(ImageFormat.JPEG); 
 		        switch(rotation){
@@ -181,20 +181,20 @@ public class RLCameraActivity extends RLActivity{
 			}
 			@Override
 			public void surfaceCreated(SurfaceHolder holder) {
-				camera = Camera.open();
+				camera=Camera.open();
 				try {
 					camera.setPreviewDisplay(holder);
 					camera.startPreview();
 					camera.autoFocus(new AutoFocusCallback(){
 						@Override
 						public void onAutoFocus(boolean success, Camera camera) {
-							if(success){   
-					            Camera.Parameters params = camera.getParameters();  
-					            params.setFlashMode(flashMode);
-					            params.setPictureFormat(ImageFormat.JPEG);  
-					            params.setPreviewSize(640,480);  
-					            camera.setParameters(params);  
-					        }
+							if(success){
+								Camera.Parameters params=camera.getParameters();
+								params.setFlashMode(flashMode);
+								params.setPictureFormat(ImageFormat.JPEG);
+								params.setPreviewSize(640,480);
+								camera.setParameters(params);
+							}
 						}
 					}); 
 				} catch (Exception e) {
@@ -212,10 +212,10 @@ public class RLCameraActivity extends RLActivity{
 	}
 	
 	@Override  
-    public void onConfigurationChanged(Configuration newConfig) { 
+    public void onConfigurationChanged(Configuration newConfig) {
 		rotation=getWindowManager().getDefaultDisplay().getRotation();
-    	super.onConfigurationChanged(newConfig);  
-    } 
+		super.onConfigurationChanged(newConfig);  
+    }
 	
 	@Override
 	public void onBackPressed(){
