@@ -18,8 +18,8 @@ package com.rincliu.library.activity;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 
-import com.rincliu.library.R;
 import com.rincliu.library.widget.RLOnClickListener;
+import com.rincliu.library.R;
 
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -66,7 +66,7 @@ public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callba
 				params.setFlashMode(flashMode); 
                 camera.setParameters(params);  
 				iv_flash.setImageDrawable(getResources().getDrawable(
-						isFlashEnabled?R.drawable.btn_camera_flash_off:R.drawable.btn_camera_flash_on));
+						isFlashEnabled?R.drawable.btn_camera_flash_on:R.drawable.btn_camera_flash_off));
 			}
 		});
 		iv_yes=(ImageView)findViewById(R.id.iv_yes);
@@ -106,7 +106,8 @@ public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callba
 	                finish();
 	                overridePendingTransition(R.anim.reload, R.anim.reload);
 	            }catch(Exception e){    
-	                e.printStackTrace();    
+	                e.printStackTrace();
+	                camera.release();
 	            }    
 				iv_yes.setVisibility(View.GONE);
 				iv_no.setVisibility(View.GONE);
