@@ -110,13 +110,13 @@ public class RLCameraActivity extends RLActivity{
 					bos.flush();
 					bos.close();
 					setResult(RESULT_OK, getIntent());
-	            }catch(Exception e){
-	            	e.printStackTrace();
-	            	setResult(RESULT_CANCELED, getIntent());
-	            }finally{
-	            	finish();
-	            	overridePendingTransition(R.anim.reload, R.anim.reload);
-	            }
+				}catch(Exception e){
+					e.printStackTrace();
+					setResult(RESULT_CANCELED, getIntent());
+				}finally{
+					finish();
+					overridePendingTransition(R.anim.reload, R.anim.reload);
+				}
 			}
 		});
 		
