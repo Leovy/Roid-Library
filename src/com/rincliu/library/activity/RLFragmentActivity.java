@@ -63,7 +63,9 @@ public class RLFragmentActivity extends FragmentActivity{
 			RLFeedbackHelper.init(this, BuildConfig.DEBUG);
 		}
 		
-		((RLApplication)getApplication()).setDisplayInfo(RLSysUtil.getDisplayInfo(this));
+		if(getApplication() instanceof RLApplication){
+			((RLApplication)getApplication()).setDisplayInfo(RLSysUtil.getDisplayInfo(this));
+		}
 	}
 	
 	@Override
@@ -159,7 +161,9 @@ public class RLFragmentActivity extends FragmentActivity{
 	@Override
 	public void onConfigurationChanged(Configuration newConfig){
 		super.onConfigurationChanged(newConfig);
-		((RLApplication)getApplication()).setDisplayInfo(RLSysUtil.getDisplayInfo(this));
+		if(getApplication() instanceof RLApplication){
+			((RLApplication)getApplication()).setDisplayInfo(RLSysUtil.getDisplayInfo(this));
+		}
 		displayRotation=getWindowManager().getDefaultDisplay().getRotation();
 	}
 	
