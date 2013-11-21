@@ -203,7 +203,9 @@ public class RLCameraActivity extends RLActivity{
 			}
 			@Override
 			public void surfaceCreated(SurfaceHolder holder) {
-				camera=Camera.open();
+				if(camera==null){
+					camera=Camera.open();
+				}
 				try {
 					camera.setPreviewDisplay(holder);
 					camera.startPreview();
