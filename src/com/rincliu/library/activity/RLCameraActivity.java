@@ -20,6 +20,7 @@ import java.io.FileOutputStream;
 
 import com.rincliu.library.util.RLSysUtil;
 import com.rincliu.library.widget.RLOnClickListener;
+import com.rincliu.library.widget.dialog.RLLoadingDialog;
 import com.rincliu.library.R;
 
 import android.graphics.Bitmap;
@@ -32,6 +33,7 @@ import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -44,6 +46,7 @@ public class RLCameraActivity extends RLActivity{
 	private boolean isFlashEnabled=false;
 	private String flashMode=Parameters.FLASH_MODE_OFF;
 	private ImageView iv_flash, iv_yes, iv_no, iv_camera;
+	private Handler handler=new Handler();
 	
 	@SuppressWarnings("deprecation")
 	public void onCreate(Bundle savedInstanceState){
@@ -78,43 +81,63 @@ public class RLCameraActivity extends RLActivity{
 		iv_yes.setOnClickListener(new RLOnClickListener(){
 			@Override
 			public void onClickX(View arg0) {
-				try{
-					Bitmap bMap=BitmapFactory.decodeByteArray(mData, 0, mData.length);
-					Bitmap bMapRotate;
-					float degrees=0f;
-					switch(getDisplayRotation()){
-					case Surface.ROTATION_0:
-						degrees=90f;
-						break;
-					case Surface.ROTATION_90:
-						degrees=0f;
-						break;
-					case Surface.ROTATION_180:
-						degrees=270f;
-						break;
-					case Surface.ROTATION_270:
-						degrees=180f;
-						break;
+				final RLLoadingDialog pd=new RLLoadingDialog(RLCameraActivity.this);
+				pd.show();
+				new Thread(){
+					@Override
+					public void run(){
+						try{
+							Bitmap bMap=BitmapFactory.decodeByteArray(mData, 0, mData.length);
+							Bitmap bMapRotate;
+							float degrees=0f;
+							switch(getDisplayRotation()){
+							case Surface.ROTATION_0:
+								degrees=90f;
+								break;
+							case Surface.ROTATION_90:
+								degrees=0f;
+								break;
+							case Surface.ROTATION_180:
+								degrees=270f;
+								break;
+							case Surface.ROTATION_270:
+								degrees=180f;
+								break;
+							}
+							Matrix matrix=new Matrix();
+							matrix.reset();
+							matrix.postRotate(degrees);
+							bMapRotate=Bitmap.createBitmap(bMap, 0, 0, bMap.getWidth(), 
+									bMap.getHeight(), matrix, true);
+							bMap=bMapRotate;
+							String savePath=getIntent().getStringExtra("savePath");
+							BufferedOutputStream bos=new BufferedOutputStream(new FileOutputStream(savePath));
+							bMap.compress(Bitmap.CompressFormat.JPEG,100,bos);
+							bos.flush();
+							bos.close();
+							handler.post(new Runnable(){
+								@Override
+								public void run(){
+									pd.dismiss();
+									setResult(RESULT_OK, getIntent());
+									finish();
+									overridePendingTransition(R.anim.reload, R.anim.reload);
+								}
+							});
+						}catch(Exception e){
+							e.printStackTrace();
+							handler.post(new Runnable(){
+								@Override
+								public void run(){
+									pd.dismiss();
+									setResult(RESULT_CANCELED, getIntent());
+									finish();
+									overridePendingTransition(R.anim.reload, R.anim.reload);
+								}
+							});
+						}
 					}
-					Matrix matrix=new Matrix();
-					matrix.reset();
-					matrix.postRotate(degrees);
-					bMapRotate=Bitmap.createBitmap(bMap, 0, 0, bMap.getWidth(), 
-							bMap.getHeight(), matrix, true);
-					bMap=bMapRotate;
-					String savePath=getIntent().getStringExtra("savePath");
-					BufferedOutputStream bos=new BufferedOutputStream(new FileOutputStream(savePath));
-					bMap.compress(Bitmap.CompressFormat.JPEG,100,bos);
-					bos.flush();
-					bos.close();
-					setResult(RESULT_OK, getIntent());
-				}catch(Exception e){
-					e.printStackTrace();
-					setResult(RESULT_CANCELED, getIntent());
-				}finally{
-					finish();
-					overridePendingTransition(R.anim.reload, R.anim.reload);
-				}
+				}.start();
 			}
 		});
 		
