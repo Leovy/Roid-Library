@@ -30,6 +30,7 @@ import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.Parameters;
+import android.hardware.Camera.PictureCallback;
 import android.os.Bundle;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -37,22 +38,29 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
 
-public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callback, Camera.PictureCallback, AutoFocusCallback{
+public class RLCameraActivity extends RLActivity{
 	private Camera camera;
-	private ImageView iv_flash, iv_yes, iv_no, iv_camera;
-	private byte[] data;
+	private byte[] mData;
 	private boolean isFlashEnabled=false;
-	public static int rotation = 0;
+	private int rotation = 0;
 	private String flashMode=Parameters.FLASH_MODE_OFF;
+	private ImageView iv_flash, iv_yes, iv_no, iv_camera;
 	
+	@SuppressWarnings("deprecation")
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_camera);
+		
 		if(!getIntent().hasExtra("savePath")||!RLSysUtil.isExternalStorageAvailable()){
 			return;
 		}
 		rotation=getWindowManager().getDefaultDisplay().getRotation();
 		iv_flash=(ImageView)findViewById(R.id.iv_flash);
+		iv_yes=(ImageView)findViewById(R.id.iv_yes);
+		iv_no=(ImageView)findViewById(R.id.iv_no);
+		iv_camera=(ImageView)findViewById(R.id.iv_camera);
+		SurfaceView surfaceView = (SurfaceView)this.findViewById(R.id.sv_camera);
+		
 		if(getIntent().getBooleanExtra("isAutoFlash", false)){
 			iv_flash.setVisibility(View.GONE);
 			flashMode=Parameters.FLASH_MODE_AUTO;
@@ -69,12 +77,11 @@ public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callba
 						isFlashEnabled?R.drawable.btn_camera_flash_on:R.drawable.btn_camera_flash_off));
 			}
 		});
-		iv_yes=(ImageView)findViewById(R.id.iv_yes);
 		iv_yes.setOnClickListener(new RLOnClickListener(){
 			@Override
 			public void onClickX(View arg0) {
 				try{    
-	                Bitmap bMap=BitmapFactory.decodeByteArray(data, 0, data.length);
+	                Bitmap bMap=BitmapFactory.decodeByteArray(mData, 0, mData.length);
 	                Bitmap bMapRotate; 
 	                float degrees=0f;
 	                switch(rotation){
@@ -112,7 +119,7 @@ public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callba
 	            }
 			}
 		});
-		iv_no=(ImageView)findViewById(R.id.iv_no);
+		
 		iv_no.setOnClickListener(new RLOnClickListener(){
 			@Override
 			public void onClickX(View arg0) {
@@ -122,86 +129,86 @@ public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callba
 				iv_camera.setVisibility(View.VISIBLE);
 			}
 		});
-		SurfaceView surfaceView = (SurfaceView)this.findViewById(R.id.sv_camera);
-		surfaceView.setFocusable(true); 
-		surfaceView.setFocusableInTouchMode(true);
-		iv_camera=(ImageView)findViewById(R.id.iv_camera);
+		
 		iv_camera.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				camera.takePicture(null, null, RLCameraActivity.this);
+				camera.takePicture(null, null, new PictureCallback(){
+					@Override
+					public void onPictureTaken(byte[] data, Camera camera) {
+						iv_yes.setVisibility(View.VISIBLE);
+						iv_no.setVisibility(View.VISIBLE);
+						iv_camera.setVisibility(View.GONE);
+						mData=data;
+					}
+				});
 			}
 		});
+		
+		surfaceView.setFocusable(true); 
+		surfaceView.setFocusableInTouchMode(true);
 		SurfaceHolder holder = surfaceView.getHolder();
-		holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-		holder.addCallback(this);
-	}
-	
-	@Override
-	public void onAutoFocus(boolean success, Camera camera) {
-		if(success){   
-            Camera.Parameters params = camera.getParameters();  
-            params.setFlashMode(flashMode);
-            params.setPictureFormat(ImageFormat.JPEG);  
-            params.setPreviewSize(640,480);  
-            camera.setParameters(params);  
-        }
-	}
-	
-	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        Camera.Parameters params = camera.getParameters(); 
-        params.setFlashMode(flashMode);
-        params.setPictureFormat(ImageFormat.JPEG); 
-        switch(rotation){
-        case Surface.ROTATION_0:
-        	params.setPreviewSize(height, width);
-        	camera.setDisplayOrientation(90);
-        	break;
-        case Surface.ROTATION_90:
-        	params.setPreviewSize(width, height);
-        	camera.setDisplayOrientation(0);
-        	break;
-        case Surface.ROTATION_180:
-        	params.setPreviewSize(height, width);
-        	camera.setDisplayOrientation(270);
-        	break;
-        case Surface.ROTATION_270:
-        	params.setPreviewSize(width, height);
-        	camera.setDisplayOrientation(180);
-        	break;
-        }
-        params.setPreviewSize(640,480);  
-        camera.setParameters(params);  
-        camera.startPreview(); 
-	}
-	
-	@Override
-	public void surfaceCreated(SurfaceHolder holder) {
-		camera = Camera.open();
-		try {
-			camera.setPreviewDisplay(holder);
-			camera.startPreview();
-			camera.autoFocus(this); 
-		} catch (Exception e) {
-			camera.release();
+		if(android.os.Build.VERSION.SDK_INT<11){
+			holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		}
-	}
-	
-	@Override
-	public void surfaceDestroyed(SurfaceHolder holder) {
-		camera.stopPreview();
-		camera.release();
-		data=null;
-		camera=null;
-	}
-	
-	@Override
-	public void onPictureTaken(byte[] data, Camera camera) {
-		iv_yes.setVisibility(View.VISIBLE);
-		iv_no.setVisibility(View.VISIBLE);
-		iv_camera.setVisibility(View.GONE);
-		this.data=data;
+		holder.addCallback(new SurfaceHolder.Callback() {
+			@Override
+			public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+		        Camera.Parameters params = camera.getParameters(); 
+		        params.setFlashMode(flashMode);
+		        params.setPictureFormat(ImageFormat.JPEG); 
+		        switch(rotation){
+		        case Surface.ROTATION_0:
+		        	params.setPreviewSize(height, width);
+		        	camera.setDisplayOrientation(90);
+		        	break;
+		        case Surface.ROTATION_90:
+		        	params.setPreviewSize(width, height);
+		        	camera.setDisplayOrientation(0);
+		        	break;
+		        case Surface.ROTATION_180:
+		        	params.setPreviewSize(height, width);
+		        	camera.setDisplayOrientation(270);
+		        	break;
+		        case Surface.ROTATION_270:
+		        	params.setPreviewSize(width, height);
+		        	camera.setDisplayOrientation(180);
+		        	break;
+		        }
+		        params.setPreviewSize(640,480);  
+		        camera.setParameters(params);  
+		        camera.startPreview(); 
+			}
+			@Override
+			public void surfaceCreated(SurfaceHolder holder) {
+				camera = Camera.open();
+				try {
+					camera.setPreviewDisplay(holder);
+					camera.startPreview();
+					camera.autoFocus(new AutoFocusCallback(){
+						@Override
+						public void onAutoFocus(boolean success, Camera camera) {
+							if(success){   
+					            Camera.Parameters params = camera.getParameters();  
+					            params.setFlashMode(flashMode);
+					            params.setPictureFormat(ImageFormat.JPEG);  
+					            params.setPreviewSize(640,480);  
+					            camera.setParameters(params);  
+					        }
+						}
+					}); 
+				} catch (Exception e) {
+					camera.release();
+				}
+			}
+			@Override
+			public void surfaceDestroyed(SurfaceHolder holder) {
+				camera.stopPreview();
+				camera.release();
+				mData=null;
+				camera=null;
+			}
+		});
 	}
 	
 	@Override  
@@ -214,6 +221,6 @@ public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callba
 	public void onBackPressed(){
 		super.onBackPressed();
 		overridePendingTransition(R.anim.reload, R.anim.reload);
-		data=null;
+		mData=null;
 	}
 }
