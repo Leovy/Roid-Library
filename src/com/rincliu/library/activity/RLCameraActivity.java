@@ -154,11 +154,11 @@ public class RLCameraActivity extends RLActivity{
 		holder.addCallback(new SurfaceHolder.Callback() {
 			@Override
 			public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-		        Camera.Parameters params=camera.getParameters(); 
-		        params.setFlashMode(flashMode);
-		        params.setPictureFormat(ImageFormat.JPEG); 
-		        switch(rotation){
-		        case Surface.ROTATION_0:
+				Camera.Parameters params=camera.getParameters(); 
+				params.setFlashMode(flashMode);
+				params.setPictureFormat(ImageFormat.JPEG);
+				switch(rotation){
+				case Surface.ROTATION_0:
 		        	params.setPreviewSize(height, width);
 		        	camera.setDisplayOrientation(90);
 		        	break;
@@ -174,10 +174,10 @@ public class RLCameraActivity extends RLActivity{
 		        	params.setPreviewSize(width, height);
 		        	camera.setDisplayOrientation(180);
 		        	break;
-		        }
-		        params.setPreviewSize(640,480);  
-		        camera.setParameters(params);  
-		        camera.startPreview(); 
+				}
+				params.setPreviewSize(640,480);
+				camera.setParameters(params);
+				camera.startPreview(); 
 			}
 			@Override
 			public void surfaceCreated(SurfaceHolder holder) {
