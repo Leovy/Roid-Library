@@ -20,7 +20,6 @@ import java.io.FileOutputStream;
 
 import com.rincliu.library.widget.RLOnClickListener;
 import com.rincliu.library.R;
-
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -102,14 +101,12 @@ public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callba
 	                bos.flush();    
 	                bos.close();
 	                setResult(RESULT_OK, getIntent());
-	                finish();
-	                overridePendingTransition(R.anim.reload, R.anim.reload);
 	            }catch(Exception e){    
 	                e.printStackTrace();
-	                camera.release();
-	            	iv_yes.setVisibility(View.GONE);
-	            	iv_no.setVisibility(View.GONE);
-	            	iv_camera.setVisibility(View.VISIBLE);
+	                setResult(RESULT_CANCELED, getIntent());
+	            }finally{
+	            	finish();
+	                overridePendingTransition(R.anim.reload, R.anim.reload);
 	            }
 			}
 		});
