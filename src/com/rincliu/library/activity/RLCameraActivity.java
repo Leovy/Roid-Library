@@ -211,11 +211,11 @@ public class RLCameraActivity extends RLActivity{
 		});
 	}
 	
-	@Override  
-    public void onConfigurationChanged(Configuration newConfig) {
+	@Override
+	public void onConfigurationChanged(Configuration newConfig){
 		rotation=getWindowManager().getDefaultDisplay().getRotation();
-		super.onConfigurationChanged(newConfig);  
-    }
+		super.onConfigurationChanged(newConfig);
+	}
 	
 	@Override
 	public void onBackPressed(){
