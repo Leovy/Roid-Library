@@ -18,8 +18,10 @@ package com.rincliu.library.activity;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 
+import com.rincliu.library.util.RLSysUtil;
 import com.rincliu.library.widget.RLOnClickListener;
 import com.rincliu.library.R;
+
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -46,7 +48,7 @@ public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callba
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_camera);
-		if(!getIntent().hasExtra("savePath")){
+		if(!getIntent().hasExtra("savePath")||!RLSysUtil.isExternalStorageAvailable()){
 			return;
 		}
 		rotation=getWindowManager().getDefaultDisplay().getRotation();
