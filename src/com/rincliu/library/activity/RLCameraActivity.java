@@ -43,19 +43,28 @@ public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callba
 	private boolean isFlashEnabled=false;
 	public static int rotation = 0;
 	private boolean isReady=false;
+	private String flashMode=Parameters.FLASH_MODE_OFF;
 	
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_camera);
+		if(!getIntent().hasExtra("savePath")){
+			return;
+		}
 		rotation=getWindowManager().getDefaultDisplay().getRotation();
 		iv_flash=(ImageView)findViewById(R.id.iv_flash);
+		if(getIntent().getBooleanExtra("isAutoFlash", false)){
+			iv_flash.setVisibility(View.GONE);
+			flashMode=Parameters.FLASH_MODE_AUTO;
+		}
 		iv_flash.setOnClickListener(new RLOnClickListener(){
 			@Override
 			public void onClickX(View view) {
 				isFlashEnabled=!isFlashEnabled;
-				Parameters parameters=camera.getParameters(); 
-				parameters.setFlashMode(isFlashEnabled?Parameters.FLASH_MODE_TORCH:Parameters.FLASH_MODE_OFF); 
-                camera.setParameters(parameters);  
+				flashMode=isFlashEnabled?Parameters.FLASH_MODE_ON:Parameters.FLASH_MODE_OFF;
+				Parameters params=camera.getParameters(); 
+				params.setFlashMode(flashMode); 
+                camera.setParameters(params);  
 				iv_flash.setImageDrawable(getResources().getDrawable(
 						isFlashEnabled?R.drawable.btn_camera_flash_off:R.drawable.btn_camera_flash_on));
 			}
@@ -136,6 +145,7 @@ public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callba
 	public void onAutoFocus(boolean success, Camera camera) {
 		if(success){   
             Camera.Parameters params = camera.getParameters();  
+            params.setFlashMode(flashMode);
             params.setPictureFormat(ImageFormat.JPEG);  
             params.setPreviewSize(640,480);  
             camera.setParameters(params);  
@@ -146,6 +156,7 @@ public class RLCameraActivity extends RLActivity implements SurfaceHolder.Callba
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         Camera.Parameters params = camera.getParameters(); 
+        params.setFlashMode(flashMode);
         params.setPictureFormat(ImageFormat.JPEG); 
         switch(rotation){
         case Surface.ROTATION_0:
