@@ -159,21 +159,21 @@ public class RLCameraActivity extends RLActivity{
 				params.setPictureFormat(ImageFormat.JPEG);
 				switch(rotation){
 				case Surface.ROTATION_0:
-		        	params.setPreviewSize(height, width);
-		        	camera.setDisplayOrientation(90);
-		        	break;
-		        case Surface.ROTATION_90:
-		        	params.setPreviewSize(width, height);
-		        	camera.setDisplayOrientation(0);
-		        	break;
-		        case Surface.ROTATION_180:
-		        	params.setPreviewSize(height, width);
-		        	camera.setDisplayOrientation(270);
-		        	break;
-		        case Surface.ROTATION_270:
-		        	params.setPreviewSize(width, height);
-		        	camera.setDisplayOrientation(180);
-		        	break;
+					params.setPreviewSize(height, width);
+					camera.setDisplayOrientation(90);
+					break;
+				case Surface.ROTATION_90:
+					params.setPreviewSize(width, height);
+					camera.setDisplayOrientation(0);
+					break;
+				case Surface.ROTATION_180:
+					params.setPreviewSize(height, width);
+					camera.setDisplayOrientation(270);
+					break;
+				case Surface.ROTATION_270:
+					params.setPreviewSize(width, height);
+					camera.setDisplayOrientation(180);
+					break;
 				}
 				params.setPreviewSize(640,480);
 				camera.setParameters(params);
