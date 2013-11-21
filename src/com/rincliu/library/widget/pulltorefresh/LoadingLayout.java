@@ -34,7 +34,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.rincliu.library.app.RLAPICompat;
+import com.rincliu.library.util.RLAPICompat;
 import com.rincliu.library.widget.pulltorefresh.ILoadingLayout;
 import com.rincliu.library.widget.pulltorefresh.PullToRefreshBase.Mode;
 import com.rincliu.library.widget.pulltorefresh.PullToRefreshBase.Orientation;

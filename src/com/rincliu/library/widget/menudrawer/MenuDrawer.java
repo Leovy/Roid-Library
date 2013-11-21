@@ -1,7 +1,7 @@
 package com.rincliu.library.widget.menudrawer;
 
 import com.rincliu.library.R;
-import com.rincliu.library.app.RLAPICompat;
+import com.rincliu.library.util.RLAPICompat;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;

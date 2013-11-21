@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import com.rincliu.library.R;
-import com.rincliu.library.app.RLAsyncTask;
+import com.rincliu.library.util.RLAsyncTask;
 import com.rincliu.library.util.RLFileUtil;
 import com.rincliu.library.util.RLUiUtil;
 import com.rincliu.library.widget.pulltorefresh.ILoadingLayout;

@@ -34,7 +34,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.rincliu.library.R;
-import com.rincliu.library.app.RLAPICompat;
+import com.rincliu.library.util.RLAPICompat;
 import com.rincliu.library.widget.pulltorefresh.FlipLoadingLayout;
 import com.rincliu.library.widget.pulltorefresh.LoadingLayout;
 import com.rincliu.library.widget.pulltorefresh.RotateLoadingLayout;

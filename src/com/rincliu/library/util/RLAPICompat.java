@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.rincliu.library.app;
+package com.rincliu.library.util;
 
 import android.annotation.TargetApi;
 import android.graphics.drawable.Drawable;

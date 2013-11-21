@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.rincliu.library.app;
+package com.rincliu.library.util;
 
 import java.util.ArrayDeque;
 import java.util.concurrent.BlockingQueue;

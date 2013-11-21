@@ -42,7 +42,7 @@ import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.rincliu.library.app.RLAPICompat;
+import com.rincliu.library.util.RLAPICompat;
 import com.rincliu.library.entity.RLDisplayInfo;
 
 public class RLSysUtil {
