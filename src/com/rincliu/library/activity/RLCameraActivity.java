@@ -21,8 +21,6 @@ import java.io.FileOutputStream;
 import com.rincliu.library.util.RLSysUtil;
 import com.rincliu.library.widget.RLOnClickListener;
 import com.rincliu.library.R;
-
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -42,7 +40,6 @@ public class RLCameraActivity extends RLActivity{
 	private Camera camera;
 	private byte[] mData;
 	private boolean isFlashEnabled=false;
-	private int rotation=0;
 	private String flashMode=Parameters.FLASH_MODE_OFF;
 	private ImageView iv_flash, iv_yes, iv_no, iv_camera;
 	
@@ -54,7 +51,6 @@ public class RLCameraActivity extends RLActivity{
 		if(!getIntent().hasExtra("savePath")||!RLSysUtil.isExternalStorageAvailable()){
 			return;
 		}
-		rotation=getWindowManager().getDefaultDisplay().getRotation();
 		iv_flash=(ImageView)findViewById(R.id.iv_flash);
 		iv_yes=(ImageView)findViewById(R.id.iv_yes);
 		iv_no=(ImageView)findViewById(R.id.iv_no);
@@ -84,7 +80,7 @@ public class RLCameraActivity extends RLActivity{
 					Bitmap bMap=BitmapFactory.decodeByteArray(mData, 0, mData.length);
 					Bitmap bMapRotate;
 					float degrees=0f;
-					switch(rotation){
+					switch(getDisplayRotation()){
 					case Surface.ROTATION_0:
 						degrees=90f;
 						break;
@@ -157,7 +153,7 @@ public class RLCameraActivity extends RLActivity{
 				Camera.Parameters params=camera.getParameters(); 
 				params.setFlashMode(flashMode);
 				params.setPictureFormat(ImageFormat.JPEG);
-				switch(rotation){
+				switch(getDisplayRotation()){
 				case Surface.ROTATION_0:
 					params.setPreviewSize(height, width);
 					camera.setDisplayOrientation(90);
@@ -209,12 +205,6 @@ public class RLCameraActivity extends RLActivity{
 				camera=null;
 			}
 		});
-	}
-	
-	@Override
-	public void onConfigurationChanged(Configuration newConfig){
-		rotation=getWindowManager().getDefaultDisplay().getRotation();
-		super.onConfigurationChanged(newConfig);
 	}
 	
 	@Override

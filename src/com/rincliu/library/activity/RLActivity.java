@@ -33,10 +33,12 @@ public class RLActivity extends RLFinalActivity{
 	private boolean isEnableCrashHandler=true;
 	private boolean isEnableAnalytics=false;
 	private boolean isEnableFeedback=false;
+	private int displayRotation=0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		displayRotation=getWindowManager().getDefaultDisplay().getRotation();
 		
 		String enableCrashHandler=RLSysUtil.getApplicationMetaData(this, "ENABLE_CRASH_HANDLER");
 		if(enableCrashHandler!=null&&enableCrashHandler.equals("false")){
@@ -67,6 +69,7 @@ public class RLActivity extends RLFinalActivity{
 	@Override
 	protected void onNewIntent(Intent intent){
 		super.onNewIntent(intent);
+		displayRotation=getWindowManager().getDefaultDisplay().getRotation();
 	}
 	
 	@Override
@@ -157,6 +160,7 @@ public class RLActivity extends RLFinalActivity{
 	public void onConfigurationChanged(Configuration newConfig){
 		super.onConfigurationChanged(newConfig);
 		((RLApplication)getApplication()).setDisplayInfo(RLSysUtil.getDisplayInfo(this));
+		displayRotation=getWindowManager().getDefaultDisplay().getRotation();
 	}
 	
 	@Override
@@ -167,5 +171,13 @@ public class RLActivity extends RLFinalActivity{
 	@Override
 	public void onSaveInstanceState(Bundle outState){
 		super.onSaveInstanceState(outState);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public int getDisplayRotation() {
+		return displayRotation;
 	}
 }
