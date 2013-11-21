@@ -18,7 +18,7 @@ package com.rincliu.library.util;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.OutputStream;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -41,7 +41,6 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
-
 import com.rincliu.library.util.RLAPICompat;
 import com.rincliu.library.entity.RLDisplayInfo;
 
@@ -50,6 +49,7 @@ public class RLSysUtil {
 	 * 
 	 * @param activity
 	 */
+	@SuppressLint("InlinedApi")
 	public static void enableHardwareAccelerate(Activity activity){
 		if(VERSION.SDK_INT>=VERSION_CODES.HONEYCOMB){ 
             activity.getWindow().setFlags(
@@ -88,7 +88,7 @@ public class RLSysUtil {
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
-		if(info!=null){
+		if(info!=null&&info.metaData!=null&&info.metaData.get(key)!=null){
 			data=info.metaData.get(key).toString();
 		}
 		return data;
@@ -109,7 +109,7 @@ public class RLSysUtil {
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
-		if(info!=null){
+		if(info!=null&&info.metaData!=null&&info.metaData.get(key)!=null){
 			data=info.metaData.get(key).toString();
 		}
 		return data;
@@ -132,7 +132,7 @@ public class RLSysUtil {
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
-		if(info!=null){
+		if(info!=null&&info.metaData!=null&&info.metaData.get(key)!=null){
 			data=info.metaData.get(key).toString();
 		}
 		return data;
@@ -155,7 +155,7 @@ public class RLSysUtil {
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
-		if(info!=null){
+		if(info!=null&&info.metaData!=null&&info.metaData.get(key)!=null){
 			data=info.metaData.get(key).toString();
 		}
 		return data;
