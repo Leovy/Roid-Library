@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import com.rincliu.library.util.RLSysUtil;
 import com.rincliu.library.widget.RLOnClickListener;
 import com.rincliu.library.R;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -29,6 +30,7 @@ import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
+import android.hardware.Camera.Size;
 import android.os.Bundle;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -171,7 +173,8 @@ public class RLCameraActivity extends RLActivity{
 					camera.setDisplayOrientation(180);
 					break;
 				}
-				params.setPreviewSize(640,480);
+				Size size=params.getSupportedPreviewSizes().get(0);
+				params.setPreviewSize(size.width, size.height);
 				camera.setParameters(params);
 				camera.startPreview(); 
 			}
@@ -188,7 +191,8 @@ public class RLCameraActivity extends RLActivity{
 								Camera.Parameters params=camera.getParameters();
 								params.setFlashMode(flashMode);
 								params.setPictureFormat(ImageFormat.JPEG);
-								params.setPreviewSize(640,480);
+								Size size=params.getSupportedPreviewSizes().get(0);
+								params.setPreviewSize(size.width, size.height);
 								camera.setParameters(params);
 							}
 						}
