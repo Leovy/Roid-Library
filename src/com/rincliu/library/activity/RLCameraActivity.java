@@ -109,13 +109,17 @@ public class RLCameraActivity extends RLActivity{
 							matrix.postRotate(degrees);
 							dstBmp=Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(), 
 									srcBmp.getHeight(), matrix, true);
-							srcBmp.recycle();
+							if(!srcBmp.isRecycled()){
+		    	            	srcBmp.recycle();
+		    	            }
 							String savePath=getIntent().getStringExtra("savePath");
 							BufferedOutputStream bos=new BufferedOutputStream(new FileOutputStream(savePath));
 							dstBmp.compress(Bitmap.CompressFormat.JPEG,100,bos);
 							bos.flush();
 							bos.close();
-							dstBmp.recycle();
+							if(!dstBmp.isRecycled()){
+		    	            	dstBmp.recycle();
+		    	            }
 							handler.post(new Runnable(){
 								@Override
 								public void run(){
