@@ -15,8 +15,9 @@
  */
 package com.rincliu.library.activity;
 
-import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import com.rincliu.library.util.RLSysUtil;
 import com.rincliu.library.widget.RLOnClickListener;
@@ -27,6 +28,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.ImageFormat;
+import android.graphics.Bitmap.CompressFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.Parameters;
@@ -47,6 +49,8 @@ public class RLCameraActivity extends RLActivity{
 	private String flashMode=Parameters.FLASH_MODE_OFF;
 	private ImageView iv_flash, iv_yes, iv_no, iv_camera;
 	private Handler handler=new Handler();
+	private int maxWidth, maxHeight;
+	private long maxSize;
 	
 	@SuppressWarnings("deprecation")
 	public void onCreate(Bundle savedInstanceState){
@@ -56,6 +60,10 @@ public class RLCameraActivity extends RLActivity{
 		if(!getIntent().hasExtra("savePath")||!RLSysUtil.isExternalStorageAvailable()){
 			return;
 		}
+		maxWidth=getIntent().getIntExtra("maxWidth", 320);
+		maxHeight=getIntent().getIntExtra("maxHeight", 480);
+		maxSize=getIntent().getLongExtra("maxSize", 500*1024);
+		
 		iv_flash=(ImageView)findViewById(R.id.iv_flash);
 		iv_yes=(ImageView)findViewById(R.id.iv_yes);
 		iv_no=(ImageView)findViewById(R.id.iv_no);
@@ -86,61 +94,76 @@ public class RLCameraActivity extends RLActivity{
 				new Thread(){
 					@Override
 					public void run(){
-						try{
-							Bitmap srcBmp=BitmapFactory.decodeByteArray(mData, 0, mData.length);
-							Bitmap dstBmp;
-							float degrees=0f;
-							switch(getDisplayRotation()){
-							case Surface.ROTATION_0:
-								degrees=90f;
-								break;
-							case Surface.ROTATION_90:
-								degrees=0f;
-								break;
-							case Surface.ROTATION_180:
-								degrees=270f;
-								break;
-							case Surface.ROTATION_270:
-								degrees=180f;
-								break;
-							}
-							Matrix matrix=new Matrix();
-							matrix.reset();
-							matrix.postRotate(degrees);
-							dstBmp=Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(), 
-									srcBmp.getHeight(), matrix, true);
-							if(!srcBmp.isRecycled()){
-		    	            	srcBmp.recycle();
-		    	            }
-							String savePath=getIntent().getStringExtra("savePath");
-							BufferedOutputStream bos=new BufferedOutputStream(new FileOutputStream(savePath));
-							dstBmp.compress(Bitmap.CompressFormat.JPEG,100,bos);
-							bos.flush();
-							bos.close();
-							if(!dstBmp.isRecycled()){
-		    	            	dstBmp.recycle();
-		    	            }
-							handler.post(new Runnable(){
-								@Override
-								public void run(){
-									pd.dismiss();
-									setResult(RESULT_OK, getIntent());
-									finish();
-									overridePendingTransition(R.anim.reload, R.anim.reload);
-								}
-							});
-						}catch(Exception e){
-							e.printStackTrace();
-							handler.post(new Runnable(){
-								@Override
-								public void run(){
-									pd.dismiss();
-									setResult(RESULT_CANCELED, getIntent());
-									finish();
-									overridePendingTransition(R.anim.reload, R.anim.reload);
-								}
-							});
+						BitmapFactory.Options opts=new BitmapFactory.Options();
+						opts.inJustDecodeBounds=true;
+						Bitmap srcBmp=BitmapFactory.decodeByteArray(mData, 0, mData.length, opts);
+						opts.inJustDecodeBounds=false;
+						int w=opts.outWidth;
+						int h=opts.outHeight;
+						int size=0;
+						if(w<=maxWidth&&h<=maxHeight){
+							size=1;
+						}else{
+							double scale=w>=h?w/maxWidth:h/maxHeight;
+							double log=Math.log(scale)/Math.log(2);
+							double logCeil=Math.ceil(log);
+							size=(int) Math.pow(2, logCeil);
 						}
+						opts.inSampleSize=size;
+						srcBmp=BitmapFactory.decodeByteArray(mData, 0, mData.length, opts);
+		                Bitmap dstBmp; 
+		                float degrees=0f;
+		                switch(getDisplayRotation()){
+		                case Surface.ROTATION_0:
+		                	degrees=90f;
+		                	break;
+		                case Surface.ROTATION_90:
+		                	degrees=0f;
+		                	break;
+		                case Surface.ROTATION_180:
+		                	degrees=270f;
+		                	break;
+		                case Surface.ROTATION_270:
+		                	degrees=180f;
+		                	break;
+		                }
+		                Matrix matrix = new Matrix();  
+			            matrix.reset();  
+			            matrix.postRotate(degrees);  
+			            dstBmp = Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(),  
+			                    srcBmp.getHeight(), matrix, true); 
+			            if(!srcBmp.isRecycled()){
+			            	srcBmp.recycle();
+			            }
+		                ByteArrayOutputStream baos=new ByteArrayOutputStream();
+		        		int quality=100;
+		        		dstBmp.compress(CompressFormat.JPEG, quality, baos);
+		        		while(baos.toByteArray().length>maxSize){		
+		        			baos.reset();
+		        			dstBmp.compress(CompressFormat.JPEG, quality, baos);
+		        			quality-=10;
+		        		}
+		        		try {
+		        			baos.writeTo(new FileOutputStream(getIntent().getStringExtra("savePath")));
+		        		}catch(Exception e) {
+		        			e.printStackTrace();
+		        		}finally{
+		        			try {
+		        				baos.flush();
+		        				baos.close();
+		        			} catch (IOException e) {
+		        				e.printStackTrace();
+		        			}
+		        		}
+		                handler.post(new Runnable(){
+		                	@Override
+		                	public void run(){
+		                		pd.dismiss();
+		                		setResult(RESULT_OK, getIntent());
+				                finish();
+				                overridePendingTransition(R.anim.reload, R.anim.reload);
+		                	}
+		                });
 					}
 				}.start();
 			}
