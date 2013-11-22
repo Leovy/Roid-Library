@@ -134,7 +134,7 @@ public class RLCameraActivity extends RLActivity{
 								srcBmp.getHeight(), matrix, true);
 						if(!srcBmp.isRecycled()){
 							srcBmp.recycle();
-			            }
+						}
 						ByteArrayOutputStream baos=new ByteArrayOutputStream();
 						int quality=100;
 						dstBmp.compress(CompressFormat.JPEG, quality, baos);
@@ -145,19 +145,19 @@ public class RLCameraActivity extends RLActivity{
 						}
 						try {
 							baos.writeTo(new FileOutputStream(getIntent().getStringExtra("savePath")));
-		        		}catch(Exception e) {
-		        			e.printStackTrace();
-		        		}finally{
+						}catch(Exception e) {
+							e.printStackTrace();
+						}finally{
 		        			try {
 		        				baos.flush();
 		        				baos.close();
 		        			} catch (IOException e) {
 		        				e.printStackTrace();
 		        			}
-		        		}
+						}
 						if(!dstBmp.isRecycled()){
 							dstBmp.recycle();
-			            }
+						}
 						handler.post(new Runnable(){
 							@Override
 							public void run(){
