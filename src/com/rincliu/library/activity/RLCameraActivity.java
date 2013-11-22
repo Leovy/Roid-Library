@@ -87,8 +87,8 @@ public class RLCameraActivity extends RLActivity{
 					@Override
 					public void run(){
 						try{
-							Bitmap bMap=BitmapFactory.decodeByteArray(mData, 0, mData.length);
-							Bitmap bMapRotate;
+							Bitmap srcBmp=BitmapFactory.decodeByteArray(mData, 0, mData.length);
+							Bitmap dstBmp;
 							float degrees=0f;
 							switch(getDisplayRotation()){
 							case Surface.ROTATION_0:
@@ -107,12 +107,13 @@ public class RLCameraActivity extends RLActivity{
 							Matrix matrix=new Matrix();
 							matrix.reset();
 							matrix.postRotate(degrees);
-							bMapRotate=Bitmap.createBitmap(bMap, 0, 0, bMap.getWidth(), 
-									bMap.getHeight(), matrix, true);
-							bMap=bMapRotate;
+							dstBmp=Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(), 
+									srcBmp.getHeight(), matrix, true);
+							srcBmp.recycle();
 							String savePath=getIntent().getStringExtra("savePath");
 							BufferedOutputStream bos=new BufferedOutputStream(new FileOutputStream(savePath));
-							bMap.compress(Bitmap.CompressFormat.JPEG,100,bos);
+							dstBmp.compress(Bitmap.CompressFormat.JPEG,100,bos);
+							dstBmp.recycle();
 							bos.flush();
 							bos.close();
 							handler.post(new Runnable(){
