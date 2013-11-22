@@ -111,40 +111,40 @@ public class RLCameraActivity extends RLActivity{
 						}
 						opts.inSampleSize=size;
 						srcBmp=BitmapFactory.decodeByteArray(mData, 0, mData.length, opts);
-		                Bitmap dstBmp; 
-		                float degrees=0f;
-		                switch(getDisplayRotation()){
-		                case Surface.ROTATION_0:
-		                	degrees=90f;
-		                	break;
-		                case Surface.ROTATION_90:
-		                	degrees=0f;
-		                	break;
-		                case Surface.ROTATION_180:
-		                	degrees=270f;
-		                	break;
-		                case Surface.ROTATION_270:
-		                	degrees=180f;
-		                	break;
-		                }
-		                Matrix matrix = new Matrix();  
-			            matrix.reset();  
-			            matrix.postRotate(degrees);  
-			            dstBmp = Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(),  
-			                    srcBmp.getHeight(), matrix, true); 
-			            if(!srcBmp.isRecycled()){
-			            	srcBmp.recycle();
+						Bitmap dstBmp;
+						float degrees=0f;
+						switch(getDisplayRotation()){
+						case Surface.ROTATION_0:
+							degrees=90f;
+							break;
+						case Surface.ROTATION_90:
+							degrees=0f;
+							break;
+						case Surface.ROTATION_180:
+							degrees=270f;
+							break;
+						case Surface.ROTATION_270:
+							degrees=180f;
+							break;
+						}
+						Matrix matrix=new Matrix();
+						matrix.reset();
+						matrix.postRotate(degrees);
+						dstBmp=Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(),
+								srcBmp.getHeight(), matrix, true);
+						if(!srcBmp.isRecycled()){
+							srcBmp.recycle();
 			            }
-		                ByteArrayOutputStream baos=new ByteArrayOutputStream();
-		        		int quality=100;
-		        		dstBmp.compress(CompressFormat.JPEG, quality, baos);
-		        		while(baos.toByteArray().length>maxSize){		
-		        			baos.reset();
-		        			dstBmp.compress(CompressFormat.JPEG, quality, baos);
-		        			quality-=10;
-		        		}
-		        		try {
-		        			baos.writeTo(new FileOutputStream(getIntent().getStringExtra("savePath")));
+						ByteArrayOutputStream baos=new ByteArrayOutputStream();
+						int quality=100;
+						dstBmp.compress(CompressFormat.JPEG, quality, baos);
+						while(baos.toByteArray().length>maxSize){
+							baos.reset();
+							dstBmp.compress(CompressFormat.JPEG, quality, baos);
+							quality-=10;
+						}
+						try {
+							baos.writeTo(new FileOutputStream(getIntent().getStringExtra("savePath")));
 		        		}catch(Exception e) {
 		        			e.printStackTrace();
 		        		}finally{
@@ -155,15 +155,18 @@ public class RLCameraActivity extends RLActivity{
 		        				e.printStackTrace();
 		        			}
 		        		}
-		                handler.post(new Runnable(){
-		                	@Override
-		                	public void run(){
-		                		pd.dismiss();
-		                		setResult(RESULT_OK, getIntent());
-				                finish();
-				                overridePendingTransition(R.anim.reload, R.anim.reload);
-		                	}
-		                });
+						if(!dstBmp.isRecycled()){
+							dstBmp.recycle();
+			            }
+						handler.post(new Runnable(){
+							@Override
+							public void run(){
+								pd.dismiss();
+								setResult(RESULT_OK, getIntent());
+								finish();
+								overridePendingTransition(R.anim.reload, R.anim.reload);
+							}
+						});
 					}
 				}.start();
 			}
