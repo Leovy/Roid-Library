@@ -20,7 +20,7 @@ Widgets and Utils
 * QR bar scanning: zxing；
 * Global CrashHandler；
 * API compatibility Util: RLAPICompat；
-* RLCameraActivity: A custom camera.
+* RLCameraActivity: A custom camera.(Supports compress.)
 * View switcher: ViewFlow；
 * Sliding menu: MenuDrawer；
 * GestureImageView: Support to scale ImageView with gesture；
