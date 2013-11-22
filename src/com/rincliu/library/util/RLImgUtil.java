@@ -99,6 +99,61 @@ public class RLImgUtil {
 	
 	/**
 	 * 
+	 * @param data
+	 * @param dstPath
+	 * @param maxWidth
+	 * @param maxHeight
+	 * @param maxSize
+	 * @param format
+	 */
+	public static void compress(byte[] data, String dstPath, int maxWidth, int maxHeight, long maxSize, CompressFormat format) {
+		BitmapFactory.Options opts=new BitmapFactory.Options();
+		opts.inJustDecodeBounds=true;
+		Bitmap bitmap=BitmapFactory.decodeByteArray(data, 0, data.length, opts);
+		opts.inJustDecodeBounds=false;
+		int w=opts.outWidth;
+		int h=opts.outHeight;
+		int size=0;
+		if(w<=maxWidth&&h<=maxHeight){
+			size=1;
+		}else{
+			//The decoder uses a final value based on powers of 2, 
+			//any other value will be rounded down to the nearest power of 2.
+			//So we use a ceil log value to keep both of them under limits.
+			//See doc: http://developer.android.com/reference/android/graphics/BitmapFactory.Options.html#inSampleSize
+			double scale=w>=h?w/maxWidth:h/maxHeight;
+			double log=Math.log(scale)/Math.log(2);
+			double logCeil=Math.ceil(log);
+			size=(int) Math.pow(2, logCeil);
+		}
+		opts.inSampleSize=size;
+		bitmap=BitmapFactory.decodeByteArray(data, 0, data.length, opts);
+		ByteArrayOutputStream baos=new ByteArrayOutputStream();
+		int quality=100;
+		bitmap.compress(format, quality, baos);
+		while(baos.toByteArray().length>maxSize){		
+			baos.reset();
+			bitmap.compress(format, quality, baos);
+			quality-=10;
+		}
+		try {
+			baos.writeTo(new FileOutputStream(dstPath));
+		}catch(FileNotFoundException e) {
+			e.printStackTrace();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				baos.flush();
+				baos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * 
 	 * @param context
 	 * @param uri
 	 * @return
