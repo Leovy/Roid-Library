@@ -16,6 +16,7 @@
 package com.rincliu.library.activity;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -48,22 +49,35 @@ public class RLCameraActivity extends RLActivity{
 	private boolean isFlashEnabled=false;
 	private String flashMode=Parameters.FLASH_MODE_OFF;
 	private ImageView iv_flash, iv_yes, iv_no, iv_camera;
-	private Handler handler=new Handler();
+	private RLLoadingDialog pd;
 	private int maxWidth, maxHeight;
 	private long maxSize;
+	private String outputFile;
 	
 	@SuppressWarnings("deprecation")
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_camera);
 		
-		if(!getIntent().hasExtra("savePath")||!RLSysUtil.isExternalStorageAvailable()){
-			return;
-		}
+		String savePath=getIntent().getStringExtra("savePath");
 		maxWidth=getIntent().getIntExtra("maxWidth", 320);
 		maxHeight=getIntent().getIntExtra("maxHeight", 480);
 		maxSize=getIntent().getLongExtra("maxSize", 500*1024);
+		if(savePath==null){
+			throw new IllegalArgumentException("You should put a 'savePath' string into the intent.");
+		}
+		if(!RLSysUtil.isExternalStorageAvailable()){
+			throw new IllegalStateException("External storage is not available.");
+		}
+		if(!savePath.endsWith(File.separator)){
+			savePath+=File.separator;
+		}
+		if(!new File(savePath).exists()){
+			new File(savePath).mkdirs();
+		}
+		outputFile=savePath+System.currentTimeMillis()+".jpg";
 		
+		pd=new RLLoadingDialog(this);
 		iv_flash=(ImageView)findViewById(R.id.iv_flash);
 		iv_yes=(ImageView)findViewById(R.id.iv_yes);
 		iv_no=(ImageView)findViewById(R.id.iv_no);
@@ -89,7 +103,6 @@ public class RLCameraActivity extends RLActivity{
 		iv_yes.setOnClickListener(new RLOnClickListener(){
 			@Override
 			public void onClickX(View arg0) {
-				final RLLoadingDialog pd=new RLLoadingDialog(RLCameraActivity.this);
 				pd.show();
 				new Thread(){
 					@Override
@@ -144,29 +157,24 @@ public class RLCameraActivity extends RLActivity{
 							quality-=10;
 						}
 						try {
-							baos.writeTo(new FileOutputStream(getIntent().getStringExtra("savePath")));
+							baos.writeTo(new FileOutputStream(outputFile));
 						}catch(Exception e) {
 							e.printStackTrace();
+							exit(false);
 						}finally{
 		        			try {
 		        				baos.flush();
 		        				baos.close();
 		        			} catch (IOException e) {
 		        				e.printStackTrace();
+		        				exit(false);
 		        			}
 						}
 						if(!dstBmp.isRecycled()){
 							dstBmp.recycle();
 						}
-						handler.post(new Runnable(){
-							@Override
-							public void run(){
-								pd.dismiss();
-								setResult(RESULT_OK, getIntent());
-								finish();
-								overridePendingTransition(R.anim.reload, R.anim.reload);
-							}
-						});
+						getIntent().putExtra("outputFile", outputFile);
+						exit(true);
 					}
 				}.start();
 			}
@@ -267,10 +275,25 @@ public class RLCameraActivity extends RLActivity{
 		});
 	}
 	
+	private Handler handler=new Handler();
+	private void exit(final boolean isSuccess){
+		mData=null;
+		handler.post(new Runnable(){
+			@Override
+			public void run() {
+				if(pd.isShowing()){
+					pd.dismiss();
+				}
+				setResult(isSuccess?RESULT_OK:RESULT_CANCELED, getIntent());
+				finish();
+				overridePendingTransition(R.anim.reload, R.anim.reload);
+			}
+		});
+	}
+	
 	@Override
 	public void onBackPressed(){
 		super.onBackPressed();
-		overridePendingTransition(R.anim.reload, R.anim.reload);
-		mData=null;
+		exit(false);
 	}
 }
