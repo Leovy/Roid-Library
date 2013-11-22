@@ -113,9 +113,9 @@ public class RLCameraActivity extends RLActivity{
 							String savePath=getIntent().getStringExtra("savePath");
 							BufferedOutputStream bos=new BufferedOutputStream(new FileOutputStream(savePath));
 							dstBmp.compress(Bitmap.CompressFormat.JPEG,100,bos);
-							dstBmp.recycle();
 							bos.flush();
 							bos.close();
+							dstBmp.recycle();
 							handler.post(new Runnable(){
 								@Override
 								public void run(){
