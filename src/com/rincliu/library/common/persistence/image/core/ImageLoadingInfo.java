@@ -27,30 +27,39 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Information for load'n'display image task
- *
+ * 
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @see MemoryCacheUtil
  * @see DisplayImageOptions
  * @see ImageLoadingListener
  * @since 1.3.1
  */
-final class ImageLoadingInfo {
+final class ImageLoadingInfo
+{
 
-	final String uri;
-	final String memoryCacheKey;
-	final Reference<ImageView> imageViewRef;
-	final ImageSize targetSize;
-	final DisplayImageOptions options;
-	final ImageLoadingListener listener;
-	final ReentrantLock loadFromUriLock;
+    final String uri;
 
-	public ImageLoadingInfo(String uri, ImageView imageView, ImageSize targetSize, String memoryCacheKey, DisplayImageOptions options, ImageLoadingListener listener, ReentrantLock loadFromUriLock) {
-		this.uri = uri;
-		this.imageViewRef = new WeakReference<ImageView>(imageView);
-		this.targetSize = targetSize;
-		this.options = options;
-		this.listener = listener;
-		this.loadFromUriLock = loadFromUriLock;
-		this.memoryCacheKey = memoryCacheKey;
-	}
+    final String memoryCacheKey;
+
+    final Reference<ImageView> imageViewRef;
+
+    final ImageSize targetSize;
+
+    final DisplayImageOptions options;
+
+    final ImageLoadingListener listener;
+
+    final ReentrantLock loadFromUriLock;
+
+    public ImageLoadingInfo(String uri, ImageView imageView, ImageSize targetSize, String memoryCacheKey,
+            DisplayImageOptions options, ImageLoadingListener listener, ReentrantLock loadFromUriLock)
+    {
+        this.uri = uri;
+        this.imageViewRef = new WeakReference<ImageView>(imageView);
+        this.targetSize = targetSize;
+        this.options = options;
+        this.listener = listener;
+        this.loadFromUriLock = loadFromUriLock;
+        this.memoryCacheKey = memoryCacheKey;
+    }
 }

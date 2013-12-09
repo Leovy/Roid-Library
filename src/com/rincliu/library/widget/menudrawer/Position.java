@@ -3,7 +3,8 @@ package com.rincliu.library.widget.menudrawer;
 /**
  * Enums used for positioning the drawer.
  */
-public enum Position {
+public enum Position
+{
     // Positions the drawer to the left of the content.
     LEFT,
 

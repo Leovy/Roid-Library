@@ -1,4 +1,3 @@
-
 package com.rincliu.library.common.persistence.rootmanager.utils;
 
 import com.rincliu.library.common.persistence.rootmanager.RootManager;
@@ -12,17 +11,21 @@ import android.util.Log;
  * 
  * @author Chris
  */
-public class RootUtils {
+public class RootUtils
+{
 
     private final static String TAG = "RootManager";
+
     private static int cmdID = 0;
 
     /**
      * To check if the caller is on the ui thread, throw exception if it calls
      * on UI thread.
      */
-    public static void checkUIThread() {
-        if (Looper.myLooper() == Looper.getMainLooper()) {
+    public static void checkUIThread()
+    {
+        if (Looper.myLooper() == Looper.getMainLooper())
+        {
             throw new IllegalStateException("Please do not call this fuction on UI thread");
         }
     }
@@ -32,7 +35,8 @@ public class RootUtils {
      * 
      * @param message
      */
-    public static void Log(String message) {
+    public static void Log(String message)
+    {
         Log.d(TAG, message);
     }
 
@@ -45,7 +49,8 @@ public class RootUtils {
      * @param extendTag Your extend tag.
      * @param message
      */
-    public static void Log(String extendTag, String message) {
+    public static void Log(String extendTag, String message)
+    {
         Log.d(TAG + "::" + extendTag, message);
     }
 
@@ -54,7 +59,8 @@ public class RootUtils {
      * 
      * @return the actual ID.
      */
-    public static int generateCommandID() {
+    public static int generateCommandID()
+    {
         cmdID = cmdID + 1;
         RootUtils.Log("Return a command id " + cmdID);
         return cmdID;
@@ -65,7 +71,8 @@ public class RootUtils {
      * 
      * @return
      */
-    public static boolean isNeedPathSDK() {
+    public static boolean isNeedPathSDK()
+    {
         return android.os.Build.VERSION.SDK_INT == 17;
     }
 }

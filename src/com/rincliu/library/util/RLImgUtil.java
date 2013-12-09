@@ -40,203 +40,251 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-public class RLImgUtil {
-	
-	/**
-	 * 
-	 * @param srcPath
-	 * @param dstPath
-	 * @param maxWidth
-	 * @param maxHeight
-	 * @param maxSize
-	 * @param format
-	 */
-	public static void compress(String srcPath, String dstPath, int maxWidth, int maxHeight, long maxSize, CompressFormat format) {
-		BitmapFactory.Options opts=new BitmapFactory.Options();
-		opts.inJustDecodeBounds=true;
-		Bitmap bitmap=BitmapFactory.decodeFile(srcPath, opts);
-		opts.inJustDecodeBounds=false;
-		int w=opts.outWidth;
-		int h=opts.outHeight;
-		int size=0;
-		if(w<=maxWidth&&h<=maxHeight){
-			size=1;
-		}else{
-			//The decoder uses a final value based on powers of 2, 
-			//any other value will be rounded down to the nearest power of 2.
-			//So we use a ceil log value to keep both of them under limits.
-			//See doc: http://developer.android.com/reference/android/graphics/BitmapFactory.Options.html#inSampleSize
-			double scale=w>=h?w/maxWidth:h/maxHeight;
-			double log=Math.log(scale)/Math.log(2);
-			double logCeil=Math.ceil(log);
-			size=(int) Math.pow(2, logCeil);
-		}
-		opts.inSampleSize=size;
-		bitmap=BitmapFactory.decodeFile(srcPath, opts);
-		ByteArrayOutputStream baos=new ByteArrayOutputStream();
-		int quality=100;
-		bitmap.compress(format, quality, baos);
-		while(baos.toByteArray().length>maxSize){		
-			baos.reset();
-			bitmap.compress(format, quality, baos);
-			quality-=10;
-		}
-		try {
-			baos.writeTo(new FileOutputStream(dstPath));
-		}catch(FileNotFoundException e) {
-			e.printStackTrace();
-		}catch (IOException e) {
-			e.printStackTrace();
-		}finally{
-			try {
-				baos.flush();
-				baos.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	/**
-	 * 
-	 * @param data
-	 * @param dstPath
-	 * @param maxWidth
-	 * @param maxHeight
-	 * @param maxSize
-	 * @param format
-	 */
-	public static void compress(byte[] data, String dstPath, int maxWidth, int maxHeight, long maxSize, CompressFormat format) {
-		BitmapFactory.Options opts=new BitmapFactory.Options();
-		opts.inJustDecodeBounds=true;
-		Bitmap bitmap=BitmapFactory.decodeByteArray(data, 0, data.length, opts);
-		opts.inJustDecodeBounds=false;
-		int w=opts.outWidth;
-		int h=opts.outHeight;
-		int size=0;
-		if(w<=maxWidth&&h<=maxHeight){
-			size=1;
-		}else{
-			//The decoder uses a final value based on powers of 2, 
-			//any other value will be rounded down to the nearest power of 2.
-			//So we use a ceil log value to keep both of them under limits.
-			//See doc: http://developer.android.com/reference/android/graphics/BitmapFactory.Options.html#inSampleSize
-			double scale=w>=h?w/maxWidth:h/maxHeight;
-			double log=Math.log(scale)/Math.log(2);
-			double logCeil=Math.ceil(log);
-			size=(int) Math.pow(2, logCeil);
-		}
-		opts.inSampleSize=size;
-		bitmap=BitmapFactory.decodeByteArray(data, 0, data.length, opts);
-		ByteArrayOutputStream baos=new ByteArrayOutputStream();
-		int quality=100;
-		bitmap.compress(format, quality, baos);
-		while(baos.toByteArray().length>maxSize){		
-			baos.reset();
-			bitmap.compress(format, quality, baos);
-			quality-=10;
-		}
-		try {
-			baos.writeTo(new FileOutputStream(dstPath));
-		}catch(FileNotFoundException e) {
-			e.printStackTrace();
-		}catch (IOException e) {
-			e.printStackTrace();
-		}finally{
-			try {
-				baos.flush();
-				baos.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	/**
-	 * 
-	 * @param context
-	 * @param uri
-	 * @return
-	 */
-	public static String getPathFromUri(Context context,Uri uri){  
-		String path=null;
-        String[] proj={ MediaStore.Images.Media.DATA };  
-        Cursor cursor=context.getContentResolver().query(uri,proj,null,null,null);
-        if(cursor!=null&&cursor.getCount()>0&&cursor.getColumnCount()>0){
-        	int column_index=-1;
-        	try{
-        		column_index=cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA); 
-        	}catch(IllegalArgumentException e){
-        		e.printStackTrace();
-        		cursor.close();
-        	}
-        	if(column_index!=-1){
-        		cursor.moveToFirst();    
-        		path=cursor.getString(column_index);
-        	}
+public class RLImgUtil
+{
+
+    /**
+     * @param srcPath
+     * @param dstPath
+     * @param maxWidth
+     * @param maxHeight
+     * @param maxSize
+     * @param format
+     */
+    public static void compress(String srcPath, String dstPath, int maxWidth, int maxHeight, long maxSize,
+            CompressFormat format)
+    {
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inJustDecodeBounds = true;
+        Bitmap bitmap = BitmapFactory.decodeFile(srcPath, opts);
+        opts.inJustDecodeBounds = false;
+        int w = opts.outWidth;
+        int h = opts.outHeight;
+        int size = 0;
+        if (w <= maxWidth && h <= maxHeight)
+        {
+            size = 1;
+        }
+        else
+        {
+            // The decoder uses a final value based on powers of 2,
+            // any other value will be rounded down to the nearest power of 2.
+            // So we use a ceil log value to keep both of them under limits.
+            // See doc:
+            // http://developer.android.com/reference/android/graphics/BitmapFactory.Options.html#inSampleSize
+            double scale = w >= h ? w / maxWidth : h / maxHeight;
+            double log = Math.log(scale) / Math.log(2);
+            double logCeil = Math.ceil(log);
+            size = (int) Math.pow(2, logCeil);
+        }
+        opts.inSampleSize = size;
+        bitmap = BitmapFactory.decodeFile(srcPath, opts);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int quality = 100;
+        bitmap.compress(format, quality, baos);
+        while (baos.toByteArray().length > maxSize)
+        {
+            baos.reset();
+            bitmap.compress(format, quality, baos);
+            quality -= 10;
+        }
+        try
+        {
+            baos.writeTo(new FileOutputStream(dstPath));
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                baos.flush();
+                baos.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * @param data
+     * @param dstPath
+     * @param maxWidth
+     * @param maxHeight
+     * @param maxSize
+     * @param format
+     */
+    public static void compress(byte[] data, String dstPath, int maxWidth, int maxHeight, long maxSize,
+            CompressFormat format)
+    {
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inJustDecodeBounds = true;
+        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, opts);
+        opts.inJustDecodeBounds = false;
+        int w = opts.outWidth;
+        int h = opts.outHeight;
+        int size = 0;
+        if (w <= maxWidth && h <= maxHeight)
+        {
+            size = 1;
+        }
+        else
+        {
+            // The decoder uses a final value based on powers of 2,
+            // any other value will be rounded down to the nearest power of 2.
+            // So we use a ceil log value to keep both of them under limits.
+            // See doc:
+            // http://developer.android.com/reference/android/graphics/BitmapFactory.Options.html#inSampleSize
+            double scale = w >= h ? w / maxWidth : h / maxHeight;
+            double log = Math.log(scale) / Math.log(2);
+            double logCeil = Math.ceil(log);
+            size = (int) Math.pow(2, logCeil);
+        }
+        opts.inSampleSize = size;
+        bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, opts);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int quality = 100;
+        bitmap.compress(format, quality, baos);
+        while (baos.toByteArray().length > maxSize)
+        {
+            baos.reset();
+            bitmap.compress(format, quality, baos);
+            quality -= 10;
+        }
+        try
+        {
+            baos.writeTo(new FileOutputStream(dstPath));
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                baos.flush();
+                baos.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * @param context
+     * @param uri
+     * @return
+     */
+    public static String getPathFromUri(Context context, Uri uri)
+    {
+        String path = null;
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(uri, proj, null, null, null);
+        if (cursor != null && cursor.getCount() > 0 && cursor.getColumnCount() > 0)
+        {
+            int column_index = -1;
+            try
+            {
+                column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            }
+            catch (IllegalArgumentException e)
+            {
+                e.printStackTrace();
+                cursor.close();
+            }
+            if (column_index != -1)
+            {
+                cursor.moveToFirst();
+                path = cursor.getString(column_index);
+            }
             cursor.close();
         }
         return path;
     }
-	
-	/**
-	 * 
-	 * @param context
-	 * @param uri
-	 * @return
-	 */
-	public static Bitmap decodeFromUri(Context context, Uri uri){
-		Bitmap bitmap = null;
-		try {
-			bitmap = BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		}
-		return bitmap;
-	}
-	
-	/**
-	 * 
-	 * @param bm
-	 * @return
-	 */
-	public static byte[] bitmap2Bytes(Bitmap bm) {
-		if(bm==null||bm.isRecycled()){
-			return null;
-		}
-		byte[] bytes;
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
-		bytes=baos.toByteArray();
-		try {
-			baos.flush();
-			baos.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return bytes;
-	}
-	
-	/**
-	 * 
-	 * @param bytes
-	 * @return
-	 */
-	public static Bitmap bytes2Bimap(byte[] bytes) {
-        if (bytes.length != 0) {
+
+    /**
+     * @param context
+     * @param uri
+     * @return
+     */
+    public static Bitmap decodeFromUri(Context context, Uri uri)
+    {
+        Bitmap bitmap = null;
+        try
+        {
+            bitmap = BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri));
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+        return bitmap;
+    }
+
+    /**
+     * @param bm
+     * @return
+     */
+    public static byte[] bitmap2Bytes(Bitmap bm)
+    {
+        if (bm == null || bm.isRecycled())
+        {
+            return null;
+        }
+        byte[] bytes;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        bytes = baos.toByteArray();
+        try
+        {
+            baos.flush();
+            baos.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return bytes;
+    }
+
+    /**
+     * @param bytes
+     * @return
+     */
+    public static Bitmap bytes2Bimap(byte[] bytes)
+    {
+        if (bytes.length != 0)
+        {
             return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-        } else {
+        }
+        else
+        {
             return null;
         }
     }
-	
-	/**
-	 * 
-	 * @param drawable
-	 * @return
-	 */
-	public static Bitmap drawableToBitmap(Drawable drawable) {
+
+    /**
+     * @param drawable
+     * @return
+     */
+    public static Bitmap drawableToBitmap(Drawable drawable)
+    {
         int w = drawable.getIntrinsicWidth();
         int h = drawable.getIntrinsicHeight();
         Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
@@ -247,14 +295,14 @@ public class RLImgUtil {
         drawable.draw(canvas);
         return bitmap;
     }
-	
-	/**
-	 * 
-	 * @param bitmap
-	 * @param roundPx
-	 * @return
-	 */
-	public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, float roundPx) {
+
+    /**
+     * @param bitmap
+     * @param roundPx
+     * @return
+     */
+    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, float roundPx)
+    {
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
         Bitmap output = Bitmap.createBitmap(w, h, Config.ARGB_8888);
@@ -271,37 +319,33 @@ public class RLImgUtil {
         canvas.drawBitmap(bitmap, rect, rect, paint);
         return output;
     }
-	
-	/**
-	 * 
-	 * @param bitmap
-	 * @return
-	 */
-	public static Bitmap createReflectionImageWithOrigin(Bitmap bitmap) {
+
+    /**
+     * @param bitmap
+     * @return
+     */
+    public static Bitmap createReflectionImageWithOrigin(Bitmap bitmap)
+    {
         final int reflectionGap = 4;
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
         Matrix matrix = new Matrix();
         matrix.preScale(1, -1);
-        Bitmap reflectionImage = Bitmap.createBitmap(bitmap, 0, h / 2, w,
-                h / 2, matrix, false);
-        Bitmap bitmapWithReflection = Bitmap.createBitmap(w, (h + h / 2),
-                Config.ARGB_8888);
+        Bitmap reflectionImage = Bitmap.createBitmap(bitmap, 0, h / 2, w, h / 2, matrix, false);
+        Bitmap bitmapWithReflection = Bitmap.createBitmap(w, (h + h / 2), Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmapWithReflection);
         canvas.drawBitmap(bitmap, 0, 0, null);
         Paint deafalutPaint = new Paint();
         canvas.drawRect(0, h, w, h + reflectionGap, deafalutPaint);
         canvas.drawBitmap(reflectionImage, 0, h + reflectionGap, null);
         Paint paint = new Paint();
-        LinearGradient shader = new LinearGradient(0, bitmap.getHeight(), 0,
-                bitmapWithReflection.getHeight() + reflectionGap, 0x70ffffff,
-                0x00ffffff, TileMode.CLAMP);
+        LinearGradient shader = new LinearGradient(0, bitmap.getHeight(), 0, bitmapWithReflection.getHeight()
+                + reflectionGap, 0x70ffffff, 0x00ffffff, TileMode.CLAMP);
         paint.setShader(shader);
         // Set the Transfer mode to be porter duff and destination in
         paint.setXfermode(new PorterDuffXfermode(Mode.DST_IN));
         // Draw a rectangle using the paint with our linear gradient
-        canvas.drawRect(0, h, w, bitmapWithReflection.getHeight()
-                + reflectionGap, paint);
+        canvas.drawRect(0, h, w, bitmapWithReflection.getHeight() + reflectionGap, paint);
         return bitmapWithReflection;
     }
 }

@@ -23,65 +23,80 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
-public class RLEditText extends EditText {
-	private Paint paint;
-	private Context context;
-	private int paintWidth = 1;
-	private int multiple = 1;
-	
-	public RLEditText(Context context) {
-		super(context);
-		this.context = context;
-		paint = new Paint();
-		this.setBackgroundColor(0);
-		paint.setStyle(Paint.Style.STROKE);
-	}
+public class RLEditText extends EditText
+{
+    private Paint paint;
 
-	public RLEditText(Context context, AttributeSet attrs) {
-		super(context,attrs);
-		this.context = context;
-		paint = new Paint();
-		this.setBackgroundColor(0);
-		paint.setStyle(Paint.Style.STROKE);
-	}
-	public RLEditText(Context context,AttributeSet attrs, int defStyle) {
-		super(context,attrs,defStyle);
-		this.context = context;
-		paint = new Paint();
-		this.setBackgroundColor(0);
-		paint.setStyle(Paint.Style.STROKE);
-	}
-	
-	@Override
-	protected void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
-		if(this.hasFocus()){
-			paint.setColor(0xFF0099cc);
-			paintWidth = 1;
-			multiple = 1;
-			paint.setStrokeWidth(RLSysUtil.dip2px(context, paintWidth));
-		}else{
-			paint.setColor(0xFFa9a9a9);
-			paintWidth = 1;
-			multiple = 2;
-			paint.setStrokeWidth(RLSysUtil.dip2px(context, paintWidth));
-		}
-		int w = getWidth();
-		int h = getHeight();
-		int x = this.getScrollX();
-		if(x>0){
-			w = w + x;
-		}
-		int y = this.getScrollY();
-		if(y>0){
-			h = h + y;
-		}
-		double d = RLSysUtil.dip2px(context, paintWidth)/2.0;
-		int len = (int) Math.ceil(((Math.ceil(d))/multiple));
-		canvas.drawLine(0, h-len, w, h-len, paint);
-		if(h>=10){
-			canvas.drawLine(w-len, h-10, w-len, h, paint);
-			canvas.drawLine(0, h-10, 0, h, paint);
-		}
-	}
+    private Context context;
+
+    private int paintWidth = 1;
+
+    private int multiple = 1;
+
+    public RLEditText(Context context)
+    {
+        super(context);
+        this.context = context;
+        paint = new Paint();
+        this.setBackgroundColor(0);
+        paint.setStyle(Paint.Style.STROKE);
+    }
+
+    public RLEditText(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
+        this.context = context;
+        paint = new Paint();
+        this.setBackgroundColor(0);
+        paint.setStyle(Paint.Style.STROKE);
+    }
+
+    public RLEditText(Context context, AttributeSet attrs, int defStyle)
+    {
+        super(context, attrs, defStyle);
+        this.context = context;
+        paint = new Paint();
+        this.setBackgroundColor(0);
+        paint.setStyle(Paint.Style.STROKE);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas)
+    {
+        super.onDraw(canvas);
+        if (this.hasFocus())
+        {
+            paint.setColor(0xFF0099cc);
+            paintWidth = 1;
+            multiple = 1;
+            paint.setStrokeWidth(RLSysUtil.dip2px(context, paintWidth));
+        }
+        else
+        {
+            paint.setColor(0xFFa9a9a9);
+            paintWidth = 1;
+            multiple = 2;
+            paint.setStrokeWidth(RLSysUtil.dip2px(context, paintWidth));
+        }
+        int w = getWidth();
+        int h = getHeight();
+        int x = this.getScrollX();
+        if (x > 0)
+        {
+            w = w + x;
+        }
+        int y = this.getScrollY();
+        if (y > 0)
+        {
+            h = h + y;
+        }
+        double d = RLSysUtil.dip2px(context, paintWidth) / 2.0;
+        int len = (int) Math.ceil(((Math.ceil(d)) / multiple));
+        canvas.drawLine(0, h - len, w, h - len, paint);
+        if (h >= 10)
+        {
+            canvas.drawLine(w - len, h - 10, w - len, h, paint);
+            canvas.drawLine(0, h - 10, 0, h, paint);
+        }
+    }
 }

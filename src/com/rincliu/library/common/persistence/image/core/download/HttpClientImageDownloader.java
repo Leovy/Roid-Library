@@ -27,26 +27,30 @@ import org.apache.http.entity.BufferedHttpEntity;
 import android.content.Context;
 
 /**
- * Implementation of ImageDownloader which uses {@link HttpClient} for image stream retrieving.
+ * Implementation of ImageDownloader which uses {@link HttpClient} for image
+ * stream retrieving.
  * 
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.4.1
  */
-public class HttpClientImageDownloader extends BaseImageDownloader {
+public class HttpClientImageDownloader extends BaseImageDownloader
+{
 
-	private HttpClient httpClient;
+    private HttpClient httpClient;
 
-	public HttpClientImageDownloader(Context context, HttpClient httpClient) {
-		super(context);
-		this.httpClient = httpClient;
-	}
+    public HttpClientImageDownloader(Context context, HttpClient httpClient)
+    {
+        super(context);
+        this.httpClient = httpClient;
+    }
 
-	@Override
-	protected InputStream getStreamFromNetwork(String imageUri, Object extra) throws IOException {
-		HttpGet httpRequest = new HttpGet(imageUri);
-		HttpResponse response = httpClient.execute(httpRequest);
-		HttpEntity entity = response.getEntity();
-		BufferedHttpEntity bufHttpEntity = new BufferedHttpEntity(entity);
-		return bufHttpEntity.getContent();
-	}
+    @Override
+    protected InputStream getStreamFromNetwork(String imageUri, Object extra) throws IOException
+    {
+        HttpGet httpRequest = new HttpGet(imageUri);
+        HttpResponse response = httpClient.execute(httpRequest);
+        HttpEntity entity = response.getEntity();
+        BufferedHttpEntity bufHttpEntity = new BufferedHttpEntity(entity);
+        return bufHttpEntity.getContent();
+    }
 }

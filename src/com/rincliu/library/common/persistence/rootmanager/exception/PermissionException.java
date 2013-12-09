@@ -1,4 +1,3 @@
-
 package com.rincliu.library.common.persistence.rootmanager.exception;
 
 /**
@@ -6,11 +5,13 @@ package com.rincliu.library.common.persistence.rootmanager.exception;
  * 
  * @author Chris Jiang
  */
-public class PermissionException extends Exception {
+public class PermissionException extends Exception
+{
 
     private static final long serialVersionUID = -8713947214162841310L;
 
-    public PermissionException(String error) {
+    public PermissionException(String error)
+    {
         super(error);
     }
 }

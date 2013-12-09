@@ -7,66 +7,83 @@ import android.graphics.drawable.Drawable;
 
 import com.rincliu.library.widget.pulltorefresh.LoadingLayout;
 
-public class LoadingLayoutProxy implements ILoadingLayout {
+public class LoadingLayoutProxy implements ILoadingLayout
+{
 
-	private final PullToRefreshBase<?> mPullToRefreshView;
-	private final HashSet<LoadingLayout> mLoadingLayouts;
+    private final PullToRefreshBase<?> mPullToRefreshView;
 
-	LoadingLayoutProxy(PullToRefreshBase<?> pullToRefreshView) {
-		mPullToRefreshView = pullToRefreshView;
-		mLoadingLayouts = new HashSet<LoadingLayout>();
-	}
+    private final HashSet<LoadingLayout> mLoadingLayouts;
 
-	void addLayout(LoadingLayout layout) {
-		if (null != layout) {
-			mLoadingLayouts.add(layout);
-		}
-	}
+    LoadingLayoutProxy(PullToRefreshBase<?> pullToRefreshView)
+    {
+        mPullToRefreshView = pullToRefreshView;
+        mLoadingLayouts = new HashSet<LoadingLayout>();
+    }
 
-	@Override
-	public void setLastUpdatedLabel(CharSequence label) {
-		for (LoadingLayout layout : mLoadingLayouts) {
-			layout.setLastUpdatedLabel(label);
-		}
+    void addLayout(LoadingLayout layout)
+    {
+        if (null != layout)
+        {
+            mLoadingLayouts.add(layout);
+        }
+    }
 
-		mPullToRefreshView.refreshLoadingViewsSize();
-	}
+    @Override
+    public void setLastUpdatedLabel(CharSequence label)
+    {
+        for (LoadingLayout layout : mLoadingLayouts)
+        {
+            layout.setLastUpdatedLabel(label);
+        }
 
-	@Override
-	public void setLoadingDrawable(Drawable drawable) {
-		for (LoadingLayout layout : mLoadingLayouts) {
-			layout.setLoadingDrawable(drawable);
-		}
+        mPullToRefreshView.refreshLoadingViewsSize();
+    }
 
-		mPullToRefreshView.refreshLoadingViewsSize();
-	}
+    @Override
+    public void setLoadingDrawable(Drawable drawable)
+    {
+        for (LoadingLayout layout : mLoadingLayouts)
+        {
+            layout.setLoadingDrawable(drawable);
+        }
 
-	@Override
-	public void setRefreshingLabel(CharSequence refreshingLabel) {
-		for (LoadingLayout layout : mLoadingLayouts) {
-			layout.setRefreshingLabel(refreshingLabel);
-		}
-	}
+        mPullToRefreshView.refreshLoadingViewsSize();
+    }
 
-	@Override
-	public void setPullLabel(CharSequence label) {
-		for (LoadingLayout layout : mLoadingLayouts) {
-			layout.setPullLabel(label);
-		}
-	}
+    @Override
+    public void setRefreshingLabel(CharSequence refreshingLabel)
+    {
+        for (LoadingLayout layout : mLoadingLayouts)
+        {
+            layout.setRefreshingLabel(refreshingLabel);
+        }
+    }
 
-	@Override
-	public void setReleaseLabel(CharSequence label) {
-		for (LoadingLayout layout : mLoadingLayouts) {
-			layout.setRefreshingLabel(label);
-		}
-	}
+    @Override
+    public void setPullLabel(CharSequence label)
+    {
+        for (LoadingLayout layout : mLoadingLayouts)
+        {
+            layout.setPullLabel(label);
+        }
+    }
 
-	public void setTextTypeface(Typeface tf) {
-		for (LoadingLayout layout : mLoadingLayouts) {
-			layout.setTextTypeface(tf);
-		}
+    @Override
+    public void setReleaseLabel(CharSequence label)
+    {
+        for (LoadingLayout layout : mLoadingLayouts)
+        {
+            layout.setRefreshingLabel(label);
+        }
+    }
 
-		mPullToRefreshView.refreshLoadingViewsSize();
-	}
+    public void setTextTypeface(Typeface tf)
+    {
+        for (LoadingLayout layout : mLoadingLayouts)
+        {
+            layout.setTextTypeface(tf);
+        }
+
+        mPullToRefreshView.refreshLoadingViewsSize();
+    }
 }

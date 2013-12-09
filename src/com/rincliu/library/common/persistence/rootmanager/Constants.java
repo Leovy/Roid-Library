@@ -1,15 +1,13 @@
-
 package com.rincliu.library.common.persistence.rootmanager;
 
-public class Constants {
+public class Constants
+{
 
     /**
      * The set of SU location I know by now.
      */
-    public static final String[] SU_BINARY_DIRS = {
-            "/system/bin", "/system/sbin", "/system/xbin",
-            "/vendor/bin", "/sbin"
-    };
+    public static final String[] SU_BINARY_DIRS = {"/system/bin", "/system/sbin", "/system/xbin", "/vendor/bin",
+            "/sbin"};
 
     /**
      * The expire time for granted permission, ten minutes
@@ -22,8 +20,8 @@ public class Constants {
     public static final String COMMAND_INSTALL = "pm install -r ";
 
     /**
-     * The patch for some android versions and devices. Install process may fail
-     * without this patch.
+     * The patch for some android versions and devices. Install process may
+     * fail without this patch.
      */
     public static final String COMMAND_INSTALL_PATCH = "LD_LIBRARY_PATH=/vendor/lib:/system/lib ";
 

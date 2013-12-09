@@ -21,7 +21,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME) 
-public @interface ManyToOne {
-	 public String column() default "";
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ManyToOne
+{
+    public String column() default "";
 }

@@ -15,6 +15,10 @@
  */
 package com.rincliu.library.app;
 
+import android.app.Application;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+
 import com.rincliu.library.BuildConfig;
 import com.rincliu.library.common.persistence.http.AsyncHttpClient;
 import com.rincliu.library.common.persistence.image.cache.disc.impl.TotalSizeLimitedDiscCache;
@@ -32,91 +36,93 @@ import com.rincliu.library.common.reference.push.RLPushHelper;
 import com.rincliu.library.entity.RLDisplayInfo;
 import com.rincliu.library.util.RLSysUtil;
 
-import android.app.Application;
-import android.content.res.Configuration;
-import android.graphics.Bitmap;
+public class RLApplication extends Application
+{
+    private RLDisplayInfo displayInfo;
 
-public class RLApplication extends Application{
-	private RLDisplayInfo displayInfo;
-	public ImageLoader imgLoader;
-	public DisplayImageOptions defaultDisplayImageOptions;
-	public AsyncHttpClient httpClient;
-	
-	@Override
-	public void onCreate(){
-		super.onCreate();
-		String enablePush=RLSysUtil.getApplicationMetaData(this, "ENABLE_PUSH");
-		if(enablePush!=null&&enablePush.equals("true")){
-			RLPushHelper.getInstance(this).init(BuildConfig.DEBUG);
-		}
-		initImageCache();
-		initHttpClient();
-	}
-	
-	@Override
-	public void onConfigurationChanged(Configuration newConfig){
-		super.onConfigurationChanged(newConfig);
-	}
-	
-	@Override
-	public void onLowMemory(){
-		super.onLowMemory();
-	}
-	
-	@Override
-	public void onTerminate(){
-		super.onTerminate();
-	}
+    public ImageLoader imgLoader;
 
-	public RLDisplayInfo getDisplayInfo() {
-		return displayInfo;
-	}
+    public DisplayImageOptions defaultDisplayImageOptions;
 
-	public void setDisplayInfo(RLDisplayInfo displayInfo) {
-		this.displayInfo = displayInfo;
-	}
-	
-	private void initImageCache(){//TODO
-		ImageLoaderConfiguration.Builder builder=new ImageLoaderConfiguration.Builder(this);
-		builder.threadPoolSize(10)
-		.threadPriority(Thread.NORM_PRIORITY-2)
-		.tasksProcessingOrder(QueueProcessingType.LIFO)
-		.imageDownloader(new BaseImageDownloader(this))
-        .imageDecoder(new BaseImageDecoder(BuildConfig.DEBUG))
-        .defaultDisplayImageOptions(DisplayImageOptions.createSimple()) 
-        .denyCacheImageMultipleSizesInMemory();
-		long availableMemory=Runtime.getRuntime().maxMemory();
-		if(availableMemory>0){
-			builder.memoryCache(new LruMemoryCache((int)(availableMemory/10)))
-			.memoryCacheSize((int)(availableMemory/10))
-			.memoryCacheSizePercentage(10);
-		}
-		long availableStorage=RLSysUtil.getAvailableExternalStorageSize();
-		if(availableStorage>0){
-			builder.discCache(new TotalSizeLimitedDiscCache(
-					StorageUtils.getCacheDirectory(this), (int)(availableStorage/10)))
-			.discCacheFileCount(1024*8)
-			.discCacheSize((int)(availableStorage/10))
-			.discCacheFileNameGenerator(new Md5FileNameGenerator());
-		}
-		if(BuildConfig.DEBUG){
-			builder.writeDebugLogs();
-		}
-		imgLoader=ImageLoader.getInstance();
-		imgLoader.init(builder.build());
-		defaultDisplayImageOptions=new DisplayImageOptions.Builder()
-		 .cacheInMemory(Runtime.getRuntime().freeMemory()>0)
-		 .cacheOnDisc(RLSysUtil.getAvailableExternalStorageSize()>0)
-		 .resetViewBeforeLoading(true)
-		 .bitmapConfig(Bitmap.Config.RGB_565)
-		 .displayer(new FadeInBitmapDisplayer(300))
-		 .build();
-	}
-	
-	private void initHttpClient(){//TODO
-		httpClient = new AsyncHttpClient();
-    	httpClient.addHeader("Connection", "Close");
-    	httpClient.addHeader("Accept", "*/*"); 
-    	httpClient.setTimeout(1000*60);
-	}
+    public AsyncHttpClient httpClient;
+
+    @Override
+    public void onCreate()
+    {
+        super.onCreate();
+        String enablePush = RLSysUtil.getApplicationMetaData(this, "ENABLE_PUSH");
+        if (enablePush != null && enablePush.equals("true"))
+        {
+            RLPushHelper.getInstance(this).init(BuildConfig.DEBUG);
+        }
+        initImageCache();
+        initHttpClient();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onLowMemory()
+    {
+        super.onLowMemory();
+    }
+
+    @Override
+    public void onTerminate()
+    {
+        super.onTerminate();
+    }
+
+    public RLDisplayInfo getDisplayInfo()
+    {
+        return displayInfo;
+    }
+
+    public void setDisplayInfo(RLDisplayInfo displayInfo)
+    {
+        this.displayInfo = displayInfo;
+    }
+
+    private void initImageCache()
+    {// TODO
+        ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(this);
+        builder.threadPoolSize(10).threadPriority(Thread.NORM_PRIORITY - 2).tasksProcessingOrder(
+                QueueProcessingType.LIFO).imageDownloader(new BaseImageDownloader(this)).imageDecoder(
+                new BaseImageDecoder(BuildConfig.DEBUG)).defaultDisplayImageOptions(DisplayImageOptions.createSimple()).denyCacheImageMultipleSizesInMemory();
+        long availableMemory = Runtime.getRuntime().maxMemory();
+        if (availableMemory > 0)
+        {
+            builder.memoryCache(new LruMemoryCache((int) (availableMemory / 10))).memoryCacheSize(
+                    (int) (availableMemory / 10)).memoryCacheSizePercentage(10);
+        }
+        long availableStorage = RLSysUtil.getAvailableExternalStorageSize();
+        if (availableStorage > 0)
+        {
+            builder.discCache(
+                    new TotalSizeLimitedDiscCache(StorageUtils.getCacheDirectory(this), (int) (availableStorage / 10))).discCacheFileCount(
+                    1024 * 8).discCacheSize((int) (availableStorage / 10)).discCacheFileNameGenerator(
+                    new Md5FileNameGenerator());
+        }
+        if (BuildConfig.DEBUG)
+        {
+            builder.writeDebugLogs();
+        }
+        imgLoader = ImageLoader.getInstance();
+        imgLoader.init(builder.build());
+        defaultDisplayImageOptions = new DisplayImageOptions.Builder().cacheInMemory(
+                Runtime.getRuntime().freeMemory() > 0).cacheOnDisc(RLSysUtil.getAvailableExternalStorageSize() > 0).resetViewBeforeLoading(
+                true).bitmapConfig(Bitmap.Config.RGB_565).displayer(new FadeInBitmapDisplayer(300)).build();
+    }
+
+    private void initHttpClient()
+    {// TODO
+        httpClient = new AsyncHttpClient();
+        httpClient.addHeader("Connection", "Close");
+        httpClient.addHeader("Accept", "*/*");
+        httpClient.setTimeout(1000 * 60);
+    }
 }

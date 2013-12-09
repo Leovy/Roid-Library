@@ -15,21 +15,27 @@
  */
 package com.rincliu.library.common.persistence.afinal.exception;
 
-public class DbException extends AfinalException {
-	private static final long serialVersionUID = 1L;
-	private String strMsg = null;
-	public DbException() {}
-	
-	public DbException(String strMsg) {
-		this.strMsg = strMsg;
-	}
-	
-	public void printStackTrace() {
-		if(strMsg!=null)
-			System.err.println(strMsg);
-		
-		super.printStackTrace();
-	}
+public class DbException extends AfinalException
+{
+    private static final long serialVersionUID = 1L;
 
-	
+    private String strMsg = null;
+
+    public DbException()
+    {
+    }
+
+    public DbException(String strMsg)
+    {
+        this.strMsg = strMsg;
+    }
+
+    @Override
+    public void printStackTrace()
+    {
+        if (strMsg != null)
+            System.err.println(strMsg);
+
+        super.printStackTrace();
+    }
 }

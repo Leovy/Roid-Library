@@ -41,317 +41,391 @@ import com.rincliu.library.widget.pulltorefresh.PullToRefreshBase.Orientation;
 import com.rincliu.library.R;
 
 @SuppressLint("ViewConstructor")
-public abstract class LoadingLayout extends FrameLayout implements ILoadingLayout {
+public abstract class LoadingLayout extends FrameLayout implements ILoadingLayout
+{
 
-	static final String LOG_TAG = "PullToRefresh-LoadingLayout";
+    static final String LOG_TAG = "PullToRefresh-LoadingLayout";
 
-	static final Interpolator ANIMATION_INTERPOLATOR = new LinearInterpolator();
+    static final Interpolator ANIMATION_INTERPOLATOR = new LinearInterpolator();
 
-	protected final ImageView mHeaderImage;
-	protected final ProgressBar mHeaderProgress;
+    protected final ImageView mHeaderImage;
 
-	private boolean mUseIntrinsicAnimation;
+    protected final ProgressBar mHeaderProgress;
 
-	private final TextView mHeaderText;
-	private final TextView mSubHeaderText;
+    private boolean mUseIntrinsicAnimation;
 
-	protected final Mode mMode;
-	protected final Orientation mScrollDirection;
+    private final TextView mHeaderText;
 
-	private CharSequence mPullLabel;
-	private CharSequence mRefreshingLabel;
-	private CharSequence mReleaseLabel;
+    private final TextView mSubHeaderText;
 
-	public LoadingLayout(Context context, final Mode mode, final Orientation scrollDirection, TypedArray attrs) {
-		super(context);
-		mMode = mode;
-		mScrollDirection = scrollDirection;
+    protected final Mode mMode;
 
-		resetPadding();
+    protected final Orientation mScrollDirection;
 
-		switch (scrollDirection) {
-			case HORIZONTAL:
-				LayoutInflater.from(context).inflate(R.layout.pulltorefresh_header_horizontal, this);
-				break;
-			case VERTICAL:
-			default:
-				LayoutInflater.from(context).inflate(R.layout.pulltorefresh_header_vertical, this);
-				break;
-		}
+    private CharSequence mPullLabel;
 
-		mHeaderText = (TextView) findViewById(R.id.pull_to_refresh_text);
-		mHeaderProgress = (ProgressBar) findViewById(R.id.pull_to_refresh_progress);
-		mSubHeaderText = (TextView) findViewById(R.id.pull_to_refresh_sub_text);
-		mHeaderImage = (ImageView) findViewById(R.id.pull_to_refresh_image);
-		mRefreshingLabel = context.getString(R.string.ptr_refreshing_label);
-		
-		switch (mode) {
-			case PULL_FROM_END:
-				// Load in labels
-				mPullLabel = context.getString(R.string.ptr_pull_label_end);
-				mReleaseLabel = context.getString(R.string.ptr_release_label_end);
-				break;
+    private CharSequence mRefreshingLabel;
 
-			case PULL_FROM_START:
-			default:
-				// Load in labels
-				mPullLabel = context.getString(R.string.ptr_pull_label_start);
-				mReleaseLabel = context.getString(R.string.ptr_release_label_start);
-				break;
-		}
+    private CharSequence mReleaseLabel;
 
-		if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderBackground)) {
-			Drawable background = attrs.getDrawable(R.styleable.PullToRefresh_ptrHeaderBackground);
-			if (null != background) {
-				RLAPICompat.setBackground(this, background);
-			}
-		}
+    public LoadingLayout(Context context, final Mode mode, final Orientation scrollDirection, TypedArray attrs)
+    {
+        super(context);
+        mMode = mode;
+        mScrollDirection = scrollDirection;
 
-		if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderTextAppearance)) {
-			TypedValue styleID = new TypedValue();
-			attrs.getValue(R.styleable.PullToRefresh_ptrHeaderTextAppearance, styleID);
-			setTextAppearance(styleID.data);
-		}
-		if (attrs.hasValue(R.styleable.PullToRefresh_ptrSubHeaderTextAppearance)) {
-			TypedValue styleID = new TypedValue();
-			attrs.getValue(R.styleable.PullToRefresh_ptrSubHeaderTextAppearance, styleID);
-			setSubTextAppearance(styleID.data);
-		}
+        resetPadding();
 
-		// Text Color attrs need to be set after TextAppearance attrs
-		if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderTextColor)) {
-			ColorStateList colors = attrs.getColorStateList(R.styleable.PullToRefresh_ptrHeaderTextColor);
-			if (null != colors) {
-				setTextColor(colors);
-			}
-		}
-		if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderSubTextColor)) {
-			ColorStateList colors = attrs.getColorStateList(R.styleable.PullToRefresh_ptrHeaderSubTextColor);
-			if (null != colors) {
-				setSubTextColor(colors);
-			}
-		}
+        switch (scrollDirection)
+        {
+            case HORIZONTAL:
+                LayoutInflater.from(context).inflate(R.layout.pulltorefresh_header_horizontal, this);
+                break;
+            case VERTICAL:
+            default:
+                LayoutInflater.from(context).inflate(R.layout.pulltorefresh_header_vertical, this);
+                break;
+        }
 
-		// Try and get defined drawable from Attrs
-		Drawable imageDrawable = null;
-		if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawable)) {
-			imageDrawable = attrs.getDrawable(R.styleable.PullToRefresh_ptrDrawable);
-		}
+        mHeaderText = (TextView) findViewById(R.id.pull_to_refresh_text);
+        mHeaderProgress = (ProgressBar) findViewById(R.id.pull_to_refresh_progress);
+        mSubHeaderText = (TextView) findViewById(R.id.pull_to_refresh_sub_text);
+        mHeaderImage = (ImageView) findViewById(R.id.pull_to_refresh_image);
+        mRefreshingLabel = context.getString(R.string.ptr_refreshing_label);
 
-		// Check Specific Drawable from Attrs, these overrite the generic
-		// drawable attr above
-		switch (mode) {
-			case PULL_FROM_START:
-			default:
-				if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawableStart)) {
-					imageDrawable = attrs.getDrawable(R.styleable.PullToRefresh_ptrDrawableStart);
-				} else if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawableTop)) {
-					imageDrawable = attrs.getDrawable(R.styleable.PullToRefresh_ptrDrawableTop);
-				}
-				break;
+        switch (mode)
+        {
+            case PULL_FROM_END:
+                // Load in labels
+                mPullLabel = context.getString(R.string.ptr_pull_label_end);
+                mReleaseLabel = context.getString(R.string.ptr_release_label_end);
+                break;
 
-			case PULL_FROM_END:
-				if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawableEnd)) {
-					imageDrawable = attrs.getDrawable(R.styleable.PullToRefresh_ptrDrawableEnd);
-				} else if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawableBottom)) {
-					imageDrawable = attrs.getDrawable(R.styleable.PullToRefresh_ptrDrawableBottom);
-				}
-				break;
-		}
+            case PULL_FROM_START:
+            default:
+                // Load in labels
+                mPullLabel = context.getString(R.string.ptr_pull_label_start);
+                mReleaseLabel = context.getString(R.string.ptr_release_label_start);
+                break;
+        }
 
-		// If we don't have a user defined drawable, load the default
-		if (null == imageDrawable) {
-			imageDrawable = context.getResources().getDrawable(getDefaultDrawableResId());
-		}
+        if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderBackground))
+        {
+            Drawable background = attrs.getDrawable(R.styleable.PullToRefresh_ptrHeaderBackground);
+            if (null != background)
+            {
+                RLAPICompat.setBackground(this, background);
+            }
+        }
 
-		// Set Drawable, and save width/height
-		setLoadingDrawable(imageDrawable);
+        if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderTextAppearance))
+        {
+            TypedValue styleID = new TypedValue();
+            attrs.getValue(R.styleable.PullToRefresh_ptrHeaderTextAppearance, styleID);
+            setTextAppearance(styleID.data);
+        }
+        if (attrs.hasValue(R.styleable.PullToRefresh_ptrSubHeaderTextAppearance))
+        {
+            TypedValue styleID = new TypedValue();
+            attrs.getValue(R.styleable.PullToRefresh_ptrSubHeaderTextAppearance, styleID);
+            setSubTextAppearance(styleID.data);
+        }
 
-		reset();
-	}
+        // Text Color attrs need to be set after TextAppearance attrs
+        if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderTextColor))
+        {
+            ColorStateList colors = attrs.getColorStateList(R.styleable.PullToRefresh_ptrHeaderTextColor);
+            if (null != colors)
+            {
+                setTextColor(colors);
+            }
+        }
+        if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderSubTextColor))
+        {
+            ColorStateList colors = attrs.getColorStateList(R.styleable.PullToRefresh_ptrHeaderSubTextColor);
+            if (null != colors)
+            {
+                setSubTextColor(colors);
+            }
+        }
 
-	public final void adjustHeightUsingBottomPadding(final int height) {
-		setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), getPaddingBottom() + height
-				- getMeasuredHeight());
-	}
+        // Try and get defined drawable from Attrs
+        Drawable imageDrawable = null;
+        if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawable))
+        {
+            imageDrawable = attrs.getDrawable(R.styleable.PullToRefresh_ptrDrawable);
+        }
 
-	public final void adjustHeightUsingTopPadding(final int height) {
-		setPadding(getPaddingLeft(), getPaddingTop() + height - getMeasuredHeight(), getPaddingRight(),
-				getPaddingBottom());
-	}
+        // Check Specific Drawable from Attrs, these overrite the generic
+        // drawable attr above
+        switch (mode)
+        {
+            case PULL_FROM_START:
+            default:
+                if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawableStart))
+                {
+                    imageDrawable = attrs.getDrawable(R.styleable.PullToRefresh_ptrDrawableStart);
+                }
+                else if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawableTop))
+                {
+                    imageDrawable = attrs.getDrawable(R.styleable.PullToRefresh_ptrDrawableTop);
+                }
+                break;
 
-	public final void adjustWidthUsingLeftPadding(final int width) {
-		setPadding(getPaddingLeft() + width - getMeasuredWidth(), getPaddingTop(), getPaddingRight(),
-				getPaddingBottom());
-	}
+            case PULL_FROM_END:
+                if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawableEnd))
+                {
+                    imageDrawable = attrs.getDrawable(R.styleable.PullToRefresh_ptrDrawableEnd);
+                }
+                else if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawableBottom))
+                {
+                    imageDrawable = attrs.getDrawable(R.styleable.PullToRefresh_ptrDrawableBottom);
+                }
+                break;
+        }
 
-	public final void adjustWidthUsingRightPadding(final int width) {
-		setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight() + width - getMeasuredWidth(),
-				getPaddingBottom());
-	}
+        // If we don't have a user defined drawable, load the default
+        if (null == imageDrawable)
+        {
+            imageDrawable = context.getResources().getDrawable(getDefaultDrawableResId());
+        }
 
-	public final void onPull(float scaleOfLayout) {
-		if (!mUseIntrinsicAnimation) {
-			onPullImpl(scaleOfLayout);
-		}
-	}
+        // Set Drawable, and save width/height
+        setLoadingDrawable(imageDrawable);
 
-	public final void pullToRefresh() {
-		if (null != mHeaderText) {
-			mHeaderText.setText(mPullLabel);
-		}
+        reset();
+    }
 
-		// Now call the callback
-		pullToRefreshImpl();
-	}
+    public final void adjustHeightUsingBottomPadding(final int height)
+    {
+        setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), getPaddingBottom() + height
+                - getMeasuredHeight());
+    }
 
-	public final void refreshing() {
-		if (null != mHeaderText) {
-			mHeaderText.setText(mRefreshingLabel);
-		}
+    public final void adjustHeightUsingTopPadding(final int height)
+    {
+        setPadding(getPaddingLeft(), getPaddingTop() + height - getMeasuredHeight(), getPaddingRight(),
+                getPaddingBottom());
+    }
 
-		if (mUseIntrinsicAnimation) {
-			((AnimationDrawable) mHeaderImage.getDrawable()).start();
-		} else {
-			// Now call the callback
-			refreshingImpl();
-		}
+    public final void adjustWidthUsingLeftPadding(final int width)
+    {
+        setPadding(getPaddingLeft() + width - getMeasuredWidth(), getPaddingTop(), getPaddingRight(),
+                getPaddingBottom());
+    }
 
-		if (null != mSubHeaderText) {
-			mSubHeaderText.setVisibility(View.GONE);
-		}
-	}
+    public final void adjustWidthUsingRightPadding(final int width)
+    {
+        setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight() + width - getMeasuredWidth(),
+                getPaddingBottom());
+    }
 
-	public final void releaseToRefresh() {
-		if (null != mHeaderText) {
-			mHeaderText.setText(mReleaseLabel);
-		}
+    public final void onPull(float scaleOfLayout)
+    {
+        if (!mUseIntrinsicAnimation)
+        {
+            onPullImpl(scaleOfLayout);
+        }
+    }
 
-		// Now call the callback
-		releaseToRefreshImpl();
-	}
+    public final void pullToRefresh()
+    {
+        if (null != mHeaderText)
+        {
+            mHeaderText.setText(mPullLabel);
+        }
 
-	public final void reset() {
-		if (null != mHeaderText) {
-			mHeaderText.setText(mPullLabel);
-		}
-		mHeaderImage.setVisibility(View.VISIBLE);
+        // Now call the callback
+        pullToRefreshImpl();
+    }
 
-		if (mUseIntrinsicAnimation) {
-			((AnimationDrawable) mHeaderImage.getDrawable()).stop();
-		} else {
-			// Now call the callback
-			resetImpl();
-		}
+    public final void refreshing()
+    {
+        if (null != mHeaderText)
+        {
+            mHeaderText.setText(mRefreshingLabel);
+        }
 
-		if (null != mSubHeaderText) {
-			if (TextUtils.isEmpty(mSubHeaderText.getText())) {
-				mSubHeaderText.setVisibility(View.GONE);
-			} else {
-				mSubHeaderText.setVisibility(View.VISIBLE);
-			}
-		}
-	}
+        if (mUseIntrinsicAnimation)
+        {
+            ((AnimationDrawable) mHeaderImage.getDrawable()).start();
+        }
+        else
+        {
+            // Now call the callback
+            refreshingImpl();
+        }
 
-	public final void resetForMeasure() {
-		resetPadding();
-	}
+        if (null != mSubHeaderText)
+        {
+            mSubHeaderText.setVisibility(View.GONE);
+        }
+    }
 
-	@Override
-	public void setLastUpdatedLabel(CharSequence label) {
-		setSubHeaderText(label);
-	}
+    public final void releaseToRefresh()
+    {
+        if (null != mHeaderText)
+        {
+            mHeaderText.setText(mReleaseLabel);
+        }
 
-	public final void setLoadingDrawable(Drawable imageDrawable) {
-		// Set Drawable
-		mHeaderImage.setImageDrawable(imageDrawable);
-		mUseIntrinsicAnimation = (imageDrawable instanceof AnimationDrawable);
+        // Now call the callback
+        releaseToRefreshImpl();
+    }
 
-		// Now call the callback
-		onLoadingDrawableSet(imageDrawable);
-	}
+    public final void reset()
+    {
+        if (null != mHeaderText)
+        {
+            mHeaderText.setText(mPullLabel);
+        }
+        mHeaderImage.setVisibility(View.VISIBLE);
 
-	public void setPullLabel(CharSequence pullLabel) {
-		mPullLabel = pullLabel;
-	}
+        if (mUseIntrinsicAnimation)
+        {
+            ((AnimationDrawable) mHeaderImage.getDrawable()).stop();
+        }
+        else
+        {
+            // Now call the callback
+            resetImpl();
+        }
 
-	public void setRefreshingLabel(CharSequence refreshingLabel) {
-		mRefreshingLabel = refreshingLabel;
-	}
+        if (null != mSubHeaderText)
+        {
+            if (TextUtils.isEmpty(mSubHeaderText.getText()))
+            {
+                mSubHeaderText.setVisibility(View.GONE);
+            }
+            else
+            {
+                mSubHeaderText.setVisibility(View.VISIBLE);
+            }
+        }
+    }
 
-	public void setReleaseLabel(CharSequence releaseLabel) {
-		mReleaseLabel = releaseLabel;
-	}
+    public final void resetForMeasure()
+    {
+        resetPadding();
+    }
 
-	@Override
-	public void setTextTypeface(Typeface tf) {
-		mHeaderText.setTypeface(tf);
-	}
+    @Override
+    public void setLastUpdatedLabel(CharSequence label)
+    {
+        setSubHeaderText(label);
+    }
 
-	/**
-	 * Callbacks for derivative Layouts
-	 */
+    public final void setLoadingDrawable(Drawable imageDrawable)
+    {
+        // Set Drawable
+        mHeaderImage.setImageDrawable(imageDrawable);
+        mUseIntrinsicAnimation = (imageDrawable instanceof AnimationDrawable);
 
-	protected abstract int getDefaultDrawableResId();
+        // Now call the callback
+        onLoadingDrawableSet(imageDrawable);
+    }
 
-	protected abstract void onLoadingDrawableSet(Drawable imageDrawable);
+    public void setPullLabel(CharSequence pullLabel)
+    {
+        mPullLabel = pullLabel;
+    }
 
-	protected abstract void onPullImpl(float scaleOfLayout);
+    public void setRefreshingLabel(CharSequence refreshingLabel)
+    {
+        mRefreshingLabel = refreshingLabel;
+    }
 
-	protected abstract void pullToRefreshImpl();
+    public void setReleaseLabel(CharSequence releaseLabel)
+    {
+        mReleaseLabel = releaseLabel;
+    }
 
-	protected abstract void refreshingImpl();
+    @Override
+    public void setTextTypeface(Typeface tf)
+    {
+        mHeaderText.setTypeface(tf);
+    }
 
-	protected abstract void releaseToRefreshImpl();
+    /**
+     * Callbacks for derivative Layouts
+     */
 
-	protected abstract void resetImpl();
+    protected abstract int getDefaultDrawableResId();
 
-	private void resetPadding() {
-		Resources res = getResources();
-		final int tbPadding = res.getDimensionPixelSize(R.dimen.ptr_header_footer_top_bottom_padding);
-		final int lrPadding = res.getDimensionPixelSize(R.dimen.ptr_header_footer_left_right_padding);
-		setPadding(lrPadding, tbPadding, lrPadding, tbPadding);
+    protected abstract void onLoadingDrawableSet(Drawable imageDrawable);
 
-	}
+    protected abstract void onPullImpl(float scaleOfLayout);
 
-	private void setSubHeaderText(CharSequence label) {
-		if (null != mSubHeaderText) {
-			if (TextUtils.isEmpty(label)) {
-				mSubHeaderText.setVisibility(View.GONE);
-			} else {
-				mSubHeaderText.setText(label);
-				mSubHeaderText.setVisibility(View.VISIBLE);
-			}
-		}
-	}
+    protected abstract void pullToRefreshImpl();
 
-	private void setSubTextAppearance(int value) {
-		if (null != mSubHeaderText) {
-			mSubHeaderText.setTextAppearance(getContext(), value);
-		}
-	}
+    protected abstract void refreshingImpl();
 
-	private void setSubTextColor(ColorStateList color) {
-		if (null != mSubHeaderText) {
-			mSubHeaderText.setTextColor(color);
-		}
-	}
+    protected abstract void releaseToRefreshImpl();
 
-	private void setTextAppearance(int value) {
-		if (null != mHeaderText) {
-			mHeaderText.setTextAppearance(getContext(), value);
-		}
-		if (null != mSubHeaderText) {
-			mSubHeaderText.setTextAppearance(getContext(), value);
-		}
-	}
+    protected abstract void resetImpl();
 
-	private void setTextColor(ColorStateList color) {
-		if (null != mHeaderText) {
-			mHeaderText.setTextColor(color);
-		}
-		if (null != mSubHeaderText) {
-			mSubHeaderText.setTextColor(color);
-		}
-	}
+    private void resetPadding()
+    {
+        Resources res = getResources();
+        final int tbPadding = res.getDimensionPixelSize(R.dimen.ptr_header_footer_top_bottom_padding);
+        final int lrPadding = res.getDimensionPixelSize(R.dimen.ptr_header_footer_left_right_padding);
+        setPadding(lrPadding, tbPadding, lrPadding, tbPadding);
+
+    }
+
+    private void setSubHeaderText(CharSequence label)
+    {
+        if (null != mSubHeaderText)
+        {
+            if (TextUtils.isEmpty(label))
+            {
+                mSubHeaderText.setVisibility(View.GONE);
+            }
+            else
+            {
+                mSubHeaderText.setText(label);
+                mSubHeaderText.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    private void setSubTextAppearance(int value)
+    {
+        if (null != mSubHeaderText)
+        {
+            mSubHeaderText.setTextAppearance(getContext(), value);
+        }
+    }
+
+    private void setSubTextColor(ColorStateList color)
+    {
+        if (null != mSubHeaderText)
+        {
+            mSubHeaderText.setTextColor(color);
+        }
+    }
+
+    private void setTextAppearance(int value)
+    {
+        if (null != mHeaderText)
+        {
+            mHeaderText.setTextAppearance(getContext(), value);
+        }
+        if (null != mSubHeaderText)
+        {
+            mSubHeaderText.setTextAppearance(getContext(), value);
+        }
+    }
+
+    private void setTextColor(ColorStateList color)
+    {
+        if (null != mHeaderText)
+        {
+            mHeaderText.setTextColor(color);
+        }
+        if (null != mSubHeaderText)
+        {
+            mSubHeaderText.setTextColor(color);
+        }
+    }
 }

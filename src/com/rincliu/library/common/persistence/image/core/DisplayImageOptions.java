@@ -31,18 +31,24 @@ import com.rincliu.library.common.persistence.image.core.process.BitmapProcessor
 /**
  * Contains options for image display. Defines:
  * <ul>
- * <li>whether stub image will be displayed in {@link android.widget.ImageView ImageView} during image loading</li>
- * <li>whether stub image will be displayed in {@link android.widget.ImageView ImageView} if empty URI is passed</li>
- * <li>whether stub image will be displayed in {@link android.widget.ImageView ImageView} if image loading fails</li>
- * <li>whether {@link android.widget.ImageView ImageView} should be reset before image loading start</li>
+ * <li>whether stub image will be displayed in
+ * {@link android.widget.ImageView ImageView} during image loading</li>
+ * <li>whether stub image will be displayed in
+ * {@link android.widget.ImageView ImageView} if empty URI is passed</li>
+ * <li>whether stub image will be displayed in
+ * {@link android.widget.ImageView ImageView} if image loading fails</li>
+ * <li>whether {@link android.widget.ImageView ImageView} should be reset
+ * before image loading start</li>
  * <li>whether loaded image will be cached in memory</li>
  * <li>whether loaded image will be cached on disc</li>
  * <li>image scale type</li>
  * <li>decoding options (including bitmap decoding configuration)</li>
  * <li>delay before loading of image</li>
- * <li>auxiliary object which will be passed to {@link ImageDownloader#getStream(String, Object) ImageDownloader}</li>
+ * <li>auxiliary object which will be passed to
+ * {@link ImageDownloader#getStream(String, Object) ImageDownloader}</li>
  * <li>pre-processor for image Bitmap (before caching in memory)</li>
- * <li>post-processor for image Bitmap (after caching in memory, before displaying)</li>
+ * <li>post-processor for image Bitmap (after caching in memory, before
+ * displaying)</li>
  * <li>how decoded {@link Bitmap} will be displayed</li>
  * </ul>
  * <p/>
@@ -51,429 +57,556 @@ import com.rincliu.library.common.persistence.image.core.process.BitmapProcessor
  * <li>with {@link Builder}:<br />
  * <b>i.e.</b> :
  * <code>new {@link DisplayImageOptions}.{@link Builder#Builder() Builder()}.{@link Builder#cacheInMemory() cacheInMemory()}.
- * {@link Builder#showImageOnLoading(int)} showImageOnLoading()}.{@link Builder#build() build()}</code><br />
+ * {@link Builder#showImageOnLoading(int)} showImageOnLoading()}.{@link Builder#build() build()}</code>
+ * <br />
  * </li>
  * <li>or by static method: {@link #createSimple()}</li> <br />
- *
+ * 
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.0.0
  */
-public final class DisplayImageOptions {
+public final class DisplayImageOptions
+{
 
-	private final int imageResOnLoading;
-	private final int imageResForEmptyUri;
-	private final int imageResOnFail;
-	private final Drawable imageOnLoading;
-	private final Drawable imageForEmptyUri;
-	private final Drawable imageOnFail;
-	private final boolean resetViewBeforeLoading;
-	private final boolean cacheInMemory;
-	private final boolean cacheOnDisc;
-	private final ImageScaleType imageScaleType;
-	private final Options decodingOptions;
-	private final int delayBeforeLoading;
-	private final Object extraForDownloader;
-	private final BitmapProcessor preProcessor;
-	private final BitmapProcessor postProcessor;
-	private final BitmapDisplayer displayer;
-	private final Handler handler;
+    private final int imageResOnLoading;
 
-	private DisplayImageOptions(Builder builder) {
-		imageResOnLoading = builder.imageResOnLoading;
-		imageResForEmptyUri = builder.imageResForEmptyUri;
-		imageResOnFail = builder.imageResOnFail;
-		imageOnLoading = builder.imageOnLoading;
-		imageForEmptyUri = builder.imageForEmptyUri;
-		imageOnFail = builder.imageOnFail;
-		resetViewBeforeLoading = builder.resetViewBeforeLoading;
-		cacheInMemory = builder.cacheInMemory;
-		cacheOnDisc = builder.cacheOnDisc;
-		imageScaleType = builder.imageScaleType;
-		decodingOptions = builder.decodingOptions;
-		delayBeforeLoading = builder.delayBeforeLoading;
-		extraForDownloader = builder.extraForDownloader;
-		preProcessor = builder.preProcessor;
-		postProcessor = builder.postProcessor;
-		displayer = builder.displayer;
-		handler = builder.handler;
-	}
+    private final int imageResForEmptyUri;
 
-	public boolean shouldShowImageResOnLoading() {
-		return imageResOnLoading != 0;
-	}
+    private final int imageResOnFail;
 
-	public boolean shouldShowImageOnLoading() {
-		return imageOnLoading != null;
-	}
+    private final Drawable imageOnLoading;
 
-	public boolean shouldShowImageResForEmptyUri() {
-		return imageResForEmptyUri != 0;
-	}
+    private final Drawable imageForEmptyUri;
 
-	public boolean shouldShowImageForEmptyUri() {
-		return imageForEmptyUri != null;
-	}
+    private final Drawable imageOnFail;
 
-	public boolean shouldShowImageResOnFail() {
-		return imageResOnFail != 0;
-	}
+    private final boolean resetViewBeforeLoading;
 
-	public boolean shouldShowImageOnFail() {
-		return imageOnFail != null;
-	}
+    private final boolean cacheInMemory;
 
-	public boolean shouldPreProcess() {
-		return preProcessor != null;
-	}
+    private final boolean cacheOnDisc;
 
-	public boolean shouldPostProcess() {
-		return postProcessor != null;
-	}
+    private final ImageScaleType imageScaleType;
 
-	public boolean shouldDelayBeforeLoading() {
-		return delayBeforeLoading > 0;
-	}
+    private final Options decodingOptions;
 
-	public int getImageResOnLoading() {
-		return imageResOnLoading;
-	}
+    private final int delayBeforeLoading;
 
-	public Drawable getImageOnLoading() {
-		return imageOnLoading;
-	}
+    private final Object extraForDownloader;
 
-	public int getImageResForEmptyUri() {
-		return imageResForEmptyUri;
-	}
+    private final BitmapProcessor preProcessor;
 
-	public Drawable getImageForEmptyUri() {
-		return imageForEmptyUri;
-	}
+    private final BitmapProcessor postProcessor;
 
-	public int getImageResOnFail() {
-		return imageResOnFail;
-	}
+    private final BitmapDisplayer displayer;
 
-	public Drawable getImageOnFail() {
-		return imageOnFail;
-	}
+    private final Handler handler;
 
-	public boolean isResetViewBeforeLoading() {
-		return resetViewBeforeLoading;
-	}
+    private DisplayImageOptions(Builder builder)
+    {
+        imageResOnLoading = builder.imageResOnLoading;
+        imageResForEmptyUri = builder.imageResForEmptyUri;
+        imageResOnFail = builder.imageResOnFail;
+        imageOnLoading = builder.imageOnLoading;
+        imageForEmptyUri = builder.imageForEmptyUri;
+        imageOnFail = builder.imageOnFail;
+        resetViewBeforeLoading = builder.resetViewBeforeLoading;
+        cacheInMemory = builder.cacheInMemory;
+        cacheOnDisc = builder.cacheOnDisc;
+        imageScaleType = builder.imageScaleType;
+        decodingOptions = builder.decodingOptions;
+        delayBeforeLoading = builder.delayBeforeLoading;
+        extraForDownloader = builder.extraForDownloader;
+        preProcessor = builder.preProcessor;
+        postProcessor = builder.postProcessor;
+        displayer = builder.displayer;
+        handler = builder.handler;
+    }
 
-	public boolean isCacheInMemory() {
-		return cacheInMemory;
-	}
+    public boolean shouldShowImageResOnLoading()
+    {
+        return imageResOnLoading != 0;
+    }
 
-	public boolean isCacheOnDisc() {
-		return cacheOnDisc;
-	}
+    public boolean shouldShowImageOnLoading()
+    {
+        return imageOnLoading != null;
+    }
 
-	public ImageScaleType getImageScaleType() {
-		return imageScaleType;
-	}
+    public boolean shouldShowImageResForEmptyUri()
+    {
+        return imageResForEmptyUri != 0;
+    }
 
-	public Options getDecodingOptions() {
-		return decodingOptions;
-	}
+    public boolean shouldShowImageForEmptyUri()
+    {
+        return imageForEmptyUri != null;
+    }
 
-	public int getDelayBeforeLoading() {
-		return delayBeforeLoading;
-	}
+    public boolean shouldShowImageResOnFail()
+    {
+        return imageResOnFail != 0;
+    }
 
-	public Object getExtraForDownloader() {
-		return extraForDownloader;
-	}
+    public boolean shouldShowImageOnFail()
+    {
+        return imageOnFail != null;
+    }
 
-	public BitmapProcessor getPreProcessor() {
-		return preProcessor;
-	}
+    public boolean shouldPreProcess()
+    {
+        return preProcessor != null;
+    }
 
-	public BitmapProcessor getPostProcessor() {
-		return postProcessor;
-	}
+    public boolean shouldPostProcess()
+    {
+        return postProcessor != null;
+    }
 
-	public BitmapDisplayer getDisplayer() {
-		return displayer;
-	}
+    public boolean shouldDelayBeforeLoading()
+    {
+        return delayBeforeLoading > 0;
+    }
 
-	public Handler getHandler() {
-		return (handler == null ? new Handler() : handler);
-	}
+    public int getImageResOnLoading()
+    {
+        return imageResOnLoading;
+    }
 
-	/**
-	 * Builder for {@link DisplayImageOptions}
-	 *
-	 * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
-	 */
-	public static class Builder {
-		private int imageResOnLoading = 0;
-		private int imageResForEmptyUri = 0;
-		private int imageResOnFail = 0;
-		private Drawable imageOnLoading = null;
-		private Drawable imageForEmptyUri = null;
-		private Drawable imageOnFail = null;
-		private boolean resetViewBeforeLoading = false;
-		private boolean cacheInMemory = false;
-		private boolean cacheOnDisc = false;
-		private ImageScaleType imageScaleType = ImageScaleType.IN_SAMPLE_POWER_OF_2;
-		private Options decodingOptions = new Options();
-		private int delayBeforeLoading = 0;
-		private Object extraForDownloader = null;
-		private BitmapProcessor preProcessor = null;
-		private BitmapProcessor postProcessor = null;
-		private BitmapDisplayer displayer = DefaultConfigurationFactory.createBitmapDisplayer();
-		private Handler handler = null;
+    public Drawable getImageOnLoading()
+    {
+        return imageOnLoading;
+    }
 
-		public Builder() {
-			decodingOptions.inPurgeable = true;
-			decodingOptions.inInputShareable = true;
-		}
+    public int getImageResForEmptyUri()
+    {
+        return imageResForEmptyUri;
+    }
 
-		/**
-		 * Stub image will be displayed in {@link android.widget.ImageView ImageView} during image loading
-		 *
-		 * @param imageRes Stub image resource
-		 * @deprecated Use {@link #showImageOnLoading(int)} instead
-		 */
-		@Deprecated
-		public Builder showStubImage(int imageRes) {
-			imageResOnLoading = imageRes;
-			return this;
-		}
+    public Drawable getImageForEmptyUri()
+    {
+        return imageForEmptyUri;
+    }
 
-		/**
-		 * Incoming image will be displayed in {@link android.widget.ImageView ImageView} during image loading
-		 *
-		 * @param imageRes Image resource
-		 */
-		public Builder showImageOnLoading(int imageRes) {
-			imageResOnLoading = imageRes;
-			return this;
-		}
+    public int getImageResOnFail()
+    {
+        return imageResOnFail;
+    }
 
-		/**
-		 * Incoming drawable will be displayed in {@link android.widget.ImageView ImageView} during image loading.
-		 * This option will be ignored if {@link DisplayImageOptions.Builder#showImageOnLoading(int)} is set.
-		 */
-		public Builder showImageOnLoading(Drawable drawable) {
-			imageOnLoading = drawable;
-			return this;
-		}
+    public Drawable getImageOnFail()
+    {
+        return imageOnFail;
+    }
 
-		/**
-		 * Incoming image will be displayed in {@link android.widget.ImageView ImageView} if empty URI (null or empty
-		 * string) will be passed to <b>ImageLoader.displayImage(...)</b> method.
-		 *
-		 * @param imageRes Image resource
-		 */
-		public Builder showImageForEmptyUri(int imageRes) {
-			imageResForEmptyUri = imageRes;
-			return this;
-		}
+    public boolean isResetViewBeforeLoading()
+    {
+        return resetViewBeforeLoading;
+    }
 
-		/**
-		 * Incoming drawable will be displayed in {@link android.widget.ImageView ImageView} if empty URI (null or empty
-		 * string) will be passed to <b>ImageLoader.displayImage(...)</b> method.
-		 * This option will be ignored if {@link DisplayImageOptions.Builder#showImageForEmptyUri(int)} is set.
-		 */
-		public Builder showImageForEmptyUri(Drawable drawable) {
-			imageForEmptyUri = drawable;
-			return this;
-		}
+    public boolean isCacheInMemory()
+    {
+        return cacheInMemory;
+    }
 
-		/**
-		 * Incoming image will be displayed in {@link android.widget.ImageView ImageView} if some error occurs during
-		 * requested image loading/decoding.
-		 *
-		 * @param imageRes Image resource
-		 */
-		public Builder showImageOnFail(int imageRes) {
-			imageResOnFail = imageRes;
-			return this;
-		}
+    public boolean isCacheOnDisc()
+    {
+        return cacheOnDisc;
+    }
 
-		/**
-		 * Incoming drawable will be displayed in {@link android.widget.ImageView ImageView} if some error occurs during
-		 * requested image loading/decoding.
-		 * This option will be ignored if {@link DisplayImageOptions.Builder#showImageOnFail(int)} is set.
-		 */
-		public Builder showImageOnFail(Drawable drawable) {
-			imageOnFail = drawable;
-			return this;
-		}
+    public ImageScaleType getImageScaleType()
+    {
+        return imageScaleType;
+    }
 
-		/**
-		 * {@link android.widget.ImageView ImageView} will be reset (set <b>null</b>) before image loading start
-		 *
-		 * @deprecated Use {@link #resetViewBeforeLoading(boolean) resetViewBeforeLoading(true)} instead
-		 */
-		public Builder resetViewBeforeLoading() {
-			resetViewBeforeLoading = true;
-			return this;
-		}
+    public Options getDecodingOptions()
+    {
+        return decodingOptions;
+    }
 
-		/** Sets whether {@link android.widget.ImageView ImageView} will be reset (set <b>null</b>) before image loading start */
-		public Builder resetViewBeforeLoading(boolean resetViewBeforeLoading) {
-			this.resetViewBeforeLoading = resetViewBeforeLoading;
-			return this;
-		}
+    public int getDelayBeforeLoading()
+    {
+        return delayBeforeLoading;
+    }
 
-		/**
-		 * Loaded image will be cached in memory
-		 *
-		 * @deprecated Use {@link #cacheInMemory(boolean) cacheInMemory(true)} instead
-		 */
-		public Builder cacheInMemory() {
-			cacheInMemory = true;
-			return this;
-		}
+    public Object getExtraForDownloader()
+    {
+        return extraForDownloader;
+    }
 
-		/** Sets whether loaded image will be cached in memory */
-		public Builder cacheInMemory(boolean cacheInMemory) {
-			this.cacheInMemory = cacheInMemory;
-			return this;
-		}
+    public BitmapProcessor getPreProcessor()
+    {
+        return preProcessor;
+    }
 
-		/**
-		 * Loaded image will be cached on disc
-		 *
-		 * @deprecated Use {@link #cacheOnDisc(boolean) cacheOnDisc(true)} instead
-		 */
-		public Builder cacheOnDisc() {
-			cacheOnDisc = true;
-			return this;
-		}
+    public BitmapProcessor getPostProcessor()
+    {
+        return postProcessor;
+    }
 
-		/** Sets whether loaded image will be cached on disc */
-		public Builder cacheOnDisc(boolean cacheOnDisc) {
-			this.cacheOnDisc = cacheOnDisc;
-			return this;
-		}
+    public BitmapDisplayer getDisplayer()
+    {
+        return displayer;
+    }
 
-		/**
-		 * Sets {@linkplain ImageScaleType scale type} for decoding image. This parameter is used while define scale
-		 * size for decoding image to Bitmap. Default value - {@link ImageScaleType#IN_SAMPLE_POWER_OF_2}
-		 */
-		public Builder imageScaleType(ImageScaleType imageScaleType) {
-			this.imageScaleType = imageScaleType;
-			return this;
-		}
+    public Handler getHandler()
+    {
+        return (handler == null ? new Handler() : handler);
+    }
 
-		/** Sets {@link Bitmap.Config bitmap config} for image decoding. Default value - {@link Bitmap.Config#ARGB_8888} */
-		public Builder bitmapConfig(Bitmap.Config bitmapConfig) {
-			if (bitmapConfig == null) throw new IllegalArgumentException("bitmapConfig can't be null");
-			decodingOptions.inPreferredConfig = bitmapConfig;
-			return this;
-		}
+    /**
+     * Builder for {@link DisplayImageOptions}
+     * 
+     * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
+     */
+    public static class Builder
+    {
+        private int imageResOnLoading = 0;
 
-		/**
-		 * Sets options for image decoding.<br />
-		 * <b>NOTE:</b> {@link Options#inSampleSize} of incoming options will <b>NOT</b> be considered. Library
-		 * calculate the most appropriate sample size itself according yo {@link #imageScaleType(ImageScaleType)}
-		 * options.<br />
-		 * <b>NOTE:</b> This option overlaps {@link #bitmapConfig(android.graphics.Bitmap.Config) bitmapConfig()}
-		 * option.
-		 */
-		public Builder decodingOptions(Options decodingOptions) {
-			if (decodingOptions == null) throw new IllegalArgumentException("decodingOptions can't be null");
-			this.decodingOptions = decodingOptions;
-			return this;
-		}
+        private int imageResForEmptyUri = 0;
 
-		/** Sets delay time before starting loading task. Default - no delay. */
-		public Builder delayBeforeLoading(int delayInMillis) {
-			this.delayBeforeLoading = delayInMillis;
-			return this;
-		}
+        private int imageResOnFail = 0;
 
-		/** Sets auxiliary object which will be passed to {@link ImageDownloader#getStream(String, Object)} */
-		public Builder extraForDownloader(Object extra) {
-			this.extraForDownloader = extra;
-			return this;
-		}
+        private Drawable imageOnLoading = null;
 
-		/**
-		 * Sets bitmap processor which will be process bitmaps before they will be cached in memory. So memory cache
-		 * will contain bitmap processed by incoming preProcessor.<br />
-		 * Image will be pre-processed even if caching in memory is disabled.
-		 */
-		public Builder preProcessor(BitmapProcessor preProcessor) {
-			this.preProcessor = preProcessor;
-			return this;
-		}
+        private Drawable imageForEmptyUri = null;
 
-		/**
-		 * Sets bitmap processor which will be process bitmaps before they will be displayed in {@link ImageView} but
-		 * after they'll have been saved in memory cache.
-		 */
-		public Builder postProcessor(BitmapProcessor postProcessor) {
-			this.postProcessor = postProcessor;
-			return this;
-		}
+        private Drawable imageOnFail = null;
 
-		/**
-		 * Sets custom {@link BitmapDisplayer displayer} for image loading task. Default value -
-		 * {@link DefaultConfigurationFactory#createBitmapDisplayer()}
-		 */
-		public Builder displayer(BitmapDisplayer displayer) {
-			if (displayer == null) throw new IllegalArgumentException("displayer can't be null");
-			this.displayer = displayer;
-			return this;
-		}
+        private boolean resetViewBeforeLoading = false;
 
-		/**
-		 * Sets custom {@linkplain Handler handler} for displaying images and firing {@linkplain ImageLoadingListener
-		 * listener} events.
-		 */
-		public Builder handler(Handler handler) {
-			this.handler = handler;
-			return this;
-		}
+        private boolean cacheInMemory = false;
 
-		/** Sets all options equal to incoming options */
-		public Builder cloneFrom(DisplayImageOptions options) {
-			imageResOnLoading = options.imageResOnLoading;
-			imageResForEmptyUri = options.imageResForEmptyUri;
-			imageResOnFail = options.imageResOnFail;
-			imageOnLoading = options.imageOnLoading;
-			imageForEmptyUri = options.imageForEmptyUri;
-			imageOnFail = options.imageOnFail;
-			resetViewBeforeLoading = options.resetViewBeforeLoading;
-			cacheInMemory = options.cacheInMemory;
-			cacheOnDisc = options.cacheOnDisc;
-			imageScaleType = options.imageScaleType;
-			decodingOptions = options.decodingOptions;
-			delayBeforeLoading = options.delayBeforeLoading;
-			extraForDownloader = options.extraForDownloader;
-			preProcessor = options.preProcessor;
-			postProcessor = options.postProcessor;
-			displayer = options.displayer;
-			handler = options.handler;
-			return this;
-		}
+        private boolean cacheOnDisc = false;
 
-		/** Builds configured {@link DisplayImageOptions} object */
-		public DisplayImageOptions build() {
-			return new DisplayImageOptions(this);
-		}
-	}
+        private ImageScaleType imageScaleType = ImageScaleType.IN_SAMPLE_POWER_OF_2;
 
-	/**
-	 * Creates options appropriate for single displaying:
-	 * <ul>
-	 * <li>View will <b>not</b> be reset before loading</li>
-	 * <li>Loaded image will <b>not</b> be cached in memory</li>
-	 * <li>Loaded image will <b>not</b> be cached on disc</li>
-	 * <li>{@link ImageScaleType#IN_SAMPLE_POWER_OF_2} decoding type will be used</li>
-	 * <li>{@link Bitmap.Config#ARGB_8888} bitmap config will be used for image decoding</li>
-	 * <li>{@link SimpleBitmapDisplayer} will be used for image displaying</li>
-	 * </ul>
-	 * <p/>
-	 * These option are appropriate for simple single-use image (from drawables or from Internet) displaying.
-	 */
-	public static DisplayImageOptions createSimple() {
-		return new Builder().build();
-	}
+        private Options decodingOptions = new Options();
+
+        private int delayBeforeLoading = 0;
+
+        private Object extraForDownloader = null;
+
+        private BitmapProcessor preProcessor = null;
+
+        private BitmapProcessor postProcessor = null;
+
+        private BitmapDisplayer displayer = DefaultConfigurationFactory.createBitmapDisplayer();
+
+        private Handler handler = null;
+
+        public Builder()
+        {
+            decodingOptions.inPurgeable = true;
+            decodingOptions.inInputShareable = true;
+        }
+
+        /**
+         * Stub image will be displayed in {@link android.widget.ImageView
+         * ImageView} during image loading
+         * 
+         * @param imageRes Stub image resource
+         * @deprecated Use {@link #showImageOnLoading(int)} instead
+         */
+        @Deprecated
+        public Builder showStubImage(int imageRes)
+        {
+            imageResOnLoading = imageRes;
+            return this;
+        }
+
+        /**
+         * Incoming image will be displayed in
+         * {@link android.widget.ImageView ImageView} during image loading
+         * 
+         * @param imageRes Image resource
+         */
+        public Builder showImageOnLoading(int imageRes)
+        {
+            imageResOnLoading = imageRes;
+            return this;
+        }
+
+        /**
+         * Incoming drawable will be displayed in
+         * {@link android.widget.ImageView ImageView} during image loading.
+         * This option will be ignored if
+         * {@link DisplayImageOptions.Builder#showImageOnLoading(int)} is set.
+         */
+        public Builder showImageOnLoading(Drawable drawable)
+        {
+            imageOnLoading = drawable;
+            return this;
+        }
+
+        /**
+         * Incoming image will be displayed in
+         * {@link android.widget.ImageView ImageView} if empty URI (null or
+         * empty string) will be passed to
+         * <b>ImageLoader.displayImage(...)</b> method.
+         * 
+         * @param imageRes Image resource
+         */
+        public Builder showImageForEmptyUri(int imageRes)
+        {
+            imageResForEmptyUri = imageRes;
+            return this;
+        }
+
+        /**
+         * Incoming drawable will be displayed in
+         * {@link android.widget.ImageView ImageView} if empty URI (null or
+         * empty string) will be passed to
+         * <b>ImageLoader.displayImage(...)</b> method. This option will be
+         * ignored if
+         * {@link DisplayImageOptions.Builder#showImageForEmptyUri(int)} is
+         * set.
+         */
+        public Builder showImageForEmptyUri(Drawable drawable)
+        {
+            imageForEmptyUri = drawable;
+            return this;
+        }
+
+        /**
+         * Incoming image will be displayed in
+         * {@link android.widget.ImageView ImageView} if some error occurs
+         * during requested image loading/decoding.
+         * 
+         * @param imageRes Image resource
+         */
+        public Builder showImageOnFail(int imageRes)
+        {
+            imageResOnFail = imageRes;
+            return this;
+        }
+
+        /**
+         * Incoming drawable will be displayed in
+         * {@link android.widget.ImageView ImageView} if some error occurs
+         * during requested image loading/decoding. This option will be
+         * ignored if {@link DisplayImageOptions.Builder#showImageOnFail(int)}
+         * is set.
+         */
+        public Builder showImageOnFail(Drawable drawable)
+        {
+            imageOnFail = drawable;
+            return this;
+        }
+
+        /**
+         * {@link android.widget.ImageView ImageView} will be reset (set
+         * <b>null</b>) before image loading start
+         * 
+         * @deprecated Use {@link #resetViewBeforeLoading(boolean)
+         *             resetViewBeforeLoading(true)} instead
+         */
+        public Builder resetViewBeforeLoading()
+        {
+            resetViewBeforeLoading = true;
+            return this;
+        }
+
+        /**
+         * Sets whether {@link android.widget.ImageView ImageView} will be
+         * reset (set <b>null</b>) before image loading start
+         */
+        public Builder resetViewBeforeLoading(boolean resetViewBeforeLoading)
+        {
+            this.resetViewBeforeLoading = resetViewBeforeLoading;
+            return this;
+        }
+
+        /**
+         * Loaded image will be cached in memory
+         * 
+         * @deprecated Use {@link #cacheInMemory(boolean) cacheInMemory(true)}
+         *             instead
+         */
+        public Builder cacheInMemory()
+        {
+            cacheInMemory = true;
+            return this;
+        }
+
+        /** Sets whether loaded image will be cached in memory */
+        public Builder cacheInMemory(boolean cacheInMemory)
+        {
+            this.cacheInMemory = cacheInMemory;
+            return this;
+        }
+
+        /**
+         * Loaded image will be cached on disc
+         * 
+         * @deprecated Use {@link #cacheOnDisc(boolean) cacheOnDisc(true)}
+         *             instead
+         */
+        public Builder cacheOnDisc()
+        {
+            cacheOnDisc = true;
+            return this;
+        }
+
+        /** Sets whether loaded image will be cached on disc */
+        public Builder cacheOnDisc(boolean cacheOnDisc)
+        {
+            this.cacheOnDisc = cacheOnDisc;
+            return this;
+        }
+
+        /**
+         * Sets {@linkplain ImageScaleType scale type} for decoding image.
+         * This parameter is used while define scale size for decoding image
+         * to Bitmap. Default value -
+         * {@link ImageScaleType#IN_SAMPLE_POWER_OF_2}
+         */
+        public Builder imageScaleType(ImageScaleType imageScaleType)
+        {
+            this.imageScaleType = imageScaleType;
+            return this;
+        }
+
+        /**
+         * Sets {@link Bitmap.Config bitmap config} for image decoding.
+         * Default value - {@link Bitmap.Config#ARGB_8888}
+         */
+        public Builder bitmapConfig(Bitmap.Config bitmapConfig)
+        {
+            if (bitmapConfig == null)
+                throw new IllegalArgumentException("bitmapConfig can't be null");
+            decodingOptions.inPreferredConfig = bitmapConfig;
+            return this;
+        }
+
+        /**
+         * Sets options for image decoding.<br />
+         * <b>NOTE:</b> {@link Options#inSampleSize} of incoming options will
+         * <b>NOT</b> be considered. Library calculate the most appropriate
+         * sample size itself according yo
+         * {@link #imageScaleType(ImageScaleType)} options.<br />
+         * <b>NOTE:</b> This option overlaps
+         * {@link #bitmapConfig(android.graphics.Bitmap.Config)
+         * bitmapConfig()} option.
+         */
+        public Builder decodingOptions(Options decodingOptions)
+        {
+            if (decodingOptions == null)
+                throw new IllegalArgumentException("decodingOptions can't be null");
+            this.decodingOptions = decodingOptions;
+            return this;
+        }
+
+        /** Sets delay time before starting loading task. Default - no delay. */
+        public Builder delayBeforeLoading(int delayInMillis)
+        {
+            this.delayBeforeLoading = delayInMillis;
+            return this;
+        }
+
+        /**
+         * Sets auxiliary object which will be passed to
+         * {@link ImageDownloader#getStream(String, Object)}
+         */
+        public Builder extraForDownloader(Object extra)
+        {
+            this.extraForDownloader = extra;
+            return this;
+        }
+
+        /**
+         * Sets bitmap processor which will be process bitmaps before they
+         * will be cached in memory. So memory cache will contain bitmap
+         * processed by incoming preProcessor.<br />
+         * Image will be pre-processed even if caching in memory is disabled.
+         */
+        public Builder preProcessor(BitmapProcessor preProcessor)
+        {
+            this.preProcessor = preProcessor;
+            return this;
+        }
+
+        /**
+         * Sets bitmap processor which will be process bitmaps before they
+         * will be displayed in {@link ImageView} but after they'll have been
+         * saved in memory cache.
+         */
+        public Builder postProcessor(BitmapProcessor postProcessor)
+        {
+            this.postProcessor = postProcessor;
+            return this;
+        }
+
+        /**
+         * Sets custom {@link BitmapDisplayer displayer} for image loading
+         * task. Default value -
+         * {@link DefaultConfigurationFactory#createBitmapDisplayer()}
+         */
+        public Builder displayer(BitmapDisplayer displayer)
+        {
+            if (displayer == null)
+                throw new IllegalArgumentException("displayer can't be null");
+            this.displayer = displayer;
+            return this;
+        }
+
+        /**
+         * Sets custom {@linkplain Handler handler} for displaying images and
+         * firing {@linkplain ImageLoadingListener listener} events.
+         */
+        public Builder handler(Handler handler)
+        {
+            this.handler = handler;
+            return this;
+        }
+
+        /** Sets all options equal to incoming options */
+        public Builder cloneFrom(DisplayImageOptions options)
+        {
+            imageResOnLoading = options.imageResOnLoading;
+            imageResForEmptyUri = options.imageResForEmptyUri;
+            imageResOnFail = options.imageResOnFail;
+            imageOnLoading = options.imageOnLoading;
+            imageForEmptyUri = options.imageForEmptyUri;
+            imageOnFail = options.imageOnFail;
+            resetViewBeforeLoading = options.resetViewBeforeLoading;
+            cacheInMemory = options.cacheInMemory;
+            cacheOnDisc = options.cacheOnDisc;
+            imageScaleType = options.imageScaleType;
+            decodingOptions = options.decodingOptions;
+            delayBeforeLoading = options.delayBeforeLoading;
+            extraForDownloader = options.extraForDownloader;
+            preProcessor = options.preProcessor;
+            postProcessor = options.postProcessor;
+            displayer = options.displayer;
+            handler = options.handler;
+            return this;
+        }
+
+        /** Builds configured {@link DisplayImageOptions} object */
+        public DisplayImageOptions build()
+        {
+            return new DisplayImageOptions(this);
+        }
+    }
+
+    /**
+     * Creates options appropriate for single displaying:
+     * <ul>
+     * <li>View will <b>not</b> be reset before loading</li>
+     * <li>Loaded image will <b>not</b> be cached in memory</li>
+     * <li>Loaded image will <b>not</b> be cached on disc</li>
+     * <li>{@link ImageScaleType#IN_SAMPLE_POWER_OF_2} decoding type will be
+     * used</li>
+     * <li>{@link Bitmap.Config#ARGB_8888} bitmap config will be used for
+     * image decoding</li>
+     * <li>{@link SimpleBitmapDisplayer} will be used for image displaying</li>
+     * </ul>
+     * <p/>
+     * These option are appropriate for simple single-use image (from
+     * drawables or from Internet) displaying.
+     */
+    public static DisplayImageOptions createSimple()
+    {
+        return new Builder().build();
+    }
 }

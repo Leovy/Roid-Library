@@ -34,104 +34,127 @@ import com.tencent.mm.sdk.openapi.WXTextObject;
 import com.tencent.mm.sdk.openapi.WXVideoObject;
 import com.tencent.mm.sdk.openapi.WXWebpageObject;
 
-public class RLWeixinHelper {
+public class RLWeixinHelper
+{
     private static final int TIMELINE_SUPPORTED_VERSION = 0x21020001;
+
     private static final int IMG_THUMB_SIZE = 150;
-	private static RLWeixinHelper helper;
+
+    private static RLWeixinHelper helper;
+
     private static IWXAPI api;
+
     private static Context mContext;
-    
-    private RLWeixinHelper(Context context){
-    	if(api==null){
-    		String key=context.getString(R.string.weixin_key);
-    		api=WXAPIFactory.createWXAPI(context, key, false);
-        	api.registerApp(key);
-    	}
+
+    private RLWeixinHelper(Context context)
+    {
+        if (api == null)
+        {
+            String key = context.getString(R.string.weixin_key);
+            api = WXAPIFactory.createWXAPI(context, key, false);
+            api.registerApp(key);
+        }
     }
-    
+
     /**
-     * 
      * @param context
      * @return
      */
-    public static RLWeixinHelper getInstance(Context context){
-    	mContext=context;
-    	if(helper==null){
-    		helper=new RLWeixinHelper(context);
-    	}
-    	return helper;
+    public static RLWeixinHelper getInstance(Context context)
+    {
+        mContext = context;
+        if (helper == null)
+        {
+            helper = new RLWeixinHelper(context);
+        }
+        return helper;
     }
-    
-    private boolean sendReq(WXMediaMessage msg, boolean isTimeline){
-    	boolean res=false;
-    	int error=-1;
-    	if(api.isWXAppInstalled()){
-    		if(api.isWXAppSupportAPI()){
-        		if(isTimeline&&api.getWXAppSupportAPI()<TIMELINE_SUPPORTED_VERSION){
-        			error=R.string.weixin_not_support_timeline;
-        		}else{
-        			SendMessageToWX.Req req = new SendMessageToWX.Req();
-            		req.transaction = String.valueOf(System.currentTimeMillis());
-            		req.message = msg;
-        			req.scene = isTimeline?SendMessageToWX.Req.WXSceneTimeline:SendMessageToWX.Req.WXSceneSession;
-            		res=api.sendReq(req);
-        		}
-    		}else{
-    			error=R.string.weixin_not_support_api;
-    		}
-    	}else{
-    		error=R.string.weixin_not_install;
-    	}
-    	if(error!=-1){
-    		Message message=new Message();
-    		Bundle data=new Bundle();
-    		data.putInt("error", error);
-    		message.setData(data);
-    		handler.sendMessage(message);
-    	}
-    	return res;
+
+    private boolean sendReq(WXMediaMessage msg, boolean isTimeline)
+    {
+        boolean res = false;
+        int error = -1;
+        if (api.isWXAppInstalled())
+        {
+            if (api.isWXAppSupportAPI())
+            {
+                if (isTimeline && api.getWXAppSupportAPI() < TIMELINE_SUPPORTED_VERSION)
+                {
+                    error = R.string.weixin_not_support_timeline;
+                }
+                else
+                {
+                    SendMessageToWX.Req req = new SendMessageToWX.Req();
+                    req.transaction = String.valueOf(System.currentTimeMillis());
+                    req.message = msg;
+                    req.scene = isTimeline ? SendMessageToWX.Req.WXSceneTimeline : SendMessageToWX.Req.WXSceneSession;
+                    res = api.sendReq(req);
+                }
+            }
+            else
+            {
+                error = R.string.weixin_not_support_api;
+            }
+        }
+        else
+        {
+            error = R.string.weixin_not_install;
+        }
+        if (error != -1)
+        {
+            Message message = new Message();
+            Bundle data = new Bundle();
+            data.putInt("error", error);
+            message.setData(data);
+            handler.sendMessage(message);
+        }
+        return res;
     }
-    
-    private static final Handler handler=new Handler(){
-    	@Override
-    	public void handleMessage(Message msg){
-    		RLUiUtil.toast(mContext, msg.getData().getInt("error"));
-    	}
+
+    private static final Handler handler = new Handler()
+    {
+        @Override
+        public void handleMessage(Message msg)
+        {
+            RLUiUtil.toast(mContext, msg.getData().getInt("error"));
+        }
     };
-    
-    private WXMediaMessage createMediaMsg(String title, String desc){
-    	WXMediaMessage msg = new WXMediaMessage();
-    	msg.title=title;
-		msg.description = desc;
-		return msg;
+
+    private WXMediaMessage createMediaMsg(String title, String desc)
+    {
+        WXMediaMessage msg = new WXMediaMessage();
+        msg.title = title;
+        msg.description = desc;
+        return msg;
     }
-    
-    private void setThumbBmpDataToMsg(WXMediaMessage msg, Bitmap bmp){
-    	Bitmap thumbBmp=Bitmap.createScaledBitmap(bmp, IMG_THUMB_SIZE, IMG_THUMB_SIZE, true);
-		bmp.recycle();
-    	if(thumbBmp!=null&&!thumbBmp.isRecycled()){
-    		msg.setThumbImage(thumbBmp);
-		}
+
+    private void setThumbBmpDataToMsg(WXMediaMessage msg, Bitmap bmp)
+    {
+        Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, IMG_THUMB_SIZE, IMG_THUMB_SIZE, true);
+        bmp.recycle();
+        if (thumbBmp != null && !thumbBmp.isRecycled())
+        {
+            msg.setThumbImage(thumbBmp);
+        }
     }
-    
+
     /**
-     * 
      * @param title
      * @param desc
      * @param text
      * @param isTimeline
      * @return
      */
-    public boolean sendText(String title, String desc, String text, boolean isTimeline) {
-    	WXMediaMessage msg = createMediaMsg(title,desc);
-    	WXTextObject textObj=new WXTextObject();
-    	textObj.text=text;
-    	msg.mediaObject=textObj;
-		return sendReq(msg, isTimeline);
+    public boolean sendText(String title, String desc, String text, boolean isTimeline)
+    {
+        WXMediaMessage msg = createMediaMsg(title, desc);
+        WXTextObject textObj = new WXTextObject();
+        textObj.text = text;
+        msg.mediaObject = textObj;
+        return sendReq(msg, isTimeline);
     }
-    
+
     /**
-     * 
      * @param title
      * @param desc
      * @param img
@@ -139,21 +162,24 @@ public class RLWeixinHelper {
      * @param isTimeline
      * @return
      */
-    public boolean sendImageBmp(String title, String desc, String img, Bitmap bmp, boolean isTimeline){
-    	WXMediaMessage msg = createMediaMsg(title,desc);
-		WXImageObject imgObj = new WXImageObject();
-		if(img.startsWith("http://")||img.startsWith("https://")){
-			imgObj.imageUrl=img;
-		}else{
-			imgObj.setImagePath(img);
-		}
-		msg.mediaObject=imgObj;
-		setThumbBmpDataToMsg(msg,bmp);
-		return sendReq(msg, isTimeline);
+    public boolean sendImageBmp(String title, String desc, String img, Bitmap bmp, boolean isTimeline)
+    {
+        WXMediaMessage msg = createMediaMsg(title, desc);
+        WXImageObject imgObj = new WXImageObject();
+        if (img.startsWith("http://") || img.startsWith("https://"))
+        {
+            imgObj.imageUrl = img;
+        }
+        else
+        {
+            imgObj.setImagePath(img);
+        }
+        msg.mediaObject = imgObj;
+        setThumbBmpDataToMsg(msg, bmp);
+        return sendReq(msg, isTimeline);
     }
-    
+
     /**
-     * 
      * @param title
      * @param desc
      * @param url
@@ -161,19 +187,20 @@ public class RLWeixinHelper {
      * @param isTimeline
      * @return
      */
-    public boolean sendUrlBmp(String title, String desc, String url, Bitmap bmp, boolean isTimeline){
-    	WXMediaMessage msg = createMediaMsg(title,desc);
-    	WXWebpageObject webpageObj = new WXWebpageObject();
-		webpageObj.webpageUrl = url;
-		msg.mediaObject=webpageObj;
-		if(bmp!=null&&!bmp.isRecycled()){
-			setThumbBmpDataToMsg(msg,bmp);
-		}
-		return sendReq(msg,isTimeline);
+    public boolean sendUrlBmp(String title, String desc, String url, Bitmap bmp, boolean isTimeline)
+    {
+        WXMediaMessage msg = createMediaMsg(title, desc);
+        WXWebpageObject webpageObj = new WXWebpageObject();
+        webpageObj.webpageUrl = url;
+        msg.mediaObject = webpageObj;
+        if (bmp != null && !bmp.isRecycled())
+        {
+            setThumbBmpDataToMsg(msg, bmp);
+        }
+        return sendReq(msg, isTimeline);
     }
-    
+
     /**
-     * 
      * @param title
      * @param desc
      * @param musicUrl
@@ -181,19 +208,20 @@ public class RLWeixinHelper {
      * @param isTimeline
      * @return
      */
-    public boolean sendMusicUrlBmp(String title, String desc, String musicUrl, Bitmap bmp, boolean isTimeline){
-    	WXMediaMessage msg = createMediaMsg(title,desc);
-		WXMusicObject musicObj=new WXMusicObject();
-		musicObj.musicUrl=musicUrl;
-		msg.mediaObject=musicObj;
-		if(bmp!=null&&!bmp.isRecycled()){
-			setThumbBmpDataToMsg(msg,bmp);
-		}
-		return sendReq(msg,isTimeline);
+    public boolean sendMusicUrlBmp(String title, String desc, String musicUrl, Bitmap bmp, boolean isTimeline)
+    {
+        WXMediaMessage msg = createMediaMsg(title, desc);
+        WXMusicObject musicObj = new WXMusicObject();
+        musicObj.musicUrl = musicUrl;
+        msg.mediaObject = musicObj;
+        if (bmp != null && !bmp.isRecycled())
+        {
+            setThumbBmpDataToMsg(msg, bmp);
+        }
+        return sendReq(msg, isTimeline);
     }
+
     /**
-     * 
-     * 
      * @param title
      * @param desc
      * @param videoUrl
@@ -201,18 +229,21 @@ public class RLWeixinHelper {
      * @param isTimeline
      * @return
      */
-    public boolean sendVideoUrlBmp(String title, String desc, String videoUrl, Bitmap bmp, boolean isTimeline){
-    	WXMediaMessage msg = createMediaMsg(title,desc);
-		WXVideoObject videoObj=new WXVideoObject();
-		videoObj.videoUrl=videoUrl;
-		msg.mediaObject=videoObj;
-		if(bmp!=null&&!bmp.isRecycled()){
-			setThumbBmpDataToMsg(msg,bmp);
-		}
-		return sendReq(msg,isTimeline);
+    public boolean sendVideoUrlBmp(String title, String desc, String videoUrl, Bitmap bmp, boolean isTimeline)
+    {
+        WXMediaMessage msg = createMediaMsg(title, desc);
+        WXVideoObject videoObj = new WXVideoObject();
+        videoObj.videoUrl = videoUrl;
+        msg.mediaObject = videoObj;
+        if (bmp != null && !bmp.isRecycled())
+        {
+            setThumbBmpDataToMsg(msg, bmp);
+        }
+        return sendReq(msg, isTimeline);
     }
-    
-    boolean handleIntent(Intent intent, IWXAPIEventHandler handler){
-    	return api.handleIntent(intent, handler);
+
+    boolean handleIntent(Intent intent, IWXAPIEventHandler handler)
+    {
+        return api.handleIntent(intent, handler);
     }
 }

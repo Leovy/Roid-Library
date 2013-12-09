@@ -15,7 +15,7 @@
  */
 package com.rincliu.library.common.persistence.afinal.exception;
 
-public class AfinalException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
-
+public class AfinalException extends RuntimeException
+{
+    private static final long serialVersionUID = 1L;
 }
