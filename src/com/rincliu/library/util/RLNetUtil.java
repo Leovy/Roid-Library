@@ -164,8 +164,9 @@ public class RLNetUtil
 //        { // this is so Linux hack return
 //            loadFileAsString("/sys/class/net/" + interfaceName + "/address").toUpperCase().trim();
 //        }
-//        catch (IOException ex)
+//        catch (IOException e)
 //        {
+//            e.printStackTrace();
 //            return null;
 //        }
     }
@@ -208,8 +209,9 @@ public class RLNetUtil
 //            {
 //                is.close();
 //            }
-//            catch (Exception ex)
+//            catch (Exception e)
 //            {
+//                e.printStackTrace();
 //            }
 //        }
 //    }
@@ -252,9 +254,10 @@ public class RLNetUtil
                 }
             }
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-        } // for now eat exceptions
+            e.printStackTrace();
+        }
         return "";
     }
 }
