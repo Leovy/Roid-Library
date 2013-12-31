@@ -26,7 +26,7 @@ Widgets and Utils
 * GestureImageView: Support to scale ImageView with gesture；
 * Custom dialogs：RLDialog、RLAlertDialog、RLListDialog、RLLoadingDialog;
 * Other custom widgets: RLFileExplorer、RLSpinner、RLWebView、RLOnClickListener；
-* Utils：RLAppUtil、RLFileUtil、RLImgUtil、RLIntentUtil、RLJsonUtil、RLNetUtil、RLStrUtil、RLSysUtil、RLUiUtil；
+* Utils：RLBluetoothHelper、RLAppUtil、RLFileUtil、RLImgUtil、RLIntentUtil、RLJsonUtil、RLNetUtil、RLStrUtil、RLSysUtil、RLUiUtil；
 
 Usage
 ==========
