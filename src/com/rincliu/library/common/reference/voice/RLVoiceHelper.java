@@ -32,8 +32,7 @@ import com.iflytek.ui.SynthesizerDialogListener;
 
 import android.content.Context;
 
-public class RLVoiceHelper
-{
+public class RLVoiceHelper {
 
     private static RLVoiceHelper helper;
 
@@ -50,8 +49,7 @@ public class RLVoiceHelper
     /**
 	 * 
 	 */
-    public enum Reader
-    {
+    public enum Reader {
         MALE, FEMALE
     }
 
@@ -59,47 +57,38 @@ public class RLVoiceHelper
      * @param context
      * @return
      */
-    public static RLVoiceHelper getInstance(Context context)
-    {
-        if (helper == null)
-        {
+    public static RLVoiceHelper getInstance(Context context) {
+        if (helper == null) {
             helper = new RLVoiceHelper(context);
         }
         return helper;
     }
 
-    private RLVoiceHelper(Context context)
-    {
+    private RLVoiceHelper(Context context) {
         mParams = "appid=" + context.getString(R.string.iflytek_key);
     }
 
     /**
      * @param reader
      */
-    public void setReader(Reader reader)
-    {
+    public void setReader(Reader reader) {
         mReader = reader;
     }
 
     /**
      * @param rate
      */
-    public void setRate(RATE rate)
-    {
+    public void setRate(RATE rate) {
         mRate = rate;
     }
 
     /**
      * @param speed
      */
-    public void setReadSpeed(int speed)
-    {
-        if (0 <= speed && speed <= 100)
-        {
+    public void setReadSpeed(int speed) {
+        if (0 <= speed && speed <= 100) {
             readSpeed = speed;
-        }
-        else
-        {
+        } else {
             throw new IllegalStateException("Speed must be an integer between 0 and 100.");
         }
     }
@@ -107,14 +96,10 @@ public class RLVoiceHelper
     /**
      * @param volume
      */
-    public void setReadVolume(int volume)
-    {
-        if (0 <= volume && volume <= 100)
-        {
+    public void setReadVolume(int volume) {
+        if (0 <= volume && volume <= 100) {
             readVolume = volume;
-        }
-        else
-        {
+        } else {
             throw new IllegalStateException("Volume must be an integer between 0 and 100.");
         }
     }
@@ -122,8 +107,7 @@ public class RLVoiceHelper
     /**
 	 * 
 	 */
-    public interface RecogniseListener
-    {
+    public interface RecogniseListener {
         public void onReceived(String res);
     }
 
@@ -131,28 +115,22 @@ public class RLVoiceHelper
      * @param context
      * @param listener
      */
-    public void recognise(final Context context, final RecogniseListener listener)
-    {
+    public void recognise(final Context context, final RecogniseListener listener) {
         RecognizerDialog dialog = new RecognizerDialog(context, mParams);
         dialog.setEngine("sms", null, null);
         dialog.setSampleRate(mRate);
-        dialog.setListener(new RecognizerDialogListener()
-        {
+        dialog.setListener(new RecognizerDialogListener() {
             @Override
-            public void onEnd(SpeechError error)
-            {
+            public void onEnd(SpeechError error) {
                 showError(context, error);
             }
 
             @Override
-            public void onResults(ArrayList<RecognizerResult> results, boolean isLast)
-            {
-                for (RecognizerResult recognizerResult : results)
-                {
+            public void onResults(ArrayList<RecognizerResult> results, boolean isLast) {
+                for (RecognizerResult recognizerResult : results) {
                     builder.append(recognizerResult.text);
                 }
-                if (isLast)
-                {
+                if (isLast) {
                     listener.onReceived(builder.toString());
                     builder = new StringBuilder();
                 }
@@ -168,74 +146,54 @@ public class RLVoiceHelper
      * @param source
      * @param isShowDialog
      */
-    public void read(final Context context, String source, boolean isShowDialog)
-    {
+    public void read(final Context context, String source, boolean isShowDialog) {
         String voiceName = mReader == Reader.MALE ? "xiaoyu" : "xiaoyan";
-        if (isShowDialog)
-        {
+        if (isShowDialog) {
             SynthesizerDialog dialog = new SynthesizerDialog(context, mParams);
             dialog.setText(source, null);
             dialog.setSampleRate(mRate);
             dialog.setVoiceName(voiceName);
             dialog.setSpeed(readSpeed);
             dialog.setVolume(readVolume);
-            dialog.setListener(new SynthesizerDialogListener()
-            {
+            dialog.setListener(new SynthesizerDialogListener() {
                 @Override
-                public void onEnd(SpeechError error)
-                {
+                public void onEnd(SpeechError error) {
                     showError(context, error);
                 }
             });
             dialog.show();
-        }
-        else
-        {
+        } else {
             SynthesizerPlayer player = SynthesizerPlayer.createSynthesizerPlayer(context, mParams);
             player.setSampleRate(mRate);
             player.setVoiceName(voiceName);
             player.setSpeed(readSpeed);
             player.setVolume(readVolume);
-            player.playText(source, null, new SynthesizerPlayerListener()
-            {
+            player.playText(source, null, new SynthesizerPlayerListener() {
                 @Override
-                public void onBufferPercent(int percent, int beginPos, int endPos)
-                {
-                }
+                public void onBufferPercent(int percent, int beginPos, int endPos) {}
 
                 @Override
-                public void onEnd(SpeechError error)
-                {
+                public void onEnd(SpeechError error) {
                     showError(context, error);
                 }
 
                 @Override
-                public void onPlayBegin()
-                {
-                }
+                public void onPlayBegin() {}
 
                 @Override
-                public void onPlayPaused()
-                {
-                }
+                public void onPlayPaused() {}
 
                 @Override
-                public void onPlayPercent(int percent, int beginPos, int endPos)
-                {
-                }
+                public void onPlayPercent(int percent, int beginPos, int endPos) {}
 
                 @Override
-                public void onPlayResumed()
-                {
-                }
+                public void onPlayResumed() {}
             });
         }
     }
 
-    private void showError(Context context, SpeechError error)
-    {
-        if (error != null)
-        {
+    private void showError(Context context, SpeechError error) {
+        if (error != null) {
             RLUiUtil.toast(context, error.getErrorDesc());
         }
     }

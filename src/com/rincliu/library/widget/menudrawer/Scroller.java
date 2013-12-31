@@ -31,8 +31,7 @@ import android.view.animation.Interpolator;
  * to its final stage and computeScrollOffset() will always return false to
  * indicate that scrolling is over.
  */
-public class Scroller
-{
+public class Scroller {
     private int mMode;
 
     private int mStartX;
@@ -97,16 +96,13 @@ public class Scroller
 
     private final float mPpi;
 
-    static
-    {
+    static {
         float xMin = 0.0f;
-        for (int i = 0; i <= NB_SAMPLES; i++)
-        {
+        for (int i = 0; i <= NB_SAMPLES; i++) {
             final float t = (float) i / NB_SAMPLES;
             float xMax = 1.0f;
             float x, tx, coef;
-            while (true)
-            {
+            while (true) {
                 x = xMin + (xMax - xMin) / 2.0f;
                 coef = 3.0f * x * (1.0f - x);
                 tx = coef * ((1.0f - x) * START_TENSION + x * END_TENSION) + x * x * x;
@@ -136,8 +132,7 @@ public class Scroller
     /**
      * Create a Scroller with the default duration and interpolator.
      */
-    public Scroller(Context context)
-    {
+    public Scroller(Context context) {
         this(context, null);
     }
 
@@ -146,8 +141,7 @@ public class Scroller
      * is null, the default (viscous) interpolator will be used. "Flywheel"
      * behavior will be in effect for apps targeting Honeycomb or newer.
      */
-    public Scroller(Context context, Interpolator interpolator)
-    {
+    public Scroller(Context context, Interpolator interpolator) {
         this(context, interpolator, context.getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.HONEYCOMB);
     }
 
@@ -156,8 +150,7 @@ public class Scroller
      * is null, the default (viscous) interpolator will be used. Specify
      * whether or not to support progressive "flywheel" behavior in flinging.
      */
-    public Scroller(Context context, Interpolator interpolator, boolean flywheel)
-    {
+    public Scroller(Context context, Interpolator interpolator, boolean flywheel) {
         mFinished = true;
         mInterpolator = interpolator;
         mPpi = context.getResources().getDisplayMetrics().density * 160.0f;
@@ -172,13 +165,11 @@ public class Scroller
      * @param friction A scalar dimension-less value representing the
      *            coefficient of friction.
      */
-    public final void setFriction(float friction)
-    {
+    public final void setFriction(float friction) {
         mDeceleration = computeDeceleration(friction);
     }
 
-    private float computeDeceleration(float friction)
-    {
+    private float computeDeceleration(float friction) {
         return SensorManager.GRAVITY_EARTH // g (m/s^2)
                 * 39.37f // inch/meter
                 * mPpi // pixels per inch
@@ -190,8 +181,7 @@ public class Scroller
      * 
      * @return True if the scroller has finished scrolling, false otherwise.
      */
-    public final boolean isFinished()
-    {
+    public final boolean isFinished() {
         return mFinished;
     }
 
@@ -200,8 +190,7 @@ public class Scroller
      * 
      * @param finished The new finished value.
      */
-    public final void forceFinished(boolean finished)
-    {
+    public final void forceFinished(boolean finished) {
         mFinished = finished;
     }
 
@@ -210,8 +199,7 @@ public class Scroller
      * 
      * @return The duration of the scroll in milliseconds.
      */
-    public final int getDuration()
-    {
+    public final int getDuration() {
         return mDuration;
     }
 
@@ -220,8 +208,7 @@ public class Scroller
      * 
      * @return The new X offset as an absolute distance from the origin.
      */
-    public final int getCurrX()
-    {
+    public final int getCurrX() {
         return mCurrX;
     }
 
@@ -230,8 +217,7 @@ public class Scroller
      * 
      * @return The new Y offset as an absolute distance from the origin.
      */
-    public final int getCurrY()
-    {
+    public final int getCurrY() {
         return mCurrY;
     }
 
@@ -241,8 +227,7 @@ public class Scroller
      * @return The original velocity less the deceleration. Result may be
      *         negative.
      */
-    public float getCurrVelocity()
-    {
+    public float getCurrVelocity() {
         return mVelocity - mDeceleration * timePassed() / 2000.0f;
     }
 
@@ -251,8 +236,7 @@ public class Scroller
      * 
      * @return The start X offset as an absolute distance from the origin.
      */
-    public final int getStartX()
-    {
+    public final int getStartX() {
         return mStartX;
     }
 
@@ -261,8 +245,7 @@ public class Scroller
      * 
      * @return The start Y offset as an absolute distance from the origin.
      */
-    public final int getStartY()
-    {
+    public final int getStartY() {
         return mStartY;
     }
 
@@ -271,8 +254,7 @@ public class Scroller
      * 
      * @return The final X offset as an absolute distance from the origin.
      */
-    public final int getFinalX()
-    {
+    public final int getFinalX() {
         return mFinalX;
     }
 
@@ -281,8 +263,7 @@ public class Scroller
      * 
      * @return The final Y offset as an absolute distance from the origin.
      */
-    public final int getFinalY()
-    {
+    public final int getFinalY() {
         return mFinalY;
     }
 
@@ -291,19 +272,15 @@ public class Scroller
      * the animation is not yet finished. loc will be altered to provide the
      * new location.
      */
-    public boolean computeScrollOffset()
-    {
-        if (mFinished)
-        {
+    public boolean computeScrollOffset() {
+        if (mFinished) {
             return false;
         }
 
         int timePassed = (int) (AnimationUtils.currentAnimationTimeMillis() - mStartTime);
 
-        if (timePassed < mDuration)
-        {
-            switch (mMode)
-            {
+        if (timePassed < mDuration) {
+            switch (mMode) {
                 case SCROLL_MODE:
                     float x = timePassed * mDurationReciprocal;
 
@@ -334,16 +311,13 @@ public class Scroller
                     mCurrY = Math.min(mCurrY, mMaxY);
                     mCurrY = Math.max(mCurrY, mMinY);
 
-                    if (mCurrX == mFinalX && mCurrY == mFinalY)
-                    {
+                    if (mCurrX == mFinalX && mCurrY == mFinalY) {
                         mFinished = true;
                     }
 
                     break;
             }
-        }
-        else
-        {
+        } else {
             mCurrX = mFinalX;
             mCurrY = mFinalY;
             mFinished = true;
@@ -365,8 +339,7 @@ public class Scroller
      * @param dy Vertical distance to travel. Positive numbers will scroll the
      *            content up.
      */
-    public void startScroll(int startX, int startY, int dx, int dy)
-    {
+    public void startScroll(int startX, int startY, int dx, int dy) {
         startScroll(startX, startY, dx, dy, DEFAULT_DURATION);
     }
 
@@ -384,8 +357,7 @@ public class Scroller
      *            content up.
      * @param duration Duration of the scroll in milliseconds.
      */
-    public void startScroll(int startX, int startY, int dx, int dy, int duration)
-    {
+    public void startScroll(int startX, int startY, int dx, int dy, int duration) {
         mMode = SCROLL_MODE;
         mFinished = false;
         mDuration = duration;
@@ -418,11 +390,9 @@ public class Scroller
      * @param maxY Maximum Y value. The scroller will not scroll past this
      *            point.
      */
-    public void fling(int startX, int startY, int velocityX, int velocityY, int minX, int maxX, int minY, int maxY)
-    {
+    public void fling(int startX, int startY, int velocityX, int velocityY, int minX, int maxX, int minY, int maxY) {
         // Continue a scroll or fling in progress
-        if (mFlywheel && !mFinished)
-        {
+        if (mFlywheel && !mFinished) {
             float oldVel = getCurrVelocity();
 
             float dx = (float) (mFinalX - mStartX);
@@ -435,8 +405,7 @@ public class Scroller
             float oldVelocityX = ndx * oldVel;
             float oldVelocityY = ndy * oldVel;
             if (Math.signum(velocityX) == Math.signum(oldVelocityX)
-                    && Math.signum(velocityY) == Math.signum(oldVelocityY))
-            {
+                    && Math.signum(velocityY) == Math.signum(oldVelocityY)) {
                 velocityX += oldVelocityX;
                 velocityY += oldVelocityY;
             }
@@ -475,15 +444,11 @@ public class Scroller
         mFinalY = Math.max(mFinalY, mMinY);
     }
 
-    static float viscousFluid(float x)
-    {
+    static float viscousFluid(float x) {
         x *= sViscousFluidScale;
-        if (x < 1.0f)
-        {
+        if (x < 1.0f) {
             x -= (1.0f - (float) Math.exp(-x));
-        }
-        else
-        {
+        } else {
             float start = 0.36787944117f; // 1/e == exp(-1)
             x = 1.0f - (float) Math.exp(1.0f - x);
             x = start + x * (1.0f - start);
@@ -499,8 +464,7 @@ public class Scroller
      * 
      * @see #forceFinished(boolean)
      */
-    public void abortAnimation()
-    {
+    public void abortAnimation() {
         mCurrX = mFinalX;
         mCurrY = mFinalY;
         mFinished = true;
@@ -515,8 +479,7 @@ public class Scroller
      * @see #setFinalX(int)
      * @see #setFinalY(int)
      */
-    public void extendDuration(int extend)
-    {
+    public void extendDuration(int extend) {
         int passed = timePassed();
         mDuration = passed + extend;
         mDurationReciprocal = 1.0f / mDuration;
@@ -528,8 +491,7 @@ public class Scroller
      * 
      * @return The elapsed time in milliseconds.
      */
-    public int timePassed()
-    {
+    public int timePassed() {
         return (int) (AnimationUtils.currentAnimationTimeMillis() - mStartTime);
     }
 
@@ -540,8 +502,7 @@ public class Scroller
      * @see #extendDuration(int)
      * @see #setFinalY(int)
      */
-    public void setFinalX(int newX)
-    {
+    public void setFinalX(int newX) {
         mFinalX = newX;
         mDeltaX = mFinalX - mStartX;
         mFinished = false;
@@ -554,8 +515,7 @@ public class Scroller
      * @see #extendDuration(int)
      * @see #setFinalX(int)
      */
-    public void setFinalY(int newY)
-    {
+    public void setFinalY(int newY) {
         mFinalY = newY;
         mDeltaY = mFinalY - mStartY;
         mFinished = false;
@@ -564,8 +524,7 @@ public class Scroller
     /**
      * @hide
      */
-    public boolean isScrollingInDirection(float xvel, float yvel)
-    {
+    public boolean isScrollingInDirection(float xvel, float yvel) {
         return !mFinished && Math.signum(xvel) == Math.signum(mFinalX - mStartX)
                 && Math.signum(yvel) == Math.signum(mFinalY - mStartY);
     }

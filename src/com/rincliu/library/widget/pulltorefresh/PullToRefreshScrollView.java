@@ -25,45 +25,35 @@ import android.os.Build.VERSION_CODES;
 import android.util.AttributeSet;
 import android.view.View;
 
-public class PullToRefreshScrollView extends PullToRefreshBase<RLScrollView>
-{
+public class PullToRefreshScrollView extends PullToRefreshBase<RLScrollView> {
 
-    public PullToRefreshScrollView(Context context)
-    {
+    public PullToRefreshScrollView(Context context) {
         super(context);
     }
 
-    public PullToRefreshScrollView(Context context, AttributeSet attrs)
-    {
+    public PullToRefreshScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public PullToRefreshScrollView(Context context, Mode mode)
-    {
+    public PullToRefreshScrollView(Context context, Mode mode) {
         super(context, mode);
     }
 
-    public PullToRefreshScrollView(Context context, Mode mode, AnimationStyle style)
-    {
+    public PullToRefreshScrollView(Context context, Mode mode, AnimationStyle style) {
         super(context, mode, style);
     }
 
     @Override
-    public final Orientation getPullToRefreshScrollDirection()
-    {
+    public final Orientation getPullToRefreshScrollDirection() {
         return Orientation.VERTICAL;
     }
 
     @Override
-    protected RLScrollView createRefreshableView(Context context, AttributeSet attrs)
-    {
+    protected RLScrollView createRefreshableView(Context context, AttributeSet attrs) {
         RLScrollView scrollView;
-        if (VERSION.SDK_INT >= VERSION_CODES.GINGERBREAD)
-        {
+        if (VERSION.SDK_INT >= VERSION_CODES.GINGERBREAD) {
             scrollView = new InternalScrollViewSDK9(context, attrs);
-        }
-        else
-        {
+        } else {
             scrollView = new RLScrollView(context, attrs);
         }
 
@@ -72,35 +62,29 @@ public class PullToRefreshScrollView extends PullToRefreshBase<RLScrollView>
     }
 
     @Override
-    protected boolean isReadyForPullStart()
-    {
+    protected boolean isReadyForPullStart() {
         return mRefreshableView.getScrollY() == 0;
     }
 
     @Override
-    protected boolean isReadyForPullEnd()
-    {
+    protected boolean isReadyForPullEnd() {
         View scrollViewChild = mRefreshableView.getChildAt(0);
-        if (null != scrollViewChild)
-        {
+        if (null != scrollViewChild) {
             return mRefreshableView.getScrollY() >= (scrollViewChild.getHeight() - getHeight());
         }
         return false;
     }
 
     @TargetApi(9)
-    final class InternalScrollViewSDK9 extends RLScrollView
-    {
+    final class InternalScrollViewSDK9 extends RLScrollView {
 
-        public InternalScrollViewSDK9(Context context, AttributeSet attrs)
-        {
+        public InternalScrollViewSDK9(Context context, AttributeSet attrs) {
             super(context, attrs);
         }
 
         @Override
         protected boolean overScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX,
-                int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent)
-        {
+                int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent) {
 
             final boolean returnValue = super.overScrollBy(deltaX, deltaY, scrollX, scrollY, scrollRangeX,
                     scrollRangeY, maxOverScrollX, maxOverScrollY, isTouchEvent);
@@ -115,11 +99,9 @@ public class PullToRefreshScrollView extends PullToRefreshBase<RLScrollView>
         /**
          * Taken from the AOSP ScrollView source
          */
-        private int getScrollRange()
-        {
+        private int getScrollRange() {
             int scrollRange = 0;
-            if (getChildCount() > 0)
-            {
+            if (getChildCount() > 0) {
                 View child = getChildAt(0);
                 scrollRange = Math.max(0, child.getHeight() - (getHeight() - getPaddingBottom() - getPaddingTop()));
             }

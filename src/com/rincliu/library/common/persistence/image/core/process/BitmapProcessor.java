@@ -27,8 +27,7 @@ import com.rincliu.library.common.persistence.image.core.DisplayImageOptions;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.8.0
  */
-public interface BitmapProcessor
-{
+public interface BitmapProcessor {
     /**
      * Makes some processing of incoming bitmap.<br />
      * This method is executing on additional thread (not on UI thread).<br />

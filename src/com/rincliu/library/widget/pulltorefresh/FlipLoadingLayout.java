@@ -31,15 +31,13 @@ import com.rincliu.library.widget.pulltorefresh.PullToRefreshBase.Mode;
 import com.rincliu.library.widget.pulltorefresh.PullToRefreshBase.Orientation;
 
 @SuppressLint("ViewConstructor")
-public class FlipLoadingLayout extends LoadingLayout
-{
+public class FlipLoadingLayout extends LoadingLayout {
 
     static final int FLIP_ANIMATION_DURATION = 150;
 
     private final Animation mRotateAnimation, mResetRotateAnimation;
 
-    public FlipLoadingLayout(Context context, final Mode mode, final Orientation scrollDirection, TypedArray attrs)
-    {
+    public FlipLoadingLayout(Context context, final Mode mode, final Orientation scrollDirection, TypedArray attrs) {
         super(context, mode, scrollDirection, attrs);
 
         final int rotateAngle = mode == Mode.PULL_FROM_START ? -180 : 180;
@@ -58,10 +56,8 @@ public class FlipLoadingLayout extends LoadingLayout
     }
 
     @Override
-    protected void onLoadingDrawableSet(Drawable imageDrawable)
-    {
-        if (null != imageDrawable)
-        {
+    protected void onLoadingDrawableSet(Drawable imageDrawable) {
+        if (null != imageDrawable) {
             final int dHeight = imageDrawable.getIntrinsicHeight();
             final int dWidth = imageDrawable.getIntrinsicWidth();
 
@@ -87,68 +83,55 @@ public class FlipLoadingLayout extends LoadingLayout
     }
 
     @Override
-    protected void onPullImpl(float scaleOfLayout)
-    {
+    protected void onPullImpl(float scaleOfLayout) {
         // NO-OP
     }
 
     @Override
-    protected void pullToRefreshImpl()
-    {
+    protected void pullToRefreshImpl() {
         // Only start reset Animation, we've previously show the rotate anim
-        if (mRotateAnimation == mHeaderImage.getAnimation())
-        {
+        if (mRotateAnimation == mHeaderImage.getAnimation()) {
             mHeaderImage.startAnimation(mResetRotateAnimation);
         }
     }
 
     @Override
-    protected void refreshingImpl()
-    {
+    protected void refreshingImpl() {
         mHeaderImage.clearAnimation();
         mHeaderImage.setVisibility(View.INVISIBLE);
         mHeaderProgress.setVisibility(View.VISIBLE);
     }
 
     @Override
-    protected void releaseToRefreshImpl()
-    {
+    protected void releaseToRefreshImpl() {
         mHeaderImage.startAnimation(mRotateAnimation);
     }
 
     @Override
-    protected void resetImpl()
-    {
+    protected void resetImpl() {
         mHeaderImage.clearAnimation();
         mHeaderProgress.setVisibility(View.GONE);
         mHeaderImage.setVisibility(View.VISIBLE);
     }
 
     @Override
-    protected int getDefaultDrawableResId()
-    {
+    protected int getDefaultDrawableResId() {
         return R.drawable.pulltorefresh_flip;
     }
 
-    private float getDrawableRotationAngle()
-    {
+    private float getDrawableRotationAngle() {
         float angle = 0f;
-        switch (mMode)
-        {
+        switch (mMode) {
             case PULL_FROM_END:
-                if (mScrollDirection == Orientation.HORIZONTAL)
-                {
+                if (mScrollDirection == Orientation.HORIZONTAL) {
                     angle = 90f;
-                }
-                else
-                {
+                } else {
                     angle = 180f;
                 }
                 break;
 
             case PULL_FROM_START:
-                if (mScrollDirection == Orientation.HORIZONTAL)
-                {
+                if (mScrollDirection == Orientation.HORIZONTAL) {
                     angle = 270f;
                 }
                 break;

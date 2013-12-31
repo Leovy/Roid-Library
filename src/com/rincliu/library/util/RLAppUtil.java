@@ -19,8 +19,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.rincliu.library.R;
-import com.rincliu.library.entity.RLAppInfo;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -33,11 +31,12 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.Settings;
 
-public class RLAppUtil
-{
+import com.rincliu.library.R;
+import com.rincliu.library.entity.RLAppInfo;
 
-    public interface Listener
-    {
+public class RLAppUtil {
+
+    public interface Listener {
         public void onReceived(ArrayList<RLAppInfo> list);
     }
 
@@ -46,18 +45,14 @@ public class RLAppUtil
      * @param listener
      * @return
      */
-    public static void getInstalledAppList(final Context context, final Listener listener)
-    {
-        new AsyncTask<Object, Object, ArrayList<RLAppInfo>>()
-        {
+    public static void getInstalledAppList(final Context context, final Listener listener) {
+        new AsyncTask<Object, Object, ArrayList<RLAppInfo>>() {
             @Override
-            protected ArrayList<RLAppInfo> doInBackground(Object... params)
-            {
+            protected ArrayList<RLAppInfo> doInBackground(Object... params) {
                 PackageManager pManager = context.getPackageManager();
                 ArrayList<RLAppInfo> appList = new ArrayList<RLAppInfo>();
                 List<PackageInfo> packages = pManager.getInstalledPackages(0);
-                for (int i = 0; i < packages.size(); i++)
-                {
+                for (int i = 0; i < packages.size(); i++) {
                     PackageInfo pInfo = packages.get(i);
                     RLAppInfo app = new RLAppInfo();
                     app.setPackageName(pInfo.packageName);
@@ -65,19 +60,15 @@ public class RLAppUtil
                     app.setVersionCode(pInfo.versionCode);
                     app.setAppName(pInfo.applicationInfo.loadLabel(pManager).toString());
                     app.setAppIcon(pInfo.applicationInfo.loadIcon(pManager));
-                    if ((pInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0)
-                    {
+                    if ((pInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
                         app.setSys(false);
-                    }
-                    else
-                    {
+                    } else {
                         app.setSys(true);
                     }
                     app.setDataDir(pInfo.applicationInfo.dataDir);
                     app.setTargetSdkVersion(pInfo.applicationInfo.targetSdkVersion);
                     String os = null;
-                    switch (app.getTargetSdkVersion())
-                    {
+                    switch (app.getTargetSdkVersion()) {
                         case 1:
                             os = "Android 1.0(BASE)";
                             break;
@@ -142,8 +133,7 @@ public class RLAppUtil
             }
 
             @Override
-            public void onPostExecute(ArrayList<RLAppInfo> result)
-            {
+            public void onPostExecute(ArrayList<RLAppInfo> result) {
                 super.onPostExecute(result);
                 listener.onReceived(result);
             }
@@ -155,17 +145,13 @@ public class RLAppUtil
      * @param packageName
      */
     @SuppressLint("InlinedApi")
-    public static void openSys(Context context, String packageName)
-    {
+    public static void openSys(Context context, String packageName) {
         Intent intent = new Intent();
         final int apiLevel = Build.VERSION.SDK_INT;
-        if (apiLevel >= 9)
-        {
+        if (apiLevel >= 9) {
             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
             intent.setData(Uri.fromParts("package", packageName, null));
-        }
-        else
-        {
+        } else {
             intent.setAction(Intent.ACTION_VIEW);
             intent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
             String appPkgName = (apiLevel == 8 ? "pkg" : "com.android.settings.ApplicationPkgName");
@@ -178,8 +164,7 @@ public class RLAppUtil
      * @param context
      * @param packageName
      */
-    public static void uninstall(Context context, String packageName)
-    {
+    public static void uninstall(Context context, String packageName) {
         Uri uri = Uri.fromParts("package", packageName, null);
         Intent it = new Intent(Intent.ACTION_DELETE, uri);
         context.startActivity(it);
@@ -189,51 +174,36 @@ public class RLAppUtil
      * @param context
      * @param packageName
      */
-    public static void clearCache(Context context, String packageName)
-    {
+    public static void clearCache(Context context, String packageName) {
         Context pContext = null;
-        try
-        {
+        try {
             pContext = context.createPackageContext(packageName, Context.CONTEXT_IGNORE_SECURITY);
-        }
-        catch (NameNotFoundException e)
-        {
+        } catch (NameNotFoundException e) {
             e.printStackTrace();
         }
-        if (pContext == null)
-        {
+        if (pContext == null) {
             return;
         }
-        if (pContext.getCacheDir() != null)
-        {
+        if (pContext.getCacheDir() != null) {
             File root1 = pContext.getCacheDir();
-            if (root1.exists() && RLSysUtil.requestRootPermission(root1.getPath()))
-            {
-                for (String dir : root1.list())
-                {
+            if (root1.exists() && RLSysUtil.requestRootPermission(root1.getPath())) {
+                for (String dir : root1.list()) {
                     RLFileUtil.deleteDir(new File(root1, dir));
                 }
                 RLUiUtil.toast(context, R.string.inner_cache_cleared);
-            }
-            else
-            {
+            } else {
                 RLUiUtil.toast(pContext, R.string.request_root_failed);
             }
         }
         String path2 = null;
-        if (RLSysUtil.isExternalStorageAvailable() && (path2 = RLSysUtil.getExternalCacheDir(pContext)) != null)
-        {
+        if (RLSysUtil.isExternalStorageAvailable() && (path2 = RLSysUtil.getExternalCacheDir(pContext)) != null) {
             File root2 = new File(path2);
-            if (root2.exists() && RLSysUtil.requestRootPermission(root2.getPath()))
-            {
-                for (String dir : root2.list())
-                {
+            if (root2.exists() && RLSysUtil.requestRootPermission(root2.getPath())) {
+                for (String dir : root2.list()) {
                     RLFileUtil.deleteDir(new File(root2, dir));
                 }
                 RLUiUtil.toast(context, R.string.external_cache_cleared);
-            }
-            else
-            {
+            } else {
                 RLUiUtil.toast(pContext, R.string.request_root_failed);
             }
         }
@@ -243,53 +213,38 @@ public class RLAppUtil
      * @param context
      * @param packageName
      */
-    public static void clearData(Context context, String packageName)
-    {
+    public static void clearData(Context context, String packageName) {
         Context pContext = null;
-        try
-        {
+        try {
             pContext = context.createPackageContext(packageName, Context.CONTEXT_IGNORE_SECURITY);
-        }
-        catch (NameNotFoundException e)
-        {
+        } catch (NameNotFoundException e) {
             e.printStackTrace();
         }
-        if (pContext == null)
-        {
+        if (pContext == null) {
             return;
         }
-        if (pContext.getCacheDir() != null && pContext.getCacheDir().getParent() != null)
-        {
+        if (pContext.getCacheDir() != null && pContext.getCacheDir().getParent() != null) {
             String path1 = pContext.getCacheDir().getParent();
             File root1 = new File(path1);
-            if (root1.exists() && RLSysUtil.requestRootPermission(path1))
-            {
-                for (String dir : root1.list())
-                {
+            if (root1.exists() && RLSysUtil.requestRootPermission(path1)) {
+                for (String dir : root1.list()) {
                     RLFileUtil.deleteDir(new File(root1, dir));
                 }
                 RLUiUtil.toast(context, R.string.inner_data_cleared);
-            }
-            else
-            {
+            } else {
                 RLUiUtil.toast(pContext, R.string.request_root_failed);
             }
         }
         String path2 = null;
         if (RLSysUtil.isExternalStorageAvailable() && (path2 = RLSysUtil.getExternalCacheDir(pContext)) != null
-                && new File(path2).getParent() != null)
-        {
+                && new File(path2).getParent() != null) {
             File root2 = new File(new File(path2).getParent());
-            if (root2.exists() && RLSysUtil.requestRootPermission(path2))
-            {
-                for (String dir : root2.list())
-                {
+            if (root2.exists() && RLSysUtil.requestRootPermission(path2)) {
+                for (String dir : root2.list()) {
                     RLFileUtil.deleteDir(new File(root2, dir));
                 }
                 RLUiUtil.toast(context, R.string.external_data_cleared);
-            }
-            else
-            {
+            } else {
                 RLUiUtil.toast(pContext, R.string.request_root_failed);
             }
         }
@@ -299,16 +254,12 @@ public class RLAppUtil
      * @param context
      * @param packageName
      */
-    public static void launch(Context context, String packageName)
-    {
+    public static void launch(Context context, String packageName) {
         PackageManager pManager = context.getPackageManager();
         Intent intent = pManager.getLaunchIntentForPackage(packageName);
-        if (intent != null)
-        {
+        if (intent != null) {
             context.startActivity(intent);
-        }
-        else
-        {
+        } else {
             RLUiUtil.toast(context, R.string.launch_app_failed);
         }
     }

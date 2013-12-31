@@ -17,8 +17,7 @@ package com.rincliu.library.entity;
 
 import java.io.Serializable;
 
-public class RLDisplayInfo implements Serializable
-{
+public class RLDisplayInfo implements Serializable {
     private static final long serialVersionUID = 4348988349135775928L;
 
     private int displayWidth;
@@ -33,63 +32,51 @@ public class RLDisplayInfo implements Serializable
 
     private int landscapeNavigationBarHeight;
 
-    public int getDisplayWidth()
-    {
+    public int getDisplayWidth() {
         return displayWidth;
     }
 
-    public void setDisplayWidth(int displayWidth)
-    {
+    public void setDisplayWidth(int displayWidth) {
         this.displayWidth = displayWidth;
     }
 
-    public int getDisplayHeight()
-    {
+    public int getDisplayHeight() {
         return displayHeight;
     }
 
-    public void setDisplayHeight(int displayHeight)
-    {
+    public void setDisplayHeight(int displayHeight) {
         this.displayHeight = displayHeight;
     }
 
-    public float getDisplayDensity()
-    {
+    public float getDisplayDensity() {
         return displayDensity;
     }
 
-    public void setDisplayDensity(float displayDensity)
-    {
+    public void setDisplayDensity(float displayDensity) {
         this.displayDensity = displayDensity;
     }
 
-    public int getStatusBarHeight()
-    {
+    public int getStatusBarHeight() {
         return statusBarHeight;
     }
 
-    public void setStatusBarHeight(int statusBarHeight)
-    {
+    public void setStatusBarHeight(int statusBarHeight) {
         this.statusBarHeight = statusBarHeight;
     }
 
-    public int getPortraitNavigationBarHeight()
-    {
+    public int getPortraitNavigationBarHeight() {
         return portraitNavigationBarHeight;
     }
 
-    public void setPortraitNavigationBarHeight(int portraitNavigationBarHeight)
-    {
+    public void setPortraitNavigationBarHeight(int portraitNavigationBarHeight) {
         this.portraitNavigationBarHeight = portraitNavigationBarHeight;
     }
 
-    public int getLandscapeNavigationBarHeight()
-    {
+    public int getLandscapeNavigationBarHeight() {
         return landscapeNavigationBarHeight;
     }
 
-    public void setLandscapeNavigationBarHeight(int landscapeNavigationBarHeight)
-    {
+    public void setLandscapeNavigationBarHeight(int landscapeNavigationBarHeight) {
         this.landscapeNavigationBarHeight = landscapeNavigationBarHeight;
     }
 }

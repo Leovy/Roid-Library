@@ -31,8 +31,7 @@ import java.util.Map;
  * @see MemoryCacheAware
  * @since 1.3.1
  */
-public class LimitedAgeMemoryCache<K, V> implements MemoryCacheAware<K, V>
-{
+public class LimitedAgeMemoryCache<K, V> implements MemoryCacheAware<K, V> {
 
     private final MemoryCacheAware<K, V> cache;
 
@@ -46,29 +45,24 @@ public class LimitedAgeMemoryCache<K, V> implements MemoryCacheAware<K, V>
      *            exceed this value then it'll be removed from cache on next
      *            treatment (and therefore be reloaded).
      */
-    public LimitedAgeMemoryCache(MemoryCacheAware<K, V> cache, long maxAge)
-    {
+    public LimitedAgeMemoryCache(MemoryCacheAware<K, V> cache, long maxAge) {
         this.cache = cache;
         this.maxAge = maxAge * 1000; // to milliseconds
     }
 
     @Override
-    public boolean put(K key, V value)
-    {
+    public boolean put(K key, V value) {
         boolean putSuccesfully = cache.put(key, value);
-        if (putSuccesfully)
-        {
+        if (putSuccesfully) {
             loadingDates.put(key, System.currentTimeMillis());
         }
         return putSuccesfully;
     }
 
     @Override
-    public V get(K key)
-    {
+    public V get(K key) {
         Long loadingDate = loadingDates.get(key);
-        if (loadingDate != null && System.currentTimeMillis() - loadingDate > maxAge)
-        {
+        if (loadingDate != null && System.currentTimeMillis() - loadingDate > maxAge) {
             cache.remove(key);
             loadingDates.remove(key);
         }
@@ -77,21 +71,18 @@ public class LimitedAgeMemoryCache<K, V> implements MemoryCacheAware<K, V>
     }
 
     @Override
-    public void remove(K key)
-    {
+    public void remove(K key) {
         cache.remove(key);
         loadingDates.remove(key);
     }
 
     @Override
-    public Collection<K> keys()
-    {
+    public Collection<K> keys() {
         return cache.keys();
     }
 
     @Override
-    public void clear()
-    {
+    public void clear() {
         cache.clear();
         loadingDates.clear();
     }

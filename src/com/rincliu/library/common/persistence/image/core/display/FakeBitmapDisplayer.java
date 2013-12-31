@@ -31,11 +31,9 @@ import com.rincliu.library.common.persistence.image.core.assist.LoadedFrom;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.6.0
  */
-public final class FakeBitmapDisplayer implements BitmapDisplayer
-{
+public final class FakeBitmapDisplayer implements BitmapDisplayer {
     @Override
-    public Bitmap display(Bitmap bitmap, ImageView imageView, LoadedFrom loadedFrom)
-    {
+    public Bitmap display(Bitmap bitmap, ImageView imageView, LoadedFrom loadedFrom) {
         // Do nothing
         return bitmap;
     }

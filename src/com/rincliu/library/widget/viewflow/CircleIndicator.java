@@ -23,8 +23,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 
-public class CircleIndicator extends BaseIndicator
-{
+public class CircleIndicator extends BaseIndicator {
     private static final int STYLE_STROKE = 0;
 
     private static final int STYLE_FILL = 1;
@@ -39,8 +38,7 @@ public class CircleIndicator extends BaseIndicator
      * @param context
      * @param attrs
      */
-    public CircleIndicator(Context context, AttributeSet attrs)
-    {
+    public CircleIndicator(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.Indicator);
         int activeType = typedArray.getInt(R.styleable.Indicator_circleActiveType, STYLE_FILL);
@@ -51,8 +49,7 @@ public class CircleIndicator extends BaseIndicator
         int inactiveColor = typedArray.getColor(R.styleable.Indicator_circleInactiveColor, inactiveDefaultColor);
         radius = typedArray.getDimension(R.styleable.Indicator_circleRadius, 3.0f);
         typedArray.recycle();
-        switch (inactiveType)
-        {
+        switch (inactiveType) {
             case STYLE_FILL:
                 mPaintInactive.setStyle(Style.FILL);
                 break;
@@ -60,8 +57,7 @@ public class CircleIndicator extends BaseIndicator
                 mPaintInactive.setStyle(Style.STROKE);
         }
         mPaintInactive.setColor(inactiveColor);
-        switch (activeType)
-        {
+        switch (activeType) {
             case STYLE_STROKE:
                 mPaintActive.setStyle(Style.STROKE);
                 break;
@@ -72,38 +68,30 @@ public class CircleIndicator extends BaseIndicator
     }
 
     @Override
-    protected void onDraw(Canvas canvas)
-    {
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         float mLeft = getPaddingLeft() + radius;
         float mTop = getPaddingTop() + radius;
         float mInnerMargin = getInnerMargin() + 2 * radius;
         int index = getPosition();
-        for (int i = 0; i < getViewFlow().getViewsCount(); i++)
-        {
-            if (i == index)
-            {
+        for (int i = 0; i < getViewFlow().getViewsCount(); i++) {
+            if (i == index) {
                 canvas.drawCircle(mLeft + mInnerMargin * index, mTop, radius, mPaintActive);
-            }
-            else
-            {
+            } else {
                 canvas.drawCircle(mLeft + mInnerMargin * i, mTop, radius, mPaintInactive);
             }
         }
     }
 
     @Override
-    protected int onMeasureWidth(int measureSpec)
-    {
+    protected int onMeasureWidth(int measureSpec) {
         int specMode = MeasureSpec.getMode(measureSpec);
         int specSize = MeasureSpec.getSize(measureSpec);
         int width = specSize;
-        if (specMode != MeasureSpec.EXACTLY)
-        {
+        if (specMode != MeasureSpec.EXACTLY) {
             int count = getViewFlow().getAdapter().getCount();
             width = (int) (getPaddingLeft() + getPaddingRight() + (count * 2 * radius) + (count - 1) * getInnerMargin() + 1);
-            if (specMode == MeasureSpec.AT_MOST)
-            {
+            if (specMode == MeasureSpec.AT_MOST) {
                 width = Math.min(width, specSize);
             }
         }
@@ -111,16 +99,13 @@ public class CircleIndicator extends BaseIndicator
     }
 
     @Override
-    protected int onMeasureHeight(int measureSpec)
-    {
+    protected int onMeasureHeight(int measureSpec) {
         int specMode = MeasureSpec.getMode(measureSpec);
         int specSize = MeasureSpec.getSize(measureSpec);
         int height = specSize;
-        if (specMode != MeasureSpec.EXACTLY)
-        {
+        if (specMode != MeasureSpec.EXACTLY) {
             height = (int) (2 * radius + getPaddingTop() + getPaddingBottom() + 1);
-            if (specMode == MeasureSpec.AT_MOST)
-            {
+            if (specMode == MeasureSpec.AT_MOST) {
                 height = Math.min(height, specSize);
             }
         }

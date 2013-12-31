@@ -38,8 +38,7 @@ import com.rincliu.library.common.persistence.image.utils.L;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.0.0
  */
-public class ImageLoader
-{
+public class ImageLoader {
 
     public static final String TAG = ImageLoader.class.getSimpleName();
 
@@ -69,14 +68,10 @@ public class ImageLoader
     private volatile static ImageLoader instance;
 
     /** Returns singleton class instance */
-    public static ImageLoader getInstance()
-    {
-        if (instance == null)
-        {
-            synchronized (ImageLoader.class)
-            {
-                if (instance == null)
-                {
+    public static ImageLoader getInstance() {
+        if (instance == null) {
+            synchronized (ImageLoader.class) {
+                if (instance == null) {
                     instance = new ImageLoader();
                 }
             }
@@ -84,9 +79,7 @@ public class ImageLoader
         return instance;
     }
 
-    protected ImageLoader()
-    {
-    }
+    protected ImageLoader() {}
 
     /**
      * Initializes ImageLoader instance with configuration.<br />
@@ -100,21 +93,16 @@ public class ImageLoader
      * @throws IllegalArgumentException if <b>configuration</b> parameter is
      *             null
      */
-    public synchronized void init(ImageLoaderConfiguration configuration)
-    {
-        if (configuration == null)
-        {
+    public synchronized void init(ImageLoaderConfiguration configuration) {
+        if (configuration == null) {
             throw new IllegalArgumentException(ERROR_INIT_CONFIG_WITH_NULL);
         }
-        if (this.configuration == null)
-        {
+        if (this.configuration == null) {
             if (configuration.writeLogs)
                 L.d(LOG_INIT_CONFIG);
             engine = new ImageLoaderEngine(configuration);
             this.configuration = configuration;
-        }
-        else
-        {
+        } else {
             L.w(WARNING_RE_INIT_CONFIG);
         }
     }
@@ -124,8 +112,7 @@ public class ImageLoader
      * {@linkplain #init(ImageLoaderConfiguration) is initialized with
      * configuration}; <b>false</b> - otherwise
      */
-    public boolean isInited()
-    {
+    public boolean isInited() {
         return configuration != null;
     }
 
@@ -145,8 +132,7 @@ public class ImageLoader
      *             called before
      * @throws IllegalArgumentException if passed <b>imageView</b> is null
      */
-    public void displayImage(String uri, ImageView imageView)
-    {
+    public void displayImage(String uri, ImageView imageView) {
         displayImage(uri, imageView, null, null);
     }
 
@@ -169,8 +155,7 @@ public class ImageLoader
      *             called before
      * @throws IllegalArgumentException if passed <b>imageView</b> is null
      */
-    public void displayImage(String uri, ImageView imageView, DisplayImageOptions options)
-    {
+    public void displayImage(String uri, ImageView imageView, DisplayImageOptions options) {
         displayImage(uri, imageView, options, null);
     }
 
@@ -192,8 +177,7 @@ public class ImageLoader
      *             called before
      * @throws IllegalArgumentException if passed <b>imageView</b> is null
      */
-    public void displayImage(String uri, ImageView imageView, ImageLoadingListener listener)
-    {
+    public void displayImage(String uri, ImageView imageView, ImageLoadingListener listener) {
         displayImage(uri, imageView, null, listener);
     }
 
@@ -218,36 +202,26 @@ public class ImageLoader
      *             called before
      * @throws IllegalArgumentException if passed <b>imageView</b> is null
      */
-    public void displayImage(String uri, ImageView imageView, DisplayImageOptions options, ImageLoadingListener listener)
-    {
+    public void displayImage(String uri, ImageView imageView, DisplayImageOptions options, ImageLoadingListener listener) {
         checkConfiguration();
-        if (imageView == null)
-        {
+        if (imageView == null) {
             throw new IllegalArgumentException(ERROR_WRONG_ARGUMENTS);
         }
-        if (listener == null)
-        {
+        if (listener == null) {
             listener = emptyListener;
         }
-        if (options == null)
-        {
+        if (options == null) {
             options = configuration.defaultDisplayImageOptions;
         }
 
-        if (TextUtils.isEmpty(uri))
-        {
+        if (TextUtils.isEmpty(uri)) {
             engine.cancelDisplayTaskFor(imageView);
             listener.onLoadingStarted(uri, imageView);
-            if (options.shouldShowImageResForEmptyUri())
-            {
+            if (options.shouldShowImageResForEmptyUri()) {
                 imageView.setImageResource(options.getImageResForEmptyUri());
-            }
-            else if (options.shouldShowImageForEmptyUri())
-            {
+            } else if (options.shouldShowImageForEmptyUri()) {
                 imageView.setImageDrawable(options.getImageForEmptyUri());
-            }
-            else
-            {
+            } else {
                 imageView.setImageDrawable(null);
             }
             listener.onLoadingComplete(uri, imageView, null);
@@ -261,39 +235,27 @@ public class ImageLoader
 
         listener.onLoadingStarted(uri, imageView);
         Bitmap bmp = configuration.memoryCache.get(memoryCacheKey);
-        if (bmp != null && !bmp.isRecycled())
-        {
+        if (bmp != null && !bmp.isRecycled()) {
             if (configuration.writeLogs)
                 L.d(LOG_LOAD_IMAGE_FROM_MEMORY_CACHE, memoryCacheKey);
 
-            if (options.shouldPostProcess())
-            {
+            if (options.shouldPostProcess()) {
                 ImageLoadingInfo imageLoadingInfo = new ImageLoadingInfo(uri, imageView, targetSize, memoryCacheKey,
                         options, listener, engine.getLockForUri(uri));
                 ProcessAndDisplayImageTask displayTask = new ProcessAndDisplayImageTask(engine, bmp, imageLoadingInfo,
                         options.getHandler());
                 engine.submit(displayTask);
-            }
-            else
-            {
+            } else {
                 options.getDisplayer().display(bmp, imageView, LoadedFrom.MEMORY_CACHE);
                 listener.onLoadingComplete(uri, imageView, bmp);
             }
-        }
-        else
-        {
-            if (options.shouldShowImageResOnLoading())
-            {
+        } else {
+            if (options.shouldShowImageResOnLoading()) {
                 imageView.setImageResource(options.getImageResOnLoading());
-            }
-            else if (options.shouldShowImageOnLoading())
-            {
+            } else if (options.shouldShowImageOnLoading()) {
                 imageView.setImageDrawable(options.getImageOnLoading());
-            }
-            else
-            {
-                if (options.isResetViewBeforeLoading())
-                {
+            } else {
+                if (options.isResetViewBeforeLoading()) {
                     imageView.setImageDrawable(null);
                 }
             }
@@ -321,8 +283,7 @@ public class ImageLoader
      *             {@link #init(ImageLoaderConfiguration)} method wasn't
      *             called before
      */
-    public void loadImage(String uri, ImageLoadingListener listener)
-    {
+    public void loadImage(String uri, ImageLoadingListener listener) {
         loadImage(uri, null, null, listener);
     }
 
@@ -347,8 +308,7 @@ public class ImageLoader
      *             {@link #init(ImageLoaderConfiguration)} method wasn't
      *             called before
      */
-    public void loadImage(String uri, ImageSize minImageSize, ImageLoadingListener listener)
-    {
+    public void loadImage(String uri, ImageSize minImageSize, ImageLoadingListener listener) {
         loadImage(uri, minImageSize, null, listener);
     }
 
@@ -374,8 +334,7 @@ public class ImageLoader
      *             {@link #init(ImageLoaderConfiguration)} method wasn't
      *             called before
      */
-    public void loadImage(String uri, DisplayImageOptions options, ImageLoadingListener listener)
-    {
+    public void loadImage(String uri, DisplayImageOptions options, ImageLoadingListener listener) {
         loadImage(uri, null, options, listener);
     }
 
@@ -408,26 +367,20 @@ public class ImageLoader
      *             called before
      */
     public void loadImage(String uri, ImageSize targetImageSize, DisplayImageOptions options,
-            ImageLoadingListener listener)
-    {
+            ImageLoadingListener listener) {
         checkConfiguration();
-        if (targetImageSize == null)
-        {
+        if (targetImageSize == null) {
             targetImageSize = new ImageSize(configuration.maxImageWidthForMemoryCache,
                     configuration.maxImageHeightForMemoryCache);
         }
-        if (options == null)
-        {
+        if (options == null) {
             options = configuration.defaultDisplayImageOptions;
         }
 
         DisplayImageOptions optionsWithFakeDisplayer;
-        if (options.getDisplayer() instanceof FakeBitmapDisplayer)
-        {
+        if (options.getDisplayer() instanceof FakeBitmapDisplayer) {
             optionsWithFakeDisplayer = options;
-        }
-        else
-        {
+        } else {
             optionsWithFakeDisplayer = new DisplayImageOptions.Builder().cloneFrom(options).displayer(
                     fakeBitmapDisplayer).build();
         }
@@ -444,10 +397,8 @@ public class ImageLoader
      * 
      * @throws IllegalStateException if configuration wasn't initialized
      */
-    private void checkConfiguration()
-    {
-        if (configuration == null)
-        {
+    private void checkConfiguration() {
+        if (configuration == null) {
             throw new IllegalStateException(ERROR_NOT_INIT);
         }
     }
@@ -459,8 +410,7 @@ public class ImageLoader
      *             {@link #init(ImageLoaderConfiguration)} method wasn't
      *             called before
      */
-    public MemoryCacheAware<String, Bitmap> getMemoryCache()
-    {
+    public MemoryCacheAware<String, Bitmap> getMemoryCache() {
         checkConfiguration();
         return configuration.memoryCache;
     }
@@ -472,8 +422,7 @@ public class ImageLoader
      *             {@link #init(ImageLoaderConfiguration)} method wasn't
      *             called before
      */
-    public void clearMemoryCache()
-    {
+    public void clearMemoryCache() {
         checkConfiguration();
         configuration.memoryCache.clear();
     }
@@ -485,8 +434,7 @@ public class ImageLoader
      *             {@link #init(ImageLoaderConfiguration)} method wasn't
      *             called before
      */
-    public DiscCacheAware getDiscCache()
-    {
+    public DiscCacheAware getDiscCache() {
         checkConfiguration();
         return configuration.discCache;
     }
@@ -498,8 +446,7 @@ public class ImageLoader
      *             {@link #init(ImageLoaderConfiguration)} method wasn't
      *             called before
      */
-    public void clearDiscCache()
-    {
+    public void clearDiscCache() {
         checkConfiguration();
         configuration.discCache.clear();
     }
@@ -508,8 +455,7 @@ public class ImageLoader
      * Returns URI of image which is loading at this moment into passed
      * {@link ImageView}
      */
-    public String getLoadingUriForView(ImageView imageView)
-    {
+    public String getLoadingUriForView(ImageView imageView) {
         return engine.getLoadingUriForView(imageView);
     }
 
@@ -520,8 +466,7 @@ public class ImageLoader
      * @param imageView {@link ImageView} for which display task will be
      *            cancelled
      */
-    public void cancelDisplayTask(ImageView imageView)
-    {
+    public void cancelDisplayTask(ImageView imageView) {
         engine.cancelDisplayTaskFor(imageView);
     }
 
@@ -536,8 +481,7 @@ public class ImageLoader
      *            download images from the network; <b>false</b> - to allow
      *            engine to download images from network.
      */
-    public void denyNetworkDownloads(boolean denyNetworkDownloads)
-    {
+    public void denyNetworkDownloads(boolean denyNetworkDownloads) {
         engine.denyNetworkDownloads(denyNetworkDownloads);
     }
 
@@ -551,8 +495,7 @@ public class ImageLoader
      *            {@link FlushedInputStream} for network downloads;
      *            <b>false</b> - otherwise.
      */
-    public void handleSlowNetwork(boolean handleSlowNetwork)
-    {
+    public void handleSlowNetwork(boolean handleSlowNetwork) {
         engine.handleSlowNetwork(handleSlowNetwork);
     }
 
@@ -561,14 +504,12 @@ public class ImageLoader
      * ImageLoader is {@link #resume() resumed}.<br />
      * Already running tasks are not paused.
      */
-    public void pause()
-    {
+    public void pause() {
         engine.pause();
     }
 
     /** Resumes waiting "load&display" tasks */
-    public void resume()
-    {
+    public void resume() {
         engine.resume();
     }
 
@@ -576,8 +517,7 @@ public class ImageLoader
      * Cancels all running and scheduled display image tasks.<br />
      * ImageLoader still can be used after calling this method.
      */
-    public void stop()
-    {
+    public void stop() {
         engine.stop();
     }
 
@@ -587,8 +527,7 @@ public class ImageLoader
      * You can {@linkplain #init(ImageLoaderConfiguration) init} ImageLoader
      * with new configuration after calling this method.
      */
-    public void destroy()
-    {
+    public void destroy() {
         if (configuration != null && configuration.writeLogs)
             L.d(LOG_DESTROY);
         stop();

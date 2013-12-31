@@ -43,8 +43,7 @@ import android.webkit.WebSettings.RenderPriority;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-public class RLWebBrowser extends ViewGroup
-{
+public class RLWebBrowser extends ViewGroup {
     private Context context;
 
     private WebView webView;
@@ -60,8 +59,7 @@ public class RLWebBrowser extends ViewGroup
     /**
      * @param context
      */
-    public RLWebBrowser(Context context)
-    {
+    public RLWebBrowser(Context context) {
         super(context);
         init(context);
     }
@@ -70,8 +68,7 @@ public class RLWebBrowser extends ViewGroup
      * @param context
      * @param attrs
      */
-    public RLWebBrowser(Context context, AttributeSet attrs)
-    {
+    public RLWebBrowser(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
@@ -81,29 +78,24 @@ public class RLWebBrowser extends ViewGroup
      * @param attrs
      * @param defStyle
      */
-    public RLWebBrowser(Context context, AttributeSet attrs, int defStyle)
-    {
+    public RLWebBrowser(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context);
     }
 
     @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b)
-    {
-        for (int i = 0; i < getChildCount(); i++)
-        {
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        for (int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
             child.layout(0, 0, child.getMeasuredWidth(), child.getMeasuredHeight());
         }
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++)
-        {
+        for (int i = 0; i < childCount; i++) {
             View child = getChildAt(i);
             child.measure(widthMeasureSpec, heightMeasureSpec);
         }
@@ -113,16 +105,12 @@ public class RLWebBrowser extends ViewGroup
      * @param url
      * @param listener
      */
-    public void load(String url, Listener listener)
-    {
+    public void load(String url, Listener listener) {
         this.listener = listener;
         listener.onPrepare();
-        if (url != null && URLUtil.isValidUrl(url))
-        {
+        if (url != null && URLUtil.isValidUrl(url)) {
             webView.loadUrl(url);
-        }
-        else
-        {
+        } else {
             RLUiUtil.toast(context, R.string.invalid_url);
         }
     }
@@ -130,16 +118,14 @@ public class RLWebBrowser extends ViewGroup
     /**
      * @return
      */
-    public WebView getWebView()
-    {
+    public WebView getWebView() {
         return webView;
     }
 
     /**
 	 * 
 	 */
-    public void denyClearCookie()
-    {
+    public void denyClearCookie() {
         isAllowClearCookie = false;
     }
 
@@ -148,8 +134,7 @@ public class RLWebBrowser extends ViewGroup
     /**
 	 * 
 	 */
-    public interface Listener
-    {
+    public interface Listener {
         public void onPrepare();
 
         public void onReceivedTitle(String title);
@@ -159,8 +144,7 @@ public class RLWebBrowser extends ViewGroup
         public void onReceivedUrl(String url);
     }
 
-    private void init(Context context)
-    {
+    private void init(Context context) {
         this.context = context;
         View rootView = LayoutInflater.from(context).inflate(R.layout.web_browser, null);
         this.addView(rootView);
@@ -198,50 +182,40 @@ public class RLWebBrowser extends ViewGroup
     /**
 	 * 
 	 */
-    public void destroy()
-    {
+    public void destroy() {
         webView.getSettings().setBlockNetworkImage(true);
         webView.getSettings().setBlockNetworkLoads(true);
         webView.destroy();
     }
 
-    private DownloadListener myDownLoadListener = new DownloadListener()
-    {
+    private DownloadListener myDownLoadListener = new DownloadListener() {
         @Override
         public void onDownloadStart(final String url, String userAgent, String contentDisposition, String mimetype,
-                long contentLength)
-        {
+                long contentLength) {
             RLAlertDialog dialog = new RLAlertDialog(context, context.getString(R.string.download_file), url,
                     context.getString(android.R.string.ok), context.getString(android.R.string.cancel),
-                    new RLAlertDialog.Listener()
-                    {
+                    new RLAlertDialog.Listener() {
                         @Override
-                        public void onLeftClick()
-                        {
+                        public void onLeftClick() {
                             openWithBrowser(url);
                         }
 
                         @Override
-                        public void onRightClick()
-                        {
-                        }
+                        public void onRightClick() {}
                     });
             dialog.show();
         }
     };
 
-    private void openWithBrowser(String url)
-    {
+    private void openWithBrowser(String url) {
         Uri uri = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         context.startActivity(intent);
     }
 
-    private WebViewClient myWebViewClient = new WebViewClient()
-    {
+    private WebViewClient myWebViewClient = new WebViewClient() {
         @Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon)
-        {
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
             isLoadFinished = false;
             webView.getSettings().setBlockNetworkImage(true);
             super.onPageStarted(view, url, favicon);
@@ -252,15 +226,13 @@ public class RLWebBrowser extends ViewGroup
         }
 
         @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url)
-        {
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
             view.loadUrl(url);
             return true;
         }
 
         @Override
-        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl)
-        {
+        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             super.onReceivedError(view, errorCode, description, failingUrl);
             iv_refresh.setVisibility(View.VISIBLE);
             iv_stop.setVisibility(View.GONE);
@@ -269,14 +241,12 @@ public class RLWebBrowser extends ViewGroup
         }
 
         @Override
-        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error)
-        {
+        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
             handler.proceed();
         }
 
         @Override
-        public void onPageFinished(WebView view, String url)
-        {
+        public void onPageFinished(WebView view, String url) {
             webView.getSettings().setBlockNetworkImage(false);
             super.onPageFinished(view, url);
             iv_refresh.setVisibility(View.VISIBLE);
@@ -288,18 +258,15 @@ public class RLWebBrowser extends ViewGroup
         }
 
         @Override
-        public void doUpdateVisitedHistory(WebView view, String url, boolean isReload)
-        {
+        public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
             super.doUpdateVisitedHistory(view, url, isReload);
             updateNaviButtonState();
         }
     };
 
-    private WebChromeClient myWebChromeClient = new WebChromeClient()
-    {
+    private WebChromeClient myWebChromeClient = new WebChromeClient() {
         @Override
-        public void onProgressChanged(WebView view, int newProgress)
-        {
+        public void onProgressChanged(WebView view, int newProgress) {
             super.onProgressChanged(view, newProgress);
             // if(newProgress<100){
             // tv_loading.setText(newProgress+"%");
@@ -307,119 +274,84 @@ public class RLWebBrowser extends ViewGroup
         }
 
         @Override
-        public void onReceivedTitle(WebView view, String title)
-        {
+        public void onReceivedTitle(WebView view, String title) {
             super.onReceivedTitle(view, title);
             listener.onReceivedTitle(title);
         }
 
         @Override
-        public void onReceivedIcon(WebView view, Bitmap icon)
-        {
+        public void onReceivedIcon(WebView view, Bitmap icon) {
             super.onReceivedIcon(view, icon);
             listener.onReceivedIcon(icon);
         }
     };
 
-    private void updateNaviButtonState()
-    {
-        if (webView.canGoBack())
-        {
+    private void updateNaviButtonState() {
+        if (webView.canGoBack()) {
             iv_goback.setEnabled(true);
-        }
-        else
-        {
+        } else {
             iv_goback.setEnabled(false);
         }
-        if (webView.canGoForward())
-        {
+        if (webView.canGoForward()) {
             iv_goforward.setEnabled(true);
-        }
-        else
-        {
+        } else {
             iv_goforward.setEnabled(false);
         }
     }
 
-    private RLOnClickListener myClickListener = new RLOnClickListener()
-    {
+    private RLOnClickListener myClickListener = new RLOnClickListener() {
         @Override
-        public void onClickX(View view)
-        {
+        public void onClickX(View view) {
             int id = view.getId();
-            if (id == R.id.iv_refresh)
-            {
+            if (id == R.id.iv_refresh) {
                 webView.getSettings().setBlockNetworkLoads(false);
                 webView.reload();
-            }
-            else if (id == R.id.iv_stop)
-            {
+            } else if (id == R.id.iv_stop) {
                 webView.getSettings().setBlockNetworkLoads(true);
                 webView.getSettings().setBlockNetworkImage(true);
                 webView.stopLoading();
-            }
-            else if (id == R.id.iv_goback)
-            {
-                if (webView.canGoBack())
-                {
+            } else if (id == R.id.iv_goback) {
+                if (webView.canGoBack()) {
                     webView.goBack();
                 }
-            }
-            else if (id == R.id.iv_goforward)
-            {
-                if (webView.canGoForward())
-                {
+            } else if (id == R.id.iv_goforward) {
+                if (webView.canGoForward()) {
                     webView.goForward();
                 }
-            }
-            else if (id == R.id.iv_more)
-            {
+            } else if (id == R.id.iv_more) {
                 showMenu();
             }
         }
     };
 
-    private void showMenu()
-    {
+    private void showMenu() {
         RLListDialog dialog = new RLListDialog(context, context.getString(R.string.select_item),
-                getResources().getStringArray(R.array.webview_items), new RLListDialog.Listener()
-                {
+                getResources().getStringArray(R.array.webview_items), new RLListDialog.Listener() {
                     @Override
-                    public void onItemClick(int position)
-                    {
-                        switch (position)
-                        {
+                    public void onItemClick(int position) {
+                        switch (position) {
                             case 0:
                                 webView.clearCache(true);
                                 RLUiUtil.toast(context, R.string.cache_cleared);
                                 break;
                             case 1:
-                                if (isAllowClearCookie)
-                                {
-                                    if (CookieManager.getInstance().hasCookies())
-                                    {
+                                if (isAllowClearCookie) {
+                                    if (CookieManager.getInstance().hasCookies()) {
                                         CookieManager.getInstance().removeAllCookie();
                                         RLUiUtil.toast(context, R.string.cookie_cleared);
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         RLUiUtil.toast(context, R.string.has_no_cookie);
                                     }
-                                }
-                                else
-                                {
+                                } else {
                                     RLUiUtil.toast(context, R.string.deny_clear_cookie);
                                 }
                                 break;
                             case 2:
-                                if (webView.canGoBack() || webView.canGoForward())
-                                {
+                                if (webView.canGoBack() || webView.canGoForward()) {
                                     webView.clearHistory();
                                     updateNaviButtonState();
                                     RLUiUtil.toast(context, R.string.history_cleared);
-                                }
-                                else
-                                {
+                                } else {
                                     RLUiUtil.toast(context, R.string.has_no_history);
                                 }
                                 break;
@@ -427,15 +359,12 @@ public class RLWebBrowser extends ViewGroup
                     }
 
                     @Override
-                    public void onCancel()
-                    {
-                    }
+                    public void onCancel() {}
                 });
         dialog.show();
     }
 
-    private OnTouchListener myTouchListener = new OnTouchListener()
-    {
+    private OnTouchListener myTouchListener = new OnTouchListener() {
         private boolean isZoom = false;
 
         private double oldDist = 1d;
@@ -443,41 +372,31 @@ public class RLWebBrowser extends ViewGroup
         private double newDist = 1d;
 
         @Override
-        public boolean onTouch(View v, MotionEvent event)
-        {
-            if (!isLoadFinished)
-            {
+        public boolean onTouch(View v, MotionEvent event) {
+            if (!isLoadFinished) {
                 return false;
             }
-            switch (event.getAction() & MotionEvent.ACTION_MASK)
-            {
+            switch (event.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_POINTER_UP:
                     isZoom = false;
                     break;
                 case MotionEvent.ACTION_POINTER_DOWN:
                     oldDist = computeDist(event);
-                    if (oldDist > 10f)
-                    {
+                    if (oldDist > 10f) {
                         isZoom = true;
-                    }
-                    else
-                    {
+                    } else {
                         isZoom = false;
                     }
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    if (isZoom)
-                    {
+                    if (isZoom) {
                         newDist = computeDist(event);
-                        if (newDist > 10f)
-                        {
+                        if (newDist > 10f) {
                             double scale = newDist / oldDist;
-                            if (scale < 1f)
-                            {
+                            if (scale < 1f) {
                                 webView.zoomOut();
                             }
-                            if (scale > 1f)
-                            {
+                            if (scale > 1f) {
                                 webView.zoomIn();
                             }
                         }
@@ -487,8 +406,7 @@ public class RLWebBrowser extends ViewGroup
             return false;
         }
 
-        private double computeDist(MotionEvent event)
-        {
+        private double computeDist(MotionEvent event) {
             float x = event.getX(0) - event.getX(1);
             float y = event.getY(0) - event.getY(1);
             return Math.sqrt(x * x + y * y);

@@ -35,8 +35,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-public abstract class ListPagerAdapter implements ListPagerView.DataObserver
-{
+public abstract class ListPagerAdapter implements ListPagerView.DataObserver {
     private ListPagerView pager;
 
     private final Object obj = new Object();
@@ -70,48 +69,40 @@ public abstract class ListPagerAdapter implements ListPagerView.DataObserver
     /**
      * @return
      */
-    protected int getNextStart()
-    {
+    protected int getNextStart() {
         return start;
     }
 
     /**
      * @return
      */
-    public boolean hasMore()
-    {
+    public boolean hasMore() {
         return hasMore;
     }
 
     @Override
-    public BaseAdapter getBaseAdapter()
-    {
+    public BaseAdapter getBaseAdapter() {
         return adapter;
     }
 
     @Override
-    public ArrayList<Object> getDataSet()
-    {
+    public ArrayList<Object> getDataSet() {
         return list;
     }
 
     @Override
-    public void setDataSet(ArrayList<Object> list)
-    {
+    public void setDataSet(ArrayList<Object> list) {
         this.list = list;
     }
 
     @Override
-    public void notifyAdapter()
-    {
+    public void notifyAdapter() {
         adapter.notifyDataSetChanged();
     }
 
     @Override
-    public void refresh()
-    {
-        if (task == null || task.getStatus() == RLAsyncTask.Status.FINISHED)
-        {
+    public void refresh() {
+        if (task == null || task.getStatus() == RLAsyncTask.Status.FINISHED) {
             pager.setRefreshing(true);
             pager.setEmptyView(null);
             isReset = true;
@@ -120,33 +111,24 @@ public abstract class ListPagerAdapter implements ListPagerView.DataObserver
             currentPage = 0;
             task = new UpdateDataTask();
             executeTask();
-        }
-        else
-        {
+        } else {
             pager.notifyFinish(true);
         }
     }
 
     @Override
-    public void loadMore()
-    {
-        if (hasMore)
-        {
-            if (task == null || task.getStatus() == RLAsyncTask.Status.FINISHED)
-            {
+    public void loadMore() {
+        if (hasMore) {
+            if (task == null || task.getStatus() == RLAsyncTask.Status.FINISHED) {
                 pager.setRefreshing(true);
                 pager.setEmptyView(null);
                 isReset = false;
                 task = new UpdateDataTask();
                 executeTask();
-            }
-            else
-            {
+            } else {
                 pager.notifyFinish(false);
             }
-        }
-        else
-        {
+        } else {
             pager.notifyFinish(false);
             RLUiUtil.toast(pager.context, "No more data.");
         }
@@ -157,8 +139,7 @@ public abstract class ListPagerAdapter implements ListPagerView.DataObserver
      * @param cacheFile
      * @param cacheKeepTime
      */
-    public ListPagerAdapter(ListPagerView pager, int pageLimit, String cacheFile, long cacheKeepTime)
-    {
+    public ListPagerAdapter(ListPagerView pager, int pageLimit, String cacheFile, long cacheKeepTime) {
         this.pager = pager;
         this.cacheFile = cacheFile;
         this.cacheKeepTime = cacheKeepTime;
@@ -168,21 +149,17 @@ public abstract class ListPagerAdapter implements ListPagerView.DataObserver
     /**
      * @param data
      */
-    public void notifyFetchDataSuccess(String data)
-    {
+    public void notifyFetchDataSuccess(String data) {
         this.data = data;
-        if (data != null)
-        {
-            if (cacheFile != null && start == 0)
-            {
+        if (data != null) {
+            if (cacheFile != null && start == 0) {
                 RLFileUtil.getInstance().write2Sd(cacheFile, data);
             }
             currentPage++;
             tmpList = onReadDataSet(data);
         }
         hasFetchedData = true;
-        synchronized (obj)
-        {
+        synchronized (obj) {
             obj.notify();
         }
     }
@@ -190,21 +167,16 @@ public abstract class ListPagerAdapter implements ListPagerView.DataObserver
     /**
 	 * 
 	 */
-    public void notifyFetchDataFailed()
-    {
+    public void notifyFetchDataFailed() {
         hasFetchedData = true;
-        synchronized (obj)
-        {
+        synchronized (obj) {
             obj.notify();
         }
     }
 
-    private void fetchData()
-    {
-        if (tmpList != null)
-        {
-            if (!tmpList.isEmpty())
-            {
+    private void fetchData() {
+        if (tmpList != null) {
+            if (!tmpList.isEmpty()) {
                 tmpList.clear();
             }
             tmpList = null;
@@ -216,29 +188,19 @@ public abstract class ListPagerAdapter implements ListPagerView.DataObserver
         boolean isNetworkNotAvailable = netInfo == null || !netInfo.isAvailable() || !netInfo.isConnected();
         boolean isCacheNeverOverTime = cacheKeepTime == -1;
         boolean isCacheNotOverTime = false;
-        if (isNeedCache)
-        {
+        if (isNeedCache) {
             isCacheNotOverTime = (cacheKeepTime != -1 && System.currentTimeMillis()
                     - new File(cacheFile).lastModified() < cacheKeepTime);
         }
         if (isLoadFirstPage && isNeedCache && (isNetworkNotAvailable || isCacheNeverOverTime || isCacheNotOverTime)
-                && readCache())
-        {
-        }
-        else
-        {
+                && readCache()) {} else {
             onFetchDataHttp(currentPage, start);
         }
-        if (!hasFetchedData)
-        {
-            synchronized (obj)
-            {
-                try
-                {
+        if (!hasFetchedData) {
+            synchronized (obj) {
+                try {
                     obj.wait();
-                }
-                catch (InterruptedException e)
-                {
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
@@ -246,12 +208,10 @@ public abstract class ListPagerAdapter implements ListPagerView.DataObserver
         hasFetchedData = false;
     }
 
-    private boolean readCache()
-    {
+    private boolean readCache() {
         boolean readSuccess = false;
         data = RLFileUtil.getInstance().readFromSd(cacheFile);
-        if (onCheckValid(data))
-        {
+        if (onCheckValid(data)) {
             tmpList = onReadDataSet(data);
             readSuccess = true;
             hasFetchedData = true;
@@ -259,88 +219,62 @@ public abstract class ListPagerAdapter implements ListPagerView.DataObserver
         return readSuccess;
     }
 
-    private void dealWithData()
-    {
-        if (onCheckValid(data) && tmpList != null)
-        {
-            if (isReset)
-            {
+    private void dealWithData() {
+        if (onCheckValid(data) && tmpList != null) {
+            if (isReset) {
                 tmpStart = 0;
-                if (list != null)
-                {
+                if (list != null) {
                     list.clear();
-                }
-                else
-                {
+                } else {
                     list = new ArrayList<Object>();
                 }
                 pager.removeFooter();
             }
             start = onReadNextStart(data);
-            if (pager.isReverse)
-            {
+            if (pager.isReverse) {
                 Collections.reverse(tmpList);
-                if (list == null)
-                {
+                if (list == null) {
                     list = new ArrayList<Object>();
                 }
                 list.addAll(0, tmpList);
-            }
-            else
-            {
-                if (list == null)
-                {
+            } else {
+                if (list == null) {
                     list = new ArrayList<Object>();
                 }
                 list.addAll(tmpList);
             }
             adapter.notifyDataSetChanged();
-            if (pageLimit == -1 || !(hasMore = onCheckHasMore(data)))
-            {
+            if (pageLimit == -1 || !(hasMore = onCheckHasMore(data))) {
                 pager.addFooter();
             }
-        }
-        else
-        {
-            if (isReset)
-            {
+        } else {
+            if (isReset) {
                 start = tmpStart;
                 tmpStart = 0;
             }
-            if (onCheckValid(data))
-            {
+            if (onCheckValid(data)) {
                 String errorStr = onReadErrorMessage(data);
-                if (errorStr != null)
-                {
+                if (errorStr != null) {
                     RLUiUtil.toast(pager.context, errorStr);
                 }
             }
         }
         adapter.notifyDataSetChanged();
         ILoadingLayout layout = null;
-        if (isReset)
-        {
-            if (pager.getIsShowStartTime())
-            {
-                if (pager.getIsShowEndTime())
-                {
+        if (isReset) {
+            if (pager.getIsShowStartTime()) {
+                if (pager.getIsShowEndTime()) {
                     layout = pager.getLoadingLayoutProxy(true, true);
-                }
-                else
-                {
+                } else {
                     layout = pager.getLoadingLayoutProxy(true, false);
                 }
             }
-        }
-        else
-        {
-            if (pager.getIsShowEndTime())
-            {
+        } else {
+            if (pager.getIsShowEndTime()) {
                 layout = pager.getLoadingLayoutProxy(false, true);
             }
         }
-        if (layout != null)
-        {
+        if (layout != null) {
             layout.setLastUpdatedLabel(pager.context.getString(R.string.ptr_updated_at)
                     + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(new Date(
                             System.currentTimeMillis())));
@@ -349,74 +283,61 @@ public abstract class ListPagerAdapter implements ListPagerView.DataObserver
         isReset = false;
     }
 
-    private void executeTask()
-    {
+    private void executeTask() {
         task.executeOnExecutor(RLAsyncTask.DUAL_THREAD_EXECUTOR);
     }
 
-    private class UpdateDataTask extends RLAsyncTask<Void, Void, Void>
-    {
+    private class UpdateDataTask extends RLAsyncTask<Void, Void, Void> {
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             super.onPreExecute();
         }
 
         @Override
-        protected Void doInBackground(Void... params)
-        {
+        protected Void doInBackground(Void... params) {
             fetchData();
             return null;
         }
 
         @Override
-        protected void onCancelled()
-        {
+        protected void onCancelled() {
             pager.notifyFinish(isReset);
         }
 
         @Override
-        protected void onCancelled(Void result)
-        {
+        protected void onCancelled(Void result) {
             pager.notifyFinish(isReset);
         }
 
         @Override
-        protected void onProgressUpdate(Void... values)
-        {
+        protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
         }
 
         @Override
-        protected void onPostExecute(Void result)
-        {
+        protected void onPostExecute(Void result) {
             dealWithData();
         }
     }
 
-    private BaseAdapter adapter = new BaseAdapter()
-    {
+    private BaseAdapter adapter = new BaseAdapter() {
         @Override
-        public int getCount()
-        {
+        public int getCount() {
             return list == null ? 0 : list.size();
         }
 
         @Override
-        public Object getItem(int position)
-        {
+        public Object getItem(int position) {
             return list == null ? null : list.get(position);
         }
 
         @Override
-        public long getItemId(int position)
-        {
+        public long getItemId(int position) {
             return position;
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
+        public View getView(int position, View convertView, ViewGroup parent) {
             return pager.itemHandler.onGetItemView(position, convertView, parent);
         }
     };

@@ -26,8 +26,7 @@ import android.view.animation.Interpolator;
  * to its final stage and computeScrollOffset() will always return false to
  * indicate that scrolling is over.
  */
-public class FloatScroller
-{
+public class FloatScroller {
 
     private float mStart;
 
@@ -52,8 +51,7 @@ public class FloatScroller
      * is null, the default (viscous) interpolator will be used. Specify
      * whether or not to support progressive "flywheel" behavior in flinging.
      */
-    public FloatScroller(Interpolator interpolator)
-    {
+    public FloatScroller(Interpolator interpolator) {
         mFinished = true;
         mInterpolator = interpolator;
     }
@@ -63,8 +61,7 @@ public class FloatScroller
      * 
      * @return True if the scroller has finished scrolling, false otherwise.
      */
-    public final boolean isFinished()
-    {
+    public final boolean isFinished() {
         return mFinished;
     }
 
@@ -73,8 +70,7 @@ public class FloatScroller
      * 
      * @param finished The new finished value.
      */
-    public final void forceFinished(boolean finished)
-    {
+    public final void forceFinished(boolean finished) {
         mFinished = finished;
     }
 
@@ -83,8 +79,7 @@ public class FloatScroller
      * 
      * @return The duration of the scroll in milliseconds.
      */
-    public final int getDuration()
-    {
+    public final int getDuration() {
         return mDuration;
     }
 
@@ -93,8 +88,7 @@ public class FloatScroller
      * 
      * @return The new offset as an absolute distance from the origin.
      */
-    public final float getCurr()
-    {
+    public final float getCurr() {
         return mCurr;
     }
 
@@ -103,8 +97,7 @@ public class FloatScroller
      * 
      * @return The start offset as an absolute distance from the origin.
      */
-    public final float getStart()
-    {
+    public final float getStart() {
         return mStart;
     }
 
@@ -113,37 +106,30 @@ public class FloatScroller
      * 
      * @return The final offset as an absolute distance from the origin.
      */
-    public final float getFinal()
-    {
+    public final float getFinal() {
         return mFinal;
     }
 
-    public boolean computeScrollOffset()
-    {
-        if (mFinished)
-        {
+    public boolean computeScrollOffset() {
+        if (mFinished) {
             return false;
         }
 
         int timePassed = (int) (AnimationUtils.currentAnimationTimeMillis() - mStartTime);
 
-        if (timePassed < mDuration)
-        {
+        if (timePassed < mDuration) {
             float x = timePassed * mDurationReciprocal;
             x = mInterpolator.getInterpolation(x);
             mCurr = mStart + x * mDeltaX;
 
-        }
-        else
-        {
+        } else {
             mCurr = mFinal;
             mFinished = true;
         }
         return true;
     }
 
-    public void startScroll(float start, float delta, int duration)
-    {
+    public void startScroll(float start, float delta, int duration) {
         mFinished = false;
         mDuration = duration;
         mStartTime = AnimationUtils.currentAnimationTimeMillis();
@@ -160,8 +146,7 @@ public class FloatScroller
      * 
      * @see #forceFinished(boolean)
      */
-    public void abortAnimation()
-    {
+    public void abortAnimation() {
         mCurr = mFinal;
         mFinished = true;
     }
@@ -173,8 +158,7 @@ public class FloatScroller
      * @param extend Additional time to scroll in milliseconds.
      * @see #setFinal(float)
      */
-    public void extendDuration(int extend)
-    {
+    public void extendDuration(int extend) {
         int passed = timePassed();
         mDuration = passed + extend;
         mDurationReciprocal = 1.0f / mDuration;
@@ -186,13 +170,11 @@ public class FloatScroller
      * 
      * @return The elapsed time in milliseconds.
      */
-    public int timePassed()
-    {
+    public int timePassed() {
         return (int) (AnimationUtils.currentAnimationTimeMillis() - mStartTime);
     }
 
-    public void setFinal(float newVal)
-    {
+    public void setFinal(float newVal) {
         mFinal = newVal;
         mDeltaX = mFinal - mStart;
         mFinished = false;

@@ -31,8 +31,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-public class RLVideoPlayer
-{
+public class RLVideoPlayer {
     private Context context;
 
     private RLLoadingDialog pb;
@@ -44,8 +43,7 @@ public class RLVideoPlayer
      * 
      * @param context
      */
-    public RLVideoPlayer(Context context)
-    {
+    public RLVideoPlayer(Context context) {
         this.context = context;
         pb = new RLLoadingDialog(context);
         BCyberPlayerFactory.init(context);
@@ -54,8 +52,7 @@ public class RLVideoPlayer
     /**
      * @return
      */
-    public boolean isEngineInstalled()
-    {
+    public boolean isEngineInstalled() {
         BEngineManager mgr = BCyberPlayerFactory.createEngineManager();
         return mgr.EngineInstalled();
     }
@@ -64,12 +61,9 @@ public class RLVideoPlayer
      * @param file
      * @return
      */
-    public boolean isFileSupport(String file)
-    {
-        for (int i = 0; i < SUPPORT_TYPES.length; i++)
-        {
-            if (file.endsWith(SUPPORT_TYPES[i]))
-            {
+    public boolean isFileSupport(String file) {
+        for (int i = 0; i < SUPPORT_TYPES.length; i++) {
+            if (file.endsWith(SUPPORT_TYPES[i])) {
                 return true;
             }
         }
@@ -80,10 +74,8 @@ public class RLVideoPlayer
      * @param uriStr
      * @param isHW 是否开启硬件解码（MP4、3GP）
      */
-    public void openPlayer(String uriStr, boolean isHW)
-    {
-        if (isEngineInstalled() && uriStr != null && !uriStr.equals(""))
-        {
+    public void openPlayer(String uriStr, boolean isHW) {
+        if (isEngineInstalled() && uriStr != null && !uriStr.equals("")) {
             Intent it = new Intent(Intent.ACTION_VIEW);
             it.putExtra("isHW", isHW);
             Uri uri = Uri.parse(uriStr);
@@ -96,26 +88,21 @@ public class RLVideoPlayer
     /**
 	 * 
 	 */
-    public void installEngine()
-    {
-        if (RLSysUtil.isExternalStorageAvailable())
-        {
+    public void installEngine() {
+        if (RLSysUtil.isExternalStorageAvailable()) {
             RLUiUtil.toast(context, R.string.check_sdcard);
             return;
         }
         BEngineManager mgr = BCyberPlayerFactory.createEngineManager();
-        mgr.installAsync(new OnEngineListener()
-        {
+        mgr.installAsync(new OnEngineListener() {
             @Override
-            public boolean onPrepare()
-            {
+            public boolean onPrepare() {
                 handler.sendEmptyMessage(MSG_ON_PREPARE);
                 return true;
             }
 
             @Override
-            public int onDownload(int total, int current)
-            {
+            public int onDownload(int total, int current) {
                 Message msg = new Message();
                 msg.what = MSG_ON_DOWNLOAD;
                 Bundle data = new Bundle();
@@ -127,15 +114,13 @@ public class RLVideoPlayer
             }
 
             @Override
-            public int onPreInstall()
-            {
+            public int onPreInstall() {
                 handler.sendEmptyMessage(MSG_ON_PRE_INSTALL);
                 return DOWNLOAD_CONTINUE;
             }
 
             @Override
-            public void onInstalled(int result)
-            {
+            public void onInstalled(int result) {
                 Message msg = new Message();
                 msg.what = MSG_ON_INSTALLED;
                 Bundle data = new Bundle();
@@ -154,13 +139,10 @@ public class RLVideoPlayer
 
     private static final int MSG_ON_INSTALLED = 999;
 
-    private Handler handler = new Handler()
-    {
+    private Handler handler = new Handler() {
         @Override
-        public void handleMessage(Message msg)
-        {
-            switch (msg.what)
-            {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
                 case MSG_ON_PREPARE:
                     // TODO
                     break;
@@ -168,21 +150,18 @@ public class RLVideoPlayer
                     int total = msg.getData().getInt("total");
                     int current = msg.getData().getInt("current");
                     pb.setMessage(context.getString(R.string.downloading) + current + "/" + total);
-                    if (!pb.isShowing())
-                    {
+                    if (!pb.isShowing()) {
                         pb.show();
                     }
                     break;
                 case MSG_ON_PRE_INSTALL:
-                    if (pb.isShowing())
-                    {
+                    if (pb.isShowing()) {
                         pb.dismiss();
                     }
                     break;
                 case MSG_ON_INSTALLED:
                     int result = msg.getData().getInt("result");
-                    switch (result)
-                    {
+                    switch (result) {
                         case OnEngineListener.RET_FAILED_ALREADY_INSTALLED:
                             RLUiUtil.toast(context, R.string.ret_failed_already_installed);
                             break;

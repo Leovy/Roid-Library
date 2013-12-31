@@ -28,8 +28,7 @@ import android.view.View;
  * @see FailReason
  * @since 1.0.0
  */
-public interface ImageLoadingListener
-{
+public interface ImageLoadingListener {
 
     /**
      * Is called when image loading task was started

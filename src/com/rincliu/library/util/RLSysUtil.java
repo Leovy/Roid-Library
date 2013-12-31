@@ -44,16 +44,13 @@ import android.view.WindowManager;
 import com.rincliu.library.util.RLAPICompat;
 import com.rincliu.library.entity.RLDisplayInfo;
 
-public class RLSysUtil
-{
+public class RLSysUtil {
     /**
      * @param activity
      */
     @SuppressLint("InlinedApi")
-    public static void enableHardwareAccelerate(Activity activity)
-    {
-        if (VERSION.SDK_INT >= VERSION_CODES.HONEYCOMB)
-        {
+    public static void enableHardwareAccelerate(Activity activity) {
+        if (VERSION.SDK_INT >= VERSION_CODES.HONEYCOMB) {
             activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                     WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
         }
@@ -64,13 +61,10 @@ public class RLSysUtil
      * @param files
      * @param mimeTypes
      */
-    public static void scanMediaFiles(final Context context, String[] files, String[] mimeTypes)
-    {
-        MediaScannerConnection.scanFile(context, files, mimeTypes, new OnScanCompletedListener()
-        {
+    public static void scanMediaFiles(final Context context, String[] files, String[] mimeTypes) {
+        MediaScannerConnection.scanFile(context, files, mimeTypes, new OnScanCompletedListener() {
             @Override
-            public void onScanCompleted(String arg0, Uri arg1)
-            {
+            public void onScanCompleted(String arg0, Uri arg1) {
                 // TODO
             }
         });
@@ -81,21 +75,16 @@ public class RLSysUtil
      * @param key
      * @return
      */
-    public static String getApplicationMetaData(Context context, String key)
-    {
+    public static String getApplicationMetaData(Context context, String key) {
         String data = null;
         ApplicationInfo info = null;
-        try
-        {
+        try {
             info = context.getPackageManager().getApplicationInfo(context.getPackageName(),
                     PackageManager.GET_META_DATA);
-        }
-        catch (NameNotFoundException e)
-        {
+        } catch (NameNotFoundException e) {
             e.printStackTrace();
         }
-        if (info != null && info.metaData != null && info.metaData.get(key) != null)
-        {
+        if (info != null && info.metaData != null && info.metaData.get(key) != null) {
             data = info.metaData.get(key).toString();
         }
         return data;
@@ -106,21 +95,16 @@ public class RLSysUtil
      * @param key
      * @return
      */
-    public static String getActivityMetaData(Activity activity, String key)
-    {
+    public static String getActivityMetaData(Activity activity, String key) {
         String data = null;
         ActivityInfo info = null;
-        try
-        {
+        try {
             info = activity.getPackageManager().getActivityInfo(activity.getComponentName(),
                     PackageManager.GET_META_DATA);
-        }
-        catch (NameNotFoundException e)
-        {
+        } catch (NameNotFoundException e) {
             e.printStackTrace();
         }
-        if (info != null && info.metaData != null && info.metaData.get(key) != null)
-        {
+        if (info != null && info.metaData != null && info.metaData.get(key) != null) {
             data = info.metaData.get(key).toString();
         }
         return data;
@@ -132,21 +116,16 @@ public class RLSysUtil
      * @param key
      * @return
      */
-    public static String getServiceMetaData(Context context, Class<?> serviceClass, String key)
-    {
+    public static String getServiceMetaData(Context context, Class<?> serviceClass, String key) {
         String data = null;
         ServiceInfo info = null;
-        try
-        {
+        try {
             info = context.getPackageManager().getServiceInfo(new ComponentName(context, serviceClass),
                     PackageManager.GET_META_DATA);
-        }
-        catch (NameNotFoundException e)
-        {
+        } catch (NameNotFoundException e) {
             e.printStackTrace();
         }
-        if (info != null && info.metaData != null && info.metaData.get(key) != null)
-        {
+        if (info != null && info.metaData != null && info.metaData.get(key) != null) {
             data = info.metaData.get(key).toString();
         }
         return data;
@@ -158,21 +137,16 @@ public class RLSysUtil
      * @param key
      * @return
      */
-    public static String getReceiverMetaData(Context context, Class<?> receiverClass, String key)
-    {
+    public static String getReceiverMetaData(Context context, Class<?> receiverClass, String key) {
         String data = null;
         ActivityInfo info = null;
-        try
-        {
+        try {
             info = context.getPackageManager().getReceiverInfo(new ComponentName(context, receiverClass),
                     PackageManager.GET_META_DATA);
-        }
-        catch (NameNotFoundException e)
-        {
+        } catch (NameNotFoundException e) {
             e.printStackTrace();
         }
-        if (info != null && info.metaData != null && info.metaData.get(key) != null)
-        {
+        if (info != null && info.metaData != null && info.metaData.get(key) != null) {
             data = info.metaData.get(key).toString();
         }
         return data;
@@ -182,8 +156,7 @@ public class RLSysUtil
      * @param activity
      * @return
      */
-    public static RLDisplayInfo getDisplayInfo(final Activity activity)
-    {
+    public static RLDisplayInfo getDisplayInfo(final Activity activity) {
         final Resources res = activity.getResources();
         final RLDisplayInfo di = new RLDisplayInfo();
         Display display = activity.getWindowManager().getDefaultDisplay();
@@ -193,57 +166,40 @@ public class RLSysUtil
         di.setDisplayHeight(dm.heightPixels);
         di.setDisplayDensity(dm.density);
         int statusResId = res.getIdentifier("status_bar_height", "dimen", "android");
-        if (statusResId > 0)
-        {
+        if (statusResId > 0) {
             di.setStatusBarHeight(res.getDimensionPixelSize(statusResId));
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             int portraitResId = res.getIdentifier("navigation_bar_height", "dimen", "android");
-            if (portraitResId > 0)
-            {
+            if (portraitResId > 0) {
                 di.setPortraitNavigationBarHeight(res.getDimensionPixelSize(portraitResId));
             }
-        }
-        else
-        {
-            new Thread()
-            {
-                public void run()
-                {
-                    try
-                    {
+        } else {
+            new Thread() {
+                public void run() {
+                    try {
                         Thread.sleep(200);
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     Window window = activity.getWindow();
                     int contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
                     int titleBarHeight = contentViewTop - di.getStatusBarHeight();
                     Configuration config = res.getConfiguration();
-                    if (config.orientation == Configuration.ORIENTATION_PORTRAIT)
-                    {
+                    if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
                         di.setPortraitNavigationBarHeight(titleBarHeight);
-                    }
-                    else if (config.orientation == Configuration.ORIENTATION_LANDSCAPE)
-                    {
+                    } else if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                         di.setLandscapeNavigationBarHeight(titleBarHeight);
                     }
                 }
             }.start();
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             int landscapeResId = res.getIdentifier("navigation_bar_height_landscape", "dimen", "android");
-            if (landscapeResId > 0)
-            {
+            if (landscapeResId > 0) {
                 di.setLandscapeNavigationBarHeight(res.getDimensionPixelSize(landscapeResId));
             }
-        }
-        else
-        {
+        } else {
             // TODO
         }
         return di;
@@ -254,8 +210,7 @@ public class RLSysUtil
      * @param dp
      * @return
      */
-    public static int dip2px(Context context, float dp)
-    {
+    public static int dip2px(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
@@ -265,8 +220,7 @@ public class RLSysUtil
      * @param px
      * @return
      */
-    public static int px2dip(Context context, float px)
-    {
+    public static int px2dip(Context context, float px) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (px / scale + 0.5f);
     }
@@ -276,8 +230,7 @@ public class RLSysUtil
      * @param spValue
      * @return
      */
-    public static int sp2px(Context context, float spValue)
-    {
+    public static int sp2px(Context context, float spValue) {
         final float scale = context.getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * scale + 0.5f);
     }
@@ -287,8 +240,7 @@ public class RLSysUtil
      * @param pxValue
      * @return
      */
-    public static int px2sp(Context context, float pxValue)
-    {
+    public static int px2sp(Context context, float pxValue) {
         final float scale = context.getResources().getDisplayMetrics().scaledDensity;
         return (int) (pxValue / scale + 0.5f);
     }
@@ -296,8 +248,7 @@ public class RLSysUtil
     /**
      * @param context
      */
-    public static void notifyScanMediaFiles(Context context)
-    {
+    public static void notifyScanMediaFiles(Context context) {
         context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"
                 + Environment.getExternalStorageDirectory())));
     }
@@ -305,18 +256,15 @@ public class RLSysUtil
     /**
      * @return
      */
-    public static boolean isExternalStorageAvailable()
-    {
+    public static boolean isExternalStorageAvailable() {
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || !isExternalStorageRemovable();
     }
 
     /**
      * @return
      */
-    static boolean isExternalStorageRemovable()
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)
-        {
+    static boolean isExternalStorageRemovable() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
             return Environment.isExternalStorageRemovable();
         }
         return true;
@@ -325,16 +273,14 @@ public class RLSysUtil
     /**
      * @return
      */
-    public static long getAvailableExternalStorageSize()
-    {
+    public static long getAvailableExternalStorageSize() {
         return RLAPICompat.getAvailableBlocks() * RLAPICompat.getBlockSize();
     }
 
     /**
      * @return
      */
-    public static long getTotalExternalStorageSize()
-    {
+    public static long getTotalExternalStorageSize() {
         return RLAPICompat.getFreeBlocks() * RLAPICompat.getBlockSize();
     }
 
@@ -342,30 +288,20 @@ public class RLSysUtil
      * @param context
      * @return
      */
-    public static String getExternalCacheDir(Context context)
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO)
-        {
+    public static String getExternalCacheDir(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             File f1 = context.getExternalCacheDir();
-            if (f1 != null)
-            {
+            if (f1 != null) {
                 return f1.getPath();
-            }
-            else
-            {
+            } else {
                 return null;
             }
-        }
-        else
-        {
+        } else {
             final String cacheDir = "/Android/data/" + context.getPackageName() + "/cache/";
             File f2 = Environment.getExternalStorageDirectory();
-            if (f2 != null)
-            {
+            if (f2 != null) {
                 return f2.getPath() + cacheDir;
-            }
-            else
-            {
+            } else {
                 return null;
             }
         }
@@ -375,20 +311,16 @@ public class RLSysUtil
      * @param path
      * @return
      */
-    public static boolean requestRootPermission(String path)
-    {
+    public static boolean requestRootPermission(String path) {
         Process process = null;
         DataOutputStream dos = null;
-        try
-        {
+        try {
             process = Runtime.getRuntime().exec("su");
-            if (process == null)
-            {
+            if (process == null) {
                 return false;
             }
             OutputStream os = process.getOutputStream();
-            if (os == null)
-            {
+            if (os == null) {
                 return false;
             }
             dos = new DataOutputStream(os);
@@ -396,27 +328,18 @@ public class RLSysUtil
             dos.writeBytes("exit\n");
             dos.flush();
             process.waitFor();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
-        }
-        finally
-        {
-            try
-            {
-                if (dos != null)
-                {
+        } finally {
+            try {
+                if (dos != null) {
                     dos.close();
                 }
-                if (process != null)
-                {
+                if (process != null) {
                     process.destroy();
                 }
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

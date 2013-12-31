@@ -23,15 +23,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class RLUiUtil
-{
+public class RLUiUtil {
     /**
      * @param context
      * @param msg
      * @param duration
      */
-    public static void toast(Context context, String msg, int duration)
-    {
+    public static void toast(Context context, String msg, int duration) {
         Toast toast;
         toast = new Toast(context);
         View view = LayoutInflater.from(context).inflate(R.layout.toast, null);
@@ -47,8 +45,7 @@ public class RLUiUtil
      * @param context
      * @param msg
      */
-    public static void toast(Context context, String msg)
-    {
+    public static void toast(Context context, String msg) {
         toast(context, msg, Toast.LENGTH_SHORT);
     }
 
@@ -57,8 +54,7 @@ public class RLUiUtil
      * @param strResId
      * @param duration
      */
-    public static void toast(Context context, int strResId, int duration)
-    {
+    public static void toast(Context context, int strResId, int duration) {
         toast(context, context.getString(strResId), duration);
     }
 
@@ -66,8 +62,7 @@ public class RLUiUtil
      * @param context
      * @param strResId
      */
-    public static void toast(Context context, int strResId)
-    {
+    public static void toast(Context context, int strResId) {
         toast(context, context.getString(strResId));
     }
 }

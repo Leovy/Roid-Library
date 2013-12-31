@@ -27,19 +27,15 @@ import java.io.File;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.8.0
  */
-public final class DiscCacheUtil
-{
+public final class DiscCacheUtil {
 
-    private DiscCacheUtil()
-    {
-    }
+    private DiscCacheUtil() {}
 
     /**
      * Returns {@link File} of cached image or <b>null</b> if image was not
      * cached in disc cache
      */
-    public static File findInCache(String imageUri, DiscCacheAware discCache)
-    {
+    public static File findInCache(String imageUri, DiscCacheAware discCache) {
         File image = discCache.get(imageUri);
         return image.exists() ? image : null;
     }
@@ -51,8 +47,7 @@ public final class DiscCacheUtil
      * @return <b>true</b> - if cached image file existed and was deleted;
      *         <b>false</b> - otherwise.
      */
-    public static boolean removeFromCache(String imageUri, DiscCacheAware discCache)
-    {
+    public static boolean removeFromCache(String imageUri, DiscCacheAware discCache) {
         File image = discCache.get(imageUri);
         return image.delete();
     }

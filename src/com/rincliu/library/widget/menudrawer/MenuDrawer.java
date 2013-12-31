@@ -22,14 +22,12 @@ import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.animation.Interpolator;
 
-public abstract class MenuDrawer extends ViewGroup
-{
+public abstract class MenuDrawer extends ViewGroup {
 
     /**
      * Callback interface for changing state of the drawer.
      */
-    public interface OnDrawerStateChangeListener
-    {
+    public interface OnDrawerStateChangeListener {
 
         /**
          * Called when the drawer state changes.
@@ -47,8 +45,7 @@ public abstract class MenuDrawer extends ViewGroup
      * drawer. This is only called when the touch mode is
      * {@link #TOUCH_MODE_FULLSCREEN}.
      */
-    public interface OnInterceptMoveEventListener
-    {
+    public interface OnInterceptMoveEventListener {
 
         /**
          * Called for each child the pointer i on when the drawer is deciding
@@ -300,11 +297,9 @@ public abstract class MenuDrawer extends ViewGroup
     /**
      * Runnable used when animating the indicator to a new position.
      */
-    private Runnable mIndicatorRunnable = new Runnable()
-    {
+    private Runnable mIndicatorRunnable = new Runnable() {
         @Override
-        public void run()
-        {
+        public void run() {
             animateIndicatorInvalidate();
         }
     };
@@ -346,8 +341,7 @@ public abstract class MenuDrawer extends ViewGroup
      * @param activity The activity that the MenuDrawer will be attached to.
      * @return The created MenuDrawer instance.
      */
-    public static MenuDrawer attach(Activity activity)
-    {
+    public static MenuDrawer attach(Activity activity) {
         return attach(activity, MENU_DRAG_CONTENT);
     }
 
@@ -360,8 +354,7 @@ public abstract class MenuDrawer extends ViewGroup
      *            {@link MenuDrawer#MENU_DRAG_WINDOW}.
      * @return The created MenuDrawer instance.
      */
-    public static MenuDrawer attach(Activity activity, int dragMode)
-    {
+    public static MenuDrawer attach(Activity activity, int dragMode) {
         return attach(activity, dragMode, Position.LEFT);
     }
 
@@ -372,8 +365,7 @@ public abstract class MenuDrawer extends ViewGroup
      * @param position Where to position the menu.
      * @return The created MenuDrawer instance.
      */
-    public static MenuDrawer attach(Activity activity, Position position)
-    {
+    public static MenuDrawer attach(Activity activity, Position position) {
         return attach(activity, MENU_DRAG_CONTENT, position);
     }
 
@@ -387,8 +379,7 @@ public abstract class MenuDrawer extends ViewGroup
      * @param position Where to position the menu.
      * @return The created MenuDrawer instance.
      */
-    public static MenuDrawer attach(Activity activity, int dragMode, Position position)
-    {
+    public static MenuDrawer attach(Activity activity, int dragMode, Position position) {
         return attach(activity, dragMode, position, false);
     }
 
@@ -404,13 +395,11 @@ public abstract class MenuDrawer extends ViewGroup
      *            drawer should be used.
      * @return The created MenuDrawer instance.
      */
-    public static MenuDrawer attach(Activity activity, int dragMode, Position position, boolean attachStatic)
-    {
+    public static MenuDrawer attach(Activity activity, int dragMode, Position position, boolean attachStatic) {
         MenuDrawer menuDrawer = createMenuDrawer(activity, dragMode, position, attachStatic);
         menuDrawer.setId(R.id.md__drawer);
 
-        switch (dragMode)
-        {
+        switch (dragMode) {
             case MenuDrawer.MENU_DRAG_CONTENT:
                 attachToContent(activity, menuDrawer);
                 break;
@@ -429,12 +418,9 @@ public abstract class MenuDrawer extends ViewGroup
     /**
      * Constructs the appropriate MenuDrawer based on the position.
      */
-    private static MenuDrawer createMenuDrawer(Activity activity, int dragMode, Position position, boolean attachStatic)
-    {
-        if (attachStatic)
-        {
-            switch (position)
-            {
+    private static MenuDrawer createMenuDrawer(Activity activity, int dragMode, Position position, boolean attachStatic) {
+        if (attachStatic) {
+            switch (position) {
                 case LEFT:
                     return new LeftStaticDrawer(activity, dragMode);
                 case RIGHT:
@@ -444,8 +430,7 @@ public abstract class MenuDrawer extends ViewGroup
             }
         }
 
-        switch (position)
-        {
+        switch (position) {
             case LEFT:
                 return new LeftDrawer(activity, dragMode);
             case RIGHT:
@@ -458,8 +443,7 @@ public abstract class MenuDrawer extends ViewGroup
     /**
      * Attaches the menu drawer to the content view.
      */
-    private static void attachToContent(Activity activity, MenuDrawer menuDrawer)
-    {
+    private static void attachToContent(Activity activity, MenuDrawer menuDrawer) {
         /**
          * Do not call mActivity#setContentView. E.g. if using with a
          * ListActivity, Activity#setContentView is overridden and dispatched
@@ -474,8 +458,7 @@ public abstract class MenuDrawer extends ViewGroup
     /**
      * Attaches the menu drawer to the window.
      */
-    private static void attachToDecor(Activity activity, MenuDrawer menuDrawer)
-    {
+    private static void attachToDecor(Activity activity, MenuDrawer menuDrawer) {
         ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
         ViewGroup decorChild = (ViewGroup) decorView.getChildAt(0);
 
@@ -485,32 +468,27 @@ public abstract class MenuDrawer extends ViewGroup
         menuDrawer.mContentContainer.addView(decorChild, decorChild.getLayoutParams());
     }
 
-    MenuDrawer(Activity activity, int dragMode)
-    {
+    MenuDrawer(Activity activity, int dragMode) {
         this(activity);
 
         mActivity = activity;
         mDragMode = dragMode;
     }
 
-    public MenuDrawer(Context context)
-    {
+    public MenuDrawer(Context context) {
         this(context, null);
     }
 
-    public MenuDrawer(Context context, AttributeSet attrs)
-    {
+    public MenuDrawer(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.menuDrawerStyle);
     }
 
-    public MenuDrawer(Context context, AttributeSet attrs, int defStyle)
-    {
+    public MenuDrawer(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initDrawer(context, attrs, defStyle);
     }
 
-    protected void initDrawer(Context context, AttributeSet attrs, int defStyle)
-    {
+    protected void initDrawer(Context context, AttributeSet attrs, int defStyle) {
         setWillNotDraw(false);
         setFocusable(false);
 
@@ -524,8 +502,7 @@ public abstract class MenuDrawer extends ViewGroup
         mMenuSizeSet = mMenuSize != -1;
 
         final int indicatorResId = a.getResourceId(R.styleable.MenuDrawer_mdActiveIndicator, 0);
-        if (indicatorResId != 0)
-        {
+        if (indicatorResId != 0) {
             mActiveIndicator = BitmapFactory.decodeResource(getResources(), indicatorResId);
         }
 
@@ -533,8 +510,7 @@ public abstract class MenuDrawer extends ViewGroup
 
         mDropShadowDrawable = a.getDrawable(R.styleable.MenuDrawer_mdDropShadow);
 
-        if (mDropShadowDrawable == null)
-        {
+        if (mDropShadowDrawable == null) {
             final int dropShadowColor = a.getColor(R.styleable.MenuDrawer_mdDropShadowColor, 0xFF000000);
             setDropShadowColor(dropShadowColor);
         }
@@ -567,18 +543,15 @@ public abstract class MenuDrawer extends ViewGroup
     }
 
     @Override
-    public void addView(View child, int index, LayoutParams params)
-    {
+    public void addView(View child, int index, LayoutParams params) {
         int childCount = mMenuContainer.getChildCount();
-        if (childCount == 0)
-        {
+        if (childCount == 0) {
             mMenuContainer.addView(child, index, params);
             return;
         }
 
         childCount = mContentContainer.getChildCount();
-        if (childCount == 0)
-        {
+        if (childCount == 0) {
             mContentContainer.addView(child, index, params);
             return;
         }
@@ -586,18 +559,14 @@ public abstract class MenuDrawer extends ViewGroup
         throw new IllegalStateException("MenuDrawer can only hold two child views");
     }
 
-    protected int dpToPx(int dp)
-    {
+    protected int dpToPx(int dp) {
         return (int) (getResources().getDisplayMetrics().density * dp + 0.5f);
     }
 
-    protected boolean isViewDescendant(View v)
-    {
+    protected boolean isViewDescendant(View v) {
         ViewParent parent = v.getParent();
-        while (parent != null)
-        {
-            if (parent == this)
-            {
+        while (parent != null) {
+            if (parent == this) {
                 return true;
             }
 
@@ -608,15 +577,13 @@ public abstract class MenuDrawer extends ViewGroup
     }
 
     @Override
-    protected void onAttachedToWindow()
-    {
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         getViewTreeObserver().addOnScrollChangedListener(mScrollListener);
     }
 
     @Override
-    protected void onDetachedFromWindow()
-    {
+    protected void onDetachedFromWindow() {
         getViewTreeObserver().removeOnScrollChangedListener(mScrollListener);
         super.onDetachedFromWindow();
     }
@@ -624,8 +591,7 @@ public abstract class MenuDrawer extends ViewGroup
     /**
      * Toggles the menu open and close with animation.
      */
-    public void toggleMenu()
-    {
+    public void toggleMenu() {
         toggleMenu(true);
     }
 
@@ -639,8 +605,7 @@ public abstract class MenuDrawer extends ViewGroup
     /**
      * Animates the menu open.
      */
-    public void openMenu()
-    {
+    public void openMenu() {
         openMenu(true);
     }
 
@@ -654,8 +619,7 @@ public abstract class MenuDrawer extends ViewGroup
     /**
      * Animates the menu closed.
      */
-    public void closeMenu()
-    {
+    public void closeMenu() {
         closeMenu(true);
     }
 
@@ -685,8 +649,7 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @return The size of the menu.
      */
-    public int getMenuSize()
-    {
+    public int getMenuSize() {
         return mMenuSize;
     }
 
@@ -696,8 +659,7 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @param v The active view.
      */
-    public void setActiveView(View v)
-    {
+    public void setActiveView(View v) {
         setActiveView(v, 0);
     }
 
@@ -710,14 +672,12 @@ public abstract class MenuDrawer extends ViewGroup
      *            v.setTag(R.id.mdActiveViewPosition, position) must be called
      *            first.
      */
-    public void setActiveView(View v, int position)
-    {
+    public void setActiveView(View v, int position) {
         final View oldView = mActiveView;
         mActiveView = v;
         mActivePosition = position;
 
-        if (mAllowIndicatorAnimation && oldView != null)
-        {
+        if (mAllowIndicatorAnimation && oldView != null) {
             startAnimatingIndicator();
         }
 
@@ -730,10 +690,8 @@ public abstract class MenuDrawer extends ViewGroup
      * @param animate Whether the indicator should be animated between active
      *            views.
      */
-    public void setAllowIndicatorAnimation(boolean animate)
-    {
-        if (animate != mAllowIndicatorAnimation)
-        {
+    public void setAllowIndicatorAnimation(boolean animate) {
+        if (animate != mAllowIndicatorAnimation) {
             mAllowIndicatorAnimation = animate;
             completeAnimatingIndicator();
         }
@@ -745,8 +703,7 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @return Whether the indicator should be animated between active views.
      */
-    public boolean getAllowIndicatorAnimation()
-    {
+    public boolean getAllowIndicatorAnimation() {
         return mAllowIndicatorAnimation;
     }
 
@@ -754,18 +711,14 @@ public abstract class MenuDrawer extends ViewGroup
      * Scroll listener that checks whether the active view has moved before
      * the drawer is invalidated.
      */
-    private ViewTreeObserver.OnScrollChangedListener mScrollListener = new ViewTreeObserver.OnScrollChangedListener()
-    {
+    private ViewTreeObserver.OnScrollChangedListener mScrollListener = new ViewTreeObserver.OnScrollChangedListener() {
         @Override
-        public void onScrollChanged()
-        {
-            if (mActiveView != null && isViewDescendant(mActiveView))
-            {
+        public void onScrollChanged() {
+            if (mActiveView != null && isViewDescendant(mActiveView)) {
                 mActiveView.getDrawingRect(mTempRect);
                 offsetDescendantRectToMyCoords(mActiveView, mTempRect);
                 if (mTempRect.left != mActiveRect.left || mTempRect.top != mActiveRect.top
-                        || mTempRect.right != mActiveRect.right || mTempRect.bottom != mActiveRect.bottom)
-                {
+                        || mTempRect.right != mActiveRect.right || mTempRect.bottom != mActiveRect.bottom) {
                     invalidate();
                 }
             }
@@ -775,8 +728,7 @@ public abstract class MenuDrawer extends ViewGroup
     /**
      * Starts animating the indicator to a new position.
      */
-    private void startAnimatingIndicator()
-    {
+    private void startAnimatingIndicator() {
         mIndicatorStartPos = getIndicatorStartPos();
         mIndicatorAnimating = true;
         mIndicatorScroller.startScroll(0.0f, 1.0f, INDICATOR_ANIM_DURATION);
@@ -794,15 +746,12 @@ public abstract class MenuDrawer extends ViewGroup
     /**
      * Callback when each frame in the indicator animation should be drawn.
      */
-    private void animateIndicatorInvalidate()
-    {
-        if (mIndicatorScroller.computeScrollOffset())
-        {
+    private void animateIndicatorInvalidate() {
+        if (mIndicatorScroller.computeScrollOffset()) {
             mIndicatorOffset = mIndicatorScroller.getCurr();
             invalidate();
 
-            if (!mIndicatorScroller.isFinished())
-            {
+            if (!mIndicatorScroller.isFinished()) {
                 postOnAnimation(mIndicatorRunnable);
                 return;
             }
@@ -814,8 +763,7 @@ public abstract class MenuDrawer extends ViewGroup
     /**
      * Called when the indicator animation has completed.
      */
-    private void completeAnimatingIndicator()
-    {
+    private void completeAnimatingIndicator() {
         mIndicatorOffset = 1.0f;
         mIndicatorAnimating = false;
         invalidate();
@@ -835,8 +783,7 @@ public abstract class MenuDrawer extends ViewGroup
      */
     public abstract boolean getOffsetMenuEnabled();
 
-    public int getDrawerState()
-    {
+    public int getDrawerState() {
         return mDrawerState;
     }
 
@@ -845,8 +792,7 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @param listener The callback that will run.
      */
-    public void setOnDrawerStateChangeListener(OnDrawerStateChangeListener listener)
-    {
+    public void setOnDrawerStateChangeListener(OnDrawerStateChangeListener listener) {
         mOnDrawerStateChangeListener = listener;
     }
 
@@ -856,8 +802,7 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @param listener The callback that will be invoked.
      */
-    public void setOnInterceptMoveEventListener(OnInterceptMoveEventListener listener)
-    {
+    public void setOnInterceptMoveEventListener(OnInterceptMoveEventListener listener) {
         mOnInterceptMoveEventListener = listener;
     }
 
@@ -866,8 +811,7 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @param enabled Whether the drop shadow is enabled.
      */
-    public void setDropShadowEnabled(boolean enabled)
-    {
+    public void setDropShadowEnabled(boolean enabled) {
         mDropShadowEnabled = enabled;
         invalidate();
     }
@@ -884,8 +828,7 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @param drawable The drawable of the drop shadow.
      */
-    public void setDropShadow(Drawable drawable)
-    {
+    public void setDropShadow(Drawable drawable) {
         mDropShadowDrawable = drawable;
         invalidate();
     }
@@ -895,16 +838,14 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @param resId The resource identifier of the the drawable.
      */
-    public void setDropShadow(int resId)
-    {
+    public void setDropShadow(int resId) {
         setDropShadow(getResources().getDrawable(resId));
     }
 
     /**
      * Returns the drawable of the drop shadow.
      */
-    public Drawable getDropShadow()
-    {
+    public Drawable getDropShadow() {
         return mDropShadowDrawable;
     }
 
@@ -913,8 +854,7 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @param size The size of the drop shadow in px.
      */
-    public void setDropShadowSize(int size)
-    {
+    public void setDropShadowSize(int size) {
         mDropShadowSize = size;
         invalidate();
     }
@@ -957,8 +897,7 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @param duration The maximum duration in milliseconds.
      */
-    public void setMaxAnimationDuration(int duration)
-    {
+    public void setMaxAnimationDuration(int duration) {
         mMaxAnimationDuration = duration;
     }
 
@@ -967,8 +906,7 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @return The menu view's parent.
      */
-    public ViewGroup getMenuContainer()
-    {
+    public ViewGroup getMenuContainer() {
         return mMenuContainer;
     }
 
@@ -977,14 +915,10 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @return The content view's parent.
      */
-    public ViewGroup getContentContainer()
-    {
-        if (mDragMode == MENU_DRAG_CONTENT)
-        {
+    public ViewGroup getContentContainer() {
+        if (mDragMode == MENU_DRAG_CONTENT) {
             return mContentContainer;
-        }
-        else
-        {
+        } else {
             return (ViewGroup) findViewById(android.R.id.content);
         }
     }
@@ -994,8 +928,7 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @param layoutResId Resource ID to be inflated.
      */
-    public void setMenuView(int layoutResId)
-    {
+    public void setMenuView(int layoutResId) {
         mMenuContainer.removeAllViews();
         mMenuView = LayoutInflater.from(getContext()).inflate(layoutResId, mMenuContainer, false);
         mMenuContainer.addView(mMenuView);
@@ -1006,8 +939,7 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @param view The menu view.
      */
-    public void setMenuView(View view)
-    {
+    public void setMenuView(View view) {
         setMenuView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
 
@@ -1017,8 +949,7 @@ public abstract class MenuDrawer extends ViewGroup
      * @param view The menu view.
      * @param params Layout parameters for the view.
      */
-    public void setMenuView(View view, LayoutParams params)
-    {
+    public void setMenuView(View view, LayoutParams params) {
         mMenuView = view;
         mMenuContainer.removeAllViews();
         mMenuContainer.addView(view, params);
@@ -1029,8 +960,7 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @return The menu view.
      */
-    public View getMenuView()
-    {
+    public View getMenuView() {
         return mMenuView;
     }
 
@@ -1039,10 +969,8 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @param layoutResId Resource ID to be inflated.
      */
-    public void setContentView(int layoutResId)
-    {
-        switch (mDragMode)
-        {
+    public void setContentView(int layoutResId) {
+        switch (mDragMode) {
             case MenuDrawer.MENU_DRAG_CONTENT:
                 mContentContainer.removeAllViews();
                 LayoutInflater.from(getContext()).inflate(layoutResId, mContentContainer, true);
@@ -1059,8 +987,7 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @param view The desired content to display.
      */
-    public void setContentView(View view)
-    {
+    public void setContentView(View view) {
         setContentView(view, new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
 
@@ -1070,10 +997,8 @@ public abstract class MenuDrawer extends ViewGroup
      * @param view The desired content to display.
      * @param params Layout parameters for the view.
      */
-    public void setContentView(View view, LayoutParams params)
-    {
-        switch (mDragMode)
-        {
+    public void setContentView(View view, LayoutParams params) {
+        switch (mDragMode) {
             case MenuDrawer.MENU_DRAG_CONTENT:
                 mContentContainer.removeAllViews();
                 mContentContainer.addView(view, params);
@@ -1085,10 +1010,8 @@ public abstract class MenuDrawer extends ViewGroup
         }
     }
 
-    protected void setDrawerState(int state)
-    {
-        if (state != mDrawerState)
-        {
+    protected void setDrawerState(int state) {
+        if (state != mDrawerState) {
             final int oldState = mDrawerState;
             mDrawerState = state;
             if (mOnDrawerStateChangeListener != null)
@@ -1098,10 +1021,8 @@ public abstract class MenuDrawer extends ViewGroup
         }
     }
 
-    protected void logDrawerState(int state)
-    {
-        switch (state)
-        {
+    protected void logDrawerState(int state) {
+        switch (state) {
             case STATE_CLOSED:
                 Log.d(TAG, "[DrawerState] STATE_CLOSED");
                 break;
@@ -1154,16 +1075,13 @@ public abstract class MenuDrawer extends ViewGroup
     public abstract int getTouchBezelSize();
 
     @Override
-    public void postOnAnimation(Runnable runnable)
-    {
+    public void postOnAnimation(Runnable runnable) {
         RLAPICompat.postOnAnimation(this, runnable);
     }
 
     @Override
-    protected boolean fitSystemWindows(Rect insets)
-    {
-        if (mDragMode == MENU_DRAG_WINDOW)
-        {
+    protected boolean fitSystemWindows(Rect insets) {
+        if (mDragMode == MENU_DRAG_WINDOW) {
             mMenuContainer.setPadding(0, insets.top, 0, 0);
         }
         return super.fitSystemWindows(insets);
@@ -1174,16 +1092,14 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @return Returns a Parcelable containing the drawer state.
      */
-    public final Parcelable saveState()
-    {
+    public final Parcelable saveState() {
         if (mState == null)
             mState = new Bundle();
         saveState(mState);
         return mState;
     }
 
-    void saveState(Bundle state)
-    {
+    void saveState(Bundle state) {
         // State saving isn't required for subclasses.
     }
 
@@ -1192,14 +1108,12 @@ public abstract class MenuDrawer extends ViewGroup
      * 
      * @param in A parcelable containing the drawer state.
      */
-    public void restoreState(Parcelable in)
-    {
+    public void restoreState(Parcelable in) {
         mState = (Bundle) in;
     }
 
     @Override
-    protected Parcelable onSaveInstanceState()
-    {
+    protected Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
         SavedState state = new SavedState(superState);
 
@@ -1212,48 +1126,40 @@ public abstract class MenuDrawer extends ViewGroup
     }
 
     @Override
-    protected void onRestoreInstanceState(Parcelable state)
-    {
+    protected void onRestoreInstanceState(Parcelable state) {
         SavedState savedState = (SavedState) state;
         super.onRestoreInstanceState(savedState.getSuperState());
 
         restoreState(savedState.mState);
     }
 
-    static class SavedState extends BaseSavedState
-    {
+    static class SavedState extends BaseSavedState {
 
         Bundle mState;
 
-        public SavedState(Parcelable superState)
-        {
+        public SavedState(Parcelable superState) {
             super(superState);
         }
 
-        public SavedState(Parcel in)
-        {
+        public SavedState(Parcel in) {
             super(in);
             mState = in.readBundle();
         }
 
         @Override
-        public void writeToParcel(Parcel dest, int flags)
-        {
+        public void writeToParcel(Parcel dest, int flags) {
             super.writeToParcel(dest, flags);
             dest.writeBundle(mState);
         }
 
-        public static final Creator<SavedState> CREATOR = new Creator<SavedState>()
-        {
+        public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
             @Override
-            public SavedState createFromParcel(Parcel in)
-            {
+            public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
             }
 
             @Override
-            public SavedState[] newArray(int size)
-            {
+            public SavedState[] newArray(int size) {
                 return new SavedState[size];
             }
         };

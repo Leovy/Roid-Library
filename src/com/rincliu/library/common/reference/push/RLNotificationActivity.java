@@ -23,12 +23,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class RLNotificationActivity extends Activity
-{
+public class RLNotificationActivity extends Activity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RLNotificationEntity ne = (RLNotificationEntity) getIntent().getSerializableExtra("data");
         setTitle(ne.getTitle());
@@ -36,30 +34,21 @@ public class RLNotificationActivity extends Activity
         TextView tv_content = (TextView) findViewById(R.id.tv_content);
         tv_content.setText(ne.getContent());
         String x = ne.getExtra();
-        if (x != null && !x.equals(""))
-        {
+        if (x != null && !x.equals("")) {
             JSONObject object = null;
-            try
-            {
+            try {
                 object = new JSONObject(x);
-            }
-            catch (JSONException e)
-            {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if (object != null && object.has("data"))
-            {
+            if (object != null && object.has("data")) {
                 String data = null;
-                try
-                {
+                try {
                     data = object.get("data").toString();
-                }
-                catch (JSONException e)
-                {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if (data != null)
-                {
+                if (data != null) {
                     System.out.println(x);
                 }
             }

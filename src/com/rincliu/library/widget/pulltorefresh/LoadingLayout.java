@@ -41,8 +41,7 @@ import com.rincliu.library.widget.pulltorefresh.PullToRefreshBase.Orientation;
 import com.rincliu.library.R;
 
 @SuppressLint("ViewConstructor")
-public abstract class LoadingLayout extends FrameLayout implements ILoadingLayout
-{
+public abstract class LoadingLayout extends FrameLayout implements ILoadingLayout {
 
     static final String LOG_TAG = "PullToRefresh-LoadingLayout";
 
@@ -68,16 +67,14 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 
     private CharSequence mReleaseLabel;
 
-    public LoadingLayout(Context context, final Mode mode, final Orientation scrollDirection, TypedArray attrs)
-    {
+    public LoadingLayout(Context context, final Mode mode, final Orientation scrollDirection, TypedArray attrs) {
         super(context);
         mMode = mode;
         mScrollDirection = scrollDirection;
 
         resetPadding();
 
-        switch (scrollDirection)
-        {
+        switch (scrollDirection) {
             case HORIZONTAL:
                 LayoutInflater.from(context).inflate(R.layout.pulltorefresh_header_horizontal, this);
                 break;
@@ -93,8 +90,7 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
         mHeaderImage = (ImageView) findViewById(R.id.pull_to_refresh_image);
         mRefreshingLabel = context.getString(R.string.ptr_refreshing_label);
 
-        switch (mode)
-        {
+        switch (mode) {
             case PULL_FROM_END:
                 // Load in labels
                 mPullLabel = context.getString(R.string.ptr_pull_label_end);
@@ -109,84 +105,67 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
                 break;
         }
 
-        if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderBackground))
-        {
+        if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderBackground)) {
             Drawable background = attrs.getDrawable(R.styleable.PullToRefresh_ptrHeaderBackground);
-            if (null != background)
-            {
+            if (null != background) {
                 RLAPICompat.setBackground(this, background);
             }
         }
 
-        if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderTextAppearance))
-        {
+        if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderTextAppearance)) {
             TypedValue styleID = new TypedValue();
             attrs.getValue(R.styleable.PullToRefresh_ptrHeaderTextAppearance, styleID);
             setTextAppearance(styleID.data);
         }
-        if (attrs.hasValue(R.styleable.PullToRefresh_ptrSubHeaderTextAppearance))
-        {
+        if (attrs.hasValue(R.styleable.PullToRefresh_ptrSubHeaderTextAppearance)) {
             TypedValue styleID = new TypedValue();
             attrs.getValue(R.styleable.PullToRefresh_ptrSubHeaderTextAppearance, styleID);
             setSubTextAppearance(styleID.data);
         }
 
         // Text Color attrs need to be set after TextAppearance attrs
-        if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderTextColor))
-        {
+        if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderTextColor)) {
             ColorStateList colors = attrs.getColorStateList(R.styleable.PullToRefresh_ptrHeaderTextColor);
-            if (null != colors)
-            {
+            if (null != colors) {
                 setTextColor(colors);
             }
         }
-        if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderSubTextColor))
-        {
+        if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderSubTextColor)) {
             ColorStateList colors = attrs.getColorStateList(R.styleable.PullToRefresh_ptrHeaderSubTextColor);
-            if (null != colors)
-            {
+            if (null != colors) {
                 setSubTextColor(colors);
             }
         }
 
         // Try and get defined drawable from Attrs
         Drawable imageDrawable = null;
-        if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawable))
-        {
+        if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawable)) {
             imageDrawable = attrs.getDrawable(R.styleable.PullToRefresh_ptrDrawable);
         }
 
         // Check Specific Drawable from Attrs, these overrite the generic
         // drawable attr above
-        switch (mode)
-        {
+        switch (mode) {
             case PULL_FROM_START:
             default:
-                if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawableStart))
-                {
+                if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawableStart)) {
                     imageDrawable = attrs.getDrawable(R.styleable.PullToRefresh_ptrDrawableStart);
-                }
-                else if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawableTop))
-                {
+                } else if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawableTop)) {
                     imageDrawable = attrs.getDrawable(R.styleable.PullToRefresh_ptrDrawableTop);
                 }
                 break;
 
             case PULL_FROM_END:
-                if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawableEnd))
-                {
+                if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawableEnd)) {
                     imageDrawable = attrs.getDrawable(R.styleable.PullToRefresh_ptrDrawableEnd);
-                }
-                else if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawableBottom))
-                {
+                } else if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawableBottom)) {
                     imageDrawable = attrs.getDrawable(R.styleable.PullToRefresh_ptrDrawableBottom);
                 }
                 break;
         }
 
         // If we don't have a user defined drawable, load the default
-        if (null == imageDrawable)
-        {
+        if (null == imageDrawable) {
             imageDrawable = context.getResources().getDrawable(getDefaultDrawableResId());
         }
 
@@ -196,42 +175,34 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
         reset();
     }
 
-    public final void adjustHeightUsingBottomPadding(final int height)
-    {
+    public final void adjustHeightUsingBottomPadding(final int height) {
         setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), getPaddingBottom() + height
                 - getMeasuredHeight());
     }
 
-    public final void adjustHeightUsingTopPadding(final int height)
-    {
+    public final void adjustHeightUsingTopPadding(final int height) {
         setPadding(getPaddingLeft(), getPaddingTop() + height - getMeasuredHeight(), getPaddingRight(),
                 getPaddingBottom());
     }
 
-    public final void adjustWidthUsingLeftPadding(final int width)
-    {
+    public final void adjustWidthUsingLeftPadding(final int width) {
         setPadding(getPaddingLeft() + width - getMeasuredWidth(), getPaddingTop(), getPaddingRight(),
                 getPaddingBottom());
     }
 
-    public final void adjustWidthUsingRightPadding(final int width)
-    {
+    public final void adjustWidthUsingRightPadding(final int width) {
         setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight() + width - getMeasuredWidth(),
                 getPaddingBottom());
     }
 
-    public final void onPull(float scaleOfLayout)
-    {
-        if (!mUseIntrinsicAnimation)
-        {
+    public final void onPull(float scaleOfLayout) {
+        if (!mUseIntrinsicAnimation) {
             onPullImpl(scaleOfLayout);
         }
     }
 
-    public final void pullToRefresh()
-    {
-        if (null != mHeaderText)
-        {
+    public final void pullToRefresh() {
+        if (null != mHeaderText) {
             mHeaderText.setText(mPullLabel);
         }
 
@@ -239,33 +210,25 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
         pullToRefreshImpl();
     }
 
-    public final void refreshing()
-    {
-        if (null != mHeaderText)
-        {
+    public final void refreshing() {
+        if (null != mHeaderText) {
             mHeaderText.setText(mRefreshingLabel);
         }
 
-        if (mUseIntrinsicAnimation)
-        {
+        if (mUseIntrinsicAnimation) {
             ((AnimationDrawable) mHeaderImage.getDrawable()).start();
-        }
-        else
-        {
+        } else {
             // Now call the callback
             refreshingImpl();
         }
 
-        if (null != mSubHeaderText)
-        {
+        if (null != mSubHeaderText) {
             mSubHeaderText.setVisibility(View.GONE);
         }
     }
 
-    public final void releaseToRefresh()
-    {
-        if (null != mHeaderText)
-        {
+    public final void releaseToRefresh() {
+        if (null != mHeaderText) {
             mHeaderText.setText(mReleaseLabel);
         }
 
@@ -273,50 +236,38 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
         releaseToRefreshImpl();
     }
 
-    public final void reset()
-    {
-        if (null != mHeaderText)
-        {
+    public final void reset() {
+        if (null != mHeaderText) {
             mHeaderText.setText(mPullLabel);
         }
         mHeaderImage.setVisibility(View.VISIBLE);
 
-        if (mUseIntrinsicAnimation)
-        {
+        if (mUseIntrinsicAnimation) {
             ((AnimationDrawable) mHeaderImage.getDrawable()).stop();
-        }
-        else
-        {
+        } else {
             // Now call the callback
             resetImpl();
         }
 
-        if (null != mSubHeaderText)
-        {
-            if (TextUtils.isEmpty(mSubHeaderText.getText()))
-            {
+        if (null != mSubHeaderText) {
+            if (TextUtils.isEmpty(mSubHeaderText.getText())) {
                 mSubHeaderText.setVisibility(View.GONE);
-            }
-            else
-            {
+            } else {
                 mSubHeaderText.setVisibility(View.VISIBLE);
             }
         }
     }
 
-    public final void resetForMeasure()
-    {
+    public final void resetForMeasure() {
         resetPadding();
     }
 
     @Override
-    public void setLastUpdatedLabel(CharSequence label)
-    {
+    public void setLastUpdatedLabel(CharSequence label) {
         setSubHeaderText(label);
     }
 
-    public final void setLoadingDrawable(Drawable imageDrawable)
-    {
+    public final void setLoadingDrawable(Drawable imageDrawable) {
         // Set Drawable
         mHeaderImage.setImageDrawable(imageDrawable);
         mUseIntrinsicAnimation = (imageDrawable instanceof AnimationDrawable);
@@ -325,24 +276,20 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
         onLoadingDrawableSet(imageDrawable);
     }
 
-    public void setPullLabel(CharSequence pullLabel)
-    {
+    public void setPullLabel(CharSequence pullLabel) {
         mPullLabel = pullLabel;
     }
 
-    public void setRefreshingLabel(CharSequence refreshingLabel)
-    {
+    public void setRefreshingLabel(CharSequence refreshingLabel) {
         mRefreshingLabel = refreshingLabel;
     }
 
-    public void setReleaseLabel(CharSequence releaseLabel)
-    {
+    public void setReleaseLabel(CharSequence releaseLabel) {
         mReleaseLabel = releaseLabel;
     }
 
     @Override
-    public void setTextTypeface(Typeface tf)
-    {
+    public void setTextTypeface(Typeface tf) {
         mHeaderText.setTypeface(tf);
     }
 
@@ -364,8 +311,7 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 
     protected abstract void resetImpl();
 
-    private void resetPadding()
-    {
+    private void resetPadding() {
         Resources res = getResources();
         final int tbPadding = res.getDimensionPixelSize(R.dimen.ptr_header_footer_top_bottom_padding);
         final int lrPadding = res.getDimensionPixelSize(R.dimen.ptr_header_footer_left_right_padding);
@@ -373,58 +319,43 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 
     }
 
-    private void setSubHeaderText(CharSequence label)
-    {
-        if (null != mSubHeaderText)
-        {
-            if (TextUtils.isEmpty(label))
-            {
+    private void setSubHeaderText(CharSequence label) {
+        if (null != mSubHeaderText) {
+            if (TextUtils.isEmpty(label)) {
                 mSubHeaderText.setVisibility(View.GONE);
-            }
-            else
-            {
+            } else {
                 mSubHeaderText.setText(label);
                 mSubHeaderText.setVisibility(View.VISIBLE);
             }
         }
     }
 
-    private void setSubTextAppearance(int value)
-    {
-        if (null != mSubHeaderText)
-        {
+    private void setSubTextAppearance(int value) {
+        if (null != mSubHeaderText) {
             mSubHeaderText.setTextAppearance(getContext(), value);
         }
     }
 
-    private void setSubTextColor(ColorStateList color)
-    {
-        if (null != mSubHeaderText)
-        {
+    private void setSubTextColor(ColorStateList color) {
+        if (null != mSubHeaderText) {
             mSubHeaderText.setTextColor(color);
         }
     }
 
-    private void setTextAppearance(int value)
-    {
-        if (null != mHeaderText)
-        {
+    private void setTextAppearance(int value) {
+        if (null != mHeaderText) {
             mHeaderText.setTextAppearance(getContext(), value);
         }
-        if (null != mSubHeaderText)
-        {
+        if (null != mSubHeaderText) {
             mSubHeaderText.setTextAppearance(getContext(), value);
         }
     }
 
-    private void setTextColor(ColorStateList color)
-    {
-        if (null != mHeaderText)
-        {
+    private void setTextColor(ColorStateList color) {
+        if (null != mHeaderText) {
             mHeaderText.setTextColor(color);
         }
-        if (null != mSubHeaderText)
-        {
+        if (null != mSubHeaderText) {
             mSubHeaderText.setTextColor(color);
         }
     }

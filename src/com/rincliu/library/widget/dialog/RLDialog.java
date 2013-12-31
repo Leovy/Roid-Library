@@ -22,8 +22,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 
-public abstract class RLDialog extends Dialog
-{
+public abstract class RLDialog extends Dialog {
     private Window window;
 
     private LayoutParams layoutParams;
@@ -31,8 +30,7 @@ public abstract class RLDialog extends Dialog
     /**
      * @param context
      */
-    public RLDialog(Context context)
-    {
+    public RLDialog(Context context) {
         super(context, R.style.DIALOG_THEME);
     }
 
@@ -40,16 +38,14 @@ public abstract class RLDialog extends Dialog
      * @param context
      * @param theme
      */
-    public RLDialog(Context context, int theme)
-    {
+    public RLDialog(Context context, int theme) {
         super(context, theme);
     }
 
     /**
 	 * 
 	 */
-    public void createView()
-    {
+    public void createView() {
         super.setContentView(getView());
         window = getWindow();
         layoutParams = window.getAttributes();
@@ -64,10 +60,8 @@ public abstract class RLDialog extends Dialog
      * @param xPos
      * @param yPos
      */
-    public void setWindowPosition(int xPos, int yPos)
-    {
-        if (layoutParams == null)
-        {
+    public void setWindowPosition(int xPos, int yPos) {
+        if (layoutParams == null) {
             throw new RuntimeException("createView() should be called before this method!");
         }
         layoutParams.x = xPos;
@@ -78,10 +72,8 @@ public abstract class RLDialog extends Dialog
      * @param width
      * @param height
      */
-    public void setWindowSize(int width, int height)
-    {
-        if (layoutParams == null)
-        {
+    public void setWindowSize(int width, int height) {
+        if (layoutParams == null) {
             throw new RuntimeException("createView() should be called before this method!");
         }
         layoutParams.width = width;
@@ -91,10 +83,8 @@ public abstract class RLDialog extends Dialog
     /**
      * @return
      */
-    public int getWindowWidth()
-    {
-        if (layoutParams == null)
-        {
+    public int getWindowWidth() {
+        if (layoutParams == null) {
             throw new RuntimeException("createView() should be called before this method!");
         }
         return layoutParams.width;
@@ -103,10 +93,8 @@ public abstract class RLDialog extends Dialog
     /**
      * @return
      */
-    public int getWindowHeight()
-    {
-        if (layoutParams == null)
-        {
+    public int getWindowHeight() {
+        if (layoutParams == null) {
             throw new RuntimeException("createView() should be called before this method!");
         }
         return layoutParams.height;
@@ -115,10 +103,8 @@ public abstract class RLDialog extends Dialog
     /**
      * @param gravity
      */
-    public void setWindowGravity(int gravity)
-    {
-        if (window == null)
-        {
+    public void setWindowGravity(int gravity) {
+        if (window == null) {
             throw new RuntimeException("createView() should be called before this method!");
         }
         window.setGravity(gravity);
@@ -127,10 +113,8 @@ public abstract class RLDialog extends Dialog
     /**
      * @param bgAlpha
      */
-    public void setWindowBgAlpha(float bgAlpha)
-    {
-        if (layoutParams == null)
-        {
+    public void setWindowBgAlpha(float bgAlpha) {
+        if (layoutParams == null) {
             throw new RuntimeException("createView() should be called before this method!");
         }
         layoutParams.dimAmount = bgAlpha;
@@ -139,10 +123,8 @@ public abstract class RLDialog extends Dialog
     /**
      * @param anims
      */
-    public void setWindowAnimations(int anims)
-    {
-        if (window == null)
-        {
+    public void setWindowAnimations(int anims) {
+        if (window == null) {
             throw new RuntimeException("createView() should be called before this method!");
         }
         window.setWindowAnimations(anims);
@@ -151,10 +133,8 @@ public abstract class RLDialog extends Dialog
     /**
      * @param alpha
      */
-    public void setWindowAlpha(float alpha)
-    {
-        if (layoutParams == null)
-        {
+    public void setWindowAlpha(float alpha) {
+        if (layoutParams == null) {
             throw new RuntimeException("createView() should be called before this method!");
         }
         layoutParams.alpha = alpha;

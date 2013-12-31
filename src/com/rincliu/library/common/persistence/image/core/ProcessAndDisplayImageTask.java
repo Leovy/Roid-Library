@@ -30,8 +30,7 @@ import com.rincliu.library.common.persistence.image.utils.L;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.8.0
  */
-class ProcessAndDisplayImageTask implements Runnable
-{
+class ProcessAndDisplayImageTask implements Runnable {
 
     private static final String LOG_POSTPROCESS_IMAGE = "PostProcess image before displaying [%s]";
 
@@ -44,8 +43,7 @@ class ProcessAndDisplayImageTask implements Runnable
     private final Handler handler;
 
     public ProcessAndDisplayImageTask(ImageLoaderEngine engine, Bitmap bitmap, ImageLoadingInfo imageLoadingInfo,
-            Handler handler)
-    {
+            Handler handler) {
         this.engine = engine;
         this.bitmap = bitmap;
         this.imageLoadingInfo = imageLoadingInfo;
@@ -53,8 +51,7 @@ class ProcessAndDisplayImageTask implements Runnable
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         if (engine.configuration.writeLogs)
             L.d(LOG_POSTPROCESS_IMAGE, imageLoadingInfo.memoryCacheKey);
         BitmapProcessor processor = imageLoadingInfo.options.getPostProcessor();

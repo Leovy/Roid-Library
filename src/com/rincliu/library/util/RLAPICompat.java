@@ -24,8 +24,7 @@ import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 
 @SuppressWarnings("deprecation")
-public class RLAPICompat
-{
+public class RLAPICompat {
 
     private static final int VERSION = android.os.Build.VERSION.SDK_INT;
 
@@ -33,14 +32,10 @@ public class RLAPICompat
      * @param view
      * @param runnable
      */
-    public static void postOnAnimation(View view, Runnable runnable)
-    {
-        if (VERSION >= 16)
-        {
+    public static void postOnAnimation(View view, Runnable runnable) {
+        if (VERSION >= 16) {
             SDK16.postOnAnimation(view, runnable);
-        }
-        else
-        {
+        } else {
             view.postDelayed(runnable, 16);
         }
     }
@@ -49,14 +44,10 @@ public class RLAPICompat
      * @param view
      * @param drawable
      */
-    public static void setBackground(View view, Drawable drawable)
-    {
-        if (VERSION >= 16)
-        {
+    public static void setBackground(View view, Drawable drawable) {
+        if (VERSION >= 16) {
             SDK16.setBackground(view, drawable);
-        }
-        else
-        {
+        } else {
             view.setBackgroundDrawable(drawable);
         }
     }
@@ -65,10 +56,8 @@ public class RLAPICompat
      * @param view
      * @param layerType
      */
-    public static void setLayerType(View view, int layerType)
-    {
-        if (VERSION >= 11)
-        {
+    public static void setLayerType(View view, int layerType) {
+        if (VERSION >= 11) {
             SDK11.setLayerType(view, layerType);
         }
     }
@@ -78,14 +67,10 @@ public class RLAPICompat
      * @param onGlobalLayoutListener
      */
     public static void removeGlobalLayoutListener(ViewTreeObserver viewTreeObserver,
-            OnGlobalLayoutListener onGlobalLayoutListener)
-    {
-        if (VERSION >= 16)
-        {
+            OnGlobalLayoutListener onGlobalLayoutListener) {
+        if (VERSION >= 16) {
             SDK16.removeGlobalLayoutListener(viewTreeObserver, onGlobalLayoutListener);
-        }
-        else
-        {
+        } else {
             viewTreeObserver.removeGlobalOnLayoutListener(onGlobalLayoutListener);
         }
     }
@@ -93,11 +78,9 @@ public class RLAPICompat
     /**
      * @return
      */
-    public static long getBlockSize()
-    {
+    public static long getBlockSize() {
         long size = 0;
-        if (Environment.getExternalStorageDirectory() != null)
-        {
+        if (Environment.getExternalStorageDirectory() != null) {
             StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
             size = VERSION >= 18 ? SDK18.getBlockSize() : (long) stat.getBlockSize();
         }
@@ -107,11 +90,9 @@ public class RLAPICompat
     /**
      * @return
      */
-    public static long getBlockCount()
-    {
+    public static long getBlockCount() {
         long size = 0;
-        if (Environment.getExternalStorageDirectory() != null)
-        {
+        if (Environment.getExternalStorageDirectory() != null) {
             StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
             size = VERSION >= 18 ? SDK18.getBlockCount() : (long) stat.getBlockCount();
         }
@@ -121,11 +102,9 @@ public class RLAPICompat
     /**
      * @return
      */
-    public static long getFreeBlocks()
-    {
+    public static long getFreeBlocks() {
         long size = 0;
-        if (Environment.getExternalStorageDirectory() != null)
-        {
+        if (Environment.getExternalStorageDirectory() != null) {
             StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
             size = VERSION >= 18 ? SDK18.getFreeBlocks() : (long) stat.getFreeBlocks();
         }
@@ -135,11 +114,9 @@ public class RLAPICompat
     /**
      * @return
      */
-    public static long getAvailableBlocks()
-    {
+    public static long getAvailableBlocks() {
         long size = 0;
-        if (Environment.getExternalStorageDirectory() != null)
-        {
+        if (Environment.getExternalStorageDirectory() != null) {
             StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
             size = VERSION >= 18 ? SDK18.getAvailableBlocks() : (long) stat.getAvailableBlocks();
         }
@@ -147,74 +124,59 @@ public class RLAPICompat
     }
 
     @TargetApi(11)
-    private static class SDK11
-    {
-        public static void setLayerType(View view, int layerType)
-        {
+    private static class SDK11 {
+        public static void setLayerType(View view, int layerType) {
             view.setLayerType(layerType, null);
         }
     }
 
     @TargetApi(16)
-    private static class SDK16
-    {
-        public static void postOnAnimation(View view, Runnable runnable)
-        {
+    private static class SDK16 {
+        public static void postOnAnimation(View view, Runnable runnable) {
             view.postOnAnimation(runnable);
         }
 
-        public static void setBackground(View view, Drawable background)
-        {
+        public static void setBackground(View view, Drawable background) {
             view.setBackground(background);
         }
 
-        public static void removeGlobalLayoutListener(ViewTreeObserver observer, OnGlobalLayoutListener listener)
-        {
+        public static void removeGlobalLayoutListener(ViewTreeObserver observer, OnGlobalLayoutListener listener) {
             observer.removeOnGlobalLayoutListener(listener);
         }
     }
 
     @TargetApi(18)
-    private static class SDK18
-    {
-        public static long getBlockSize()
-        {
+    private static class SDK18 {
+        public static long getBlockSize() {
             long size = 0;
-            if (Environment.getExternalStorageDirectory() != null)
-            {
+            if (Environment.getExternalStorageDirectory() != null) {
                 StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
                 size = stat.getBlockSizeLong();
             }
             return size;
         }
 
-        public static long getBlockCount()
-        {
+        public static long getBlockCount() {
             long size = 0;
-            if (Environment.getExternalStorageDirectory() != null)
-            {
+            if (Environment.getExternalStorageDirectory() != null) {
                 StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
                 size = stat.getBlockCountLong();
             }
             return size;
         }
 
-        public static long getFreeBlocks()
-        {
+        public static long getFreeBlocks() {
             long size = 0;
-            if (Environment.getExternalStorageDirectory() != null)
-            {
+            if (Environment.getExternalStorageDirectory() != null) {
                 StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
                 size = stat.getFreeBlocksLong();
             }
             return size;
         }
 
-        public static long getAvailableBlocks()
-        {
+        public static long getAvailableBlocks() {
             long size = 0;
-            if (Environment.getExternalStorageDirectory() != null)
-            {
+            if (Environment.getExternalStorageDirectory() != null) {
                 StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
                 size = stat.getAvailableBlocksLong();
             }

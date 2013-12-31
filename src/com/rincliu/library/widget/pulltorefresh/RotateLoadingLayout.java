@@ -27,8 +27,7 @@ import com.rincliu.library.R;
 import com.rincliu.library.widget.pulltorefresh.PullToRefreshBase.Mode;
 import com.rincliu.library.widget.pulltorefresh.PullToRefreshBase.Orientation;
 
-public class RotateLoadingLayout extends LoadingLayout
-{
+public class RotateLoadingLayout extends LoadingLayout {
 
     static final int ROTATION_ANIMATION_DURATION = 1200;
 
@@ -40,8 +39,7 @@ public class RotateLoadingLayout extends LoadingLayout
 
     private final boolean mRotateDrawableWhilePulling;
 
-    public RotateLoadingLayout(Context context, Mode mode, Orientation scrollDirection, TypedArray attrs)
-    {
+    public RotateLoadingLayout(Context context, Mode mode, Orientation scrollDirection, TypedArray attrs) {
         super(context, mode, scrollDirection, attrs);
 
         mRotateDrawableWhilePulling = attrs.getBoolean(R.styleable.PullToRefresh_ptrRotateDrawableWhilePulling, true);
@@ -58,24 +56,18 @@ public class RotateLoadingLayout extends LoadingLayout
         mRotateAnimation.setRepeatMode(Animation.RESTART);
     }
 
-    public void onLoadingDrawableSet(Drawable imageDrawable)
-    {
-        if (null != imageDrawable)
-        {
+    public void onLoadingDrawableSet(Drawable imageDrawable) {
+        if (null != imageDrawable) {
             mRotationPivotX = imageDrawable.getIntrinsicWidth() / 2f;
             mRotationPivotY = imageDrawable.getIntrinsicHeight() / 2f;
         }
     }
 
-    protected void onPullImpl(float scaleOfLayout)
-    {
+    protected void onPullImpl(float scaleOfLayout) {
         float angle;
-        if (mRotateDrawableWhilePulling)
-        {
+        if (mRotateDrawableWhilePulling) {
             angle = scaleOfLayout * 90f;
-        }
-        else
-        {
+        } else {
             angle = Math.max(0f, Math.min(180f, scaleOfLayout * 360f - 180f));
         }
 
@@ -84,42 +76,35 @@ public class RotateLoadingLayout extends LoadingLayout
     }
 
     @Override
-    protected void refreshingImpl()
-    {
+    protected void refreshingImpl() {
         mHeaderImage.startAnimation(mRotateAnimation);
     }
 
     @Override
-    protected void resetImpl()
-    {
+    protected void resetImpl() {
         mHeaderImage.clearAnimation();
         resetImageRotation();
     }
 
-    private void resetImageRotation()
-    {
-        if (null != mHeaderImageMatrix)
-        {
+    private void resetImageRotation() {
+        if (null != mHeaderImageMatrix) {
             mHeaderImageMatrix.reset();
             mHeaderImage.setImageMatrix(mHeaderImageMatrix);
         }
     }
 
     @Override
-    protected void pullToRefreshImpl()
-    {
+    protected void pullToRefreshImpl() {
         // NO-OP
     }
 
     @Override
-    protected void releaseToRefreshImpl()
-    {
+    protected void releaseToRefreshImpl() {
         // NO-OP
     }
 
     @Override
-    protected int getDefaultDrawableResId()
-    {
+    protected int getDefaultDrawableResId() {
         return R.drawable.pulltorefresh_rotate;
     }
 }

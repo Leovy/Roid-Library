@@ -25,8 +25,7 @@ import cn.jpush.android.api.JPushInterface;
 import android.app.Notification;
 import android.content.Context;
 
-public class RLPushHelper
-{
+public class RLPushHelper {
     private static RLPushHelper helper;
 
     private static Context mContext;
@@ -37,19 +36,15 @@ public class RLPushHelper
      * @param context
      * @return
      */
-    public static RLPushHelper getInstance(Context context)
-    {
-        if (helper == null)
-        {
+    public static RLPushHelper getInstance(Context context) {
+        if (helper == null) {
             helper = new RLPushHelper(context);
         }
         return helper;
     }
 
-    private RLPushHelper(Context context)
-    {
-        if (mContext == null)
-        {
+    private RLPushHelper(Context context) {
+        if (mContext == null) {
             mContext = context.getApplicationContext();
         }
     }
@@ -57,8 +52,7 @@ public class RLPushHelper
     /**
      * @param isDebug
      */
-    public void init(boolean isDebug)
-    {
+    public void init(boolean isDebug) {
         JPushInterface.setDebugMode(isDebug);
         JPushInterface.init(mContext);
         JPushInterface.setLatestNotifactionNumber(mContext, LASTEST_NOTIFICATION_NUMBER);
@@ -72,16 +66,14 @@ public class RLPushHelper
     /**
 	 * 
 	 */
-    public void stop()
-    {
+    public void stop() {
         JPushInterface.stopPush(mContext);
     }
 
     /**
 	 * 
 	 */
-    public void resume()
-    {
+    public void resume() {
         JPushInterface.resumePush(mContext);
     }
 
@@ -90,8 +82,7 @@ public class RLPushHelper
      * @param startHour 范围0-23
      * @param endHour 范围0-23
      */
-    public void setTime(HashSet<Integer> weekDays, int startHour, int endHour)
-    {
+    public void setTime(HashSet<Integer> weekDays, int startHour, int endHour) {
         JPushInterface.setPushTime(mContext, weekDays, startHour, endHour);
     }
 
@@ -99,10 +90,8 @@ public class RLPushHelper
      * @param str
      * @return
      */
-    public boolean isValidAliasAndTags(String str)
-    {
-        if (str == null || str.equals("") || str.length() > 40)
-        {
+    public boolean isValidAliasAndTags(String str) {
+        if (str == null || str.equals("") || str.length() > 40) {
             return false;
         }
         Pattern p = Pattern.compile("^[\u4E00-\u9FA50-9a-zA-Z_-]{0,}$");
@@ -114,8 +103,7 @@ public class RLPushHelper
      * @param alias 最大长度40
      * @param tags 最大长度40，最多100个
      */
-    public void setAliasAndTags(String alias, LinkedHashSet<String> tags)
-    {
+    public void setAliasAndTags(String alias, LinkedHashSet<String> tags) {
         JPushInterface.setAliasAndTags(mContext, alias, tags);
     }
 }

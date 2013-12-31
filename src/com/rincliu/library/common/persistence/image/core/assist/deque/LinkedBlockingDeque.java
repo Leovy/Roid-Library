@@ -41,8 +41,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Doug Lea
  * @param <E> the type of elements held in this collection
  */
-public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements BlockingDeque<E>, java.io.Serializable
-{
+public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements BlockingDeque<E>, java.io.Serializable {
 
     /*
      * Implemented as a simple doubly-linked list protected by a single lock
@@ -70,8 +69,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
     private static final long serialVersionUID = -387911632671998426L;
 
     /** Doubly-linked list node class */
-    static final class Node<E>
-    {
+    static final class Node<E> {
         /**
          * The item, or null if this node has been removed.
          */
@@ -89,8 +87,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
          */
         Node<E> next;
 
-        Node(E x)
-        {
+        Node(E x) {
             item = x;
         }
     }
@@ -126,8 +123,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * Creates a {@code LinkedBlockingDeque} with a capacity of
      * {@link Integer#MAX_VALUE}.
      */
-    public LinkedBlockingDeque()
-    {
+    public LinkedBlockingDeque() {
         this(Integer.MAX_VALUE);
     }
 
@@ -137,8 +133,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * @param capacity the capacity of this deque
      * @throws IllegalArgumentException if {@code capacity} is less than 1
      */
-    public LinkedBlockingDeque(int capacity)
-    {
+    public LinkedBlockingDeque(int capacity) {
         if (capacity <= 0)
             throw new IllegalArgumentException();
         this.capacity = capacity;
@@ -154,23 +149,18 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * @throws NullPointerException if the specified collection or any of its
      *             elements are null
      */
-    public LinkedBlockingDeque(Collection<? extends E> c)
-    {
+    public LinkedBlockingDeque(Collection<? extends E> c) {
         this(Integer.MAX_VALUE);
         final ReentrantLock lock = this.lock;
         lock.lock(); // Never contended, but necessary for visibility
-        try
-        {
-            for (E e : c)
-            {
+        try {
+            for (E e : c) {
                 if (e == null)
                     throw new NullPointerException();
                 if (!linkLast(new Node<E>(e)))
                     throw new IllegalStateException("Deque full");
             }
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -180,8 +170,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
     /**
      * Links node as first element, or returns false if full.
      */
-    private boolean linkFirst(Node<E> node)
-    {
+    private boolean linkFirst(Node<E> node) {
         // assert lock.isHeldByCurrentThread();
         if (count >= capacity)
             return false;
@@ -200,8 +189,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
     /**
      * Links node as last element, or returns false if full.
      */
-    private boolean linkLast(Node<E> node)
-    {
+    private boolean linkLast(Node<E> node) {
         // assert lock.isHeldByCurrentThread();
         if (count >= capacity)
             return false;
@@ -220,8 +208,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
     /**
      * Removes and returns first element, or null if empty.
      */
-    private E unlinkFirst()
-    {
+    private E unlinkFirst() {
         // assert lock.isHeldByCurrentThread();
         Node<E> f = first;
         if (f == null)
@@ -243,8 +230,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
     /**
      * Removes and returns last element, or null if empty.
      */
-    private E unlinkLast()
-    {
+    private E unlinkLast() {
         // assert lock.isHeldByCurrentThread();
         Node<E> l = last;
         if (l == null)
@@ -266,21 +252,15 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
     /**
      * Unlinks x.
      */
-    void unlink(Node<E> x)
-    {
+    void unlink(Node<E> x) {
         // assert lock.isHeldByCurrentThread();
         Node<E> p = x.prev;
         Node<E> n = x.next;
-        if (p == null)
-        {
+        if (p == null) {
             unlinkFirst();
-        }
-        else if (n == null)
-        {
+        } else if (n == null) {
             unlinkLast();
-        }
-        else
-        {
+        } else {
             p.next = n;
             n.prev = p;
             x.item = null;
@@ -297,8 +277,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * @throws IllegalStateException {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public void addFirst(E e)
-    {
+    public void addFirst(E e) {
         if (!offerFirst(e))
             throw new IllegalStateException("Deque full");
     }
@@ -307,8 +286,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * @throws IllegalStateException {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public void addLast(E e)
-    {
+    public void addLast(E e) {
         if (!offerLast(e))
             throw new IllegalStateException("Deque full");
     }
@@ -316,19 +294,15 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
     /**
      * @throws NullPointerException {@inheritDoc}
      */
-    public boolean offerFirst(E e)
-    {
+    public boolean offerFirst(E e) {
         if (e == null)
             throw new NullPointerException();
         Node<E> node = new Node<E>(e);
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
+        try {
             return linkFirst(node);
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -336,19 +310,15 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
     /**
      * @throws NullPointerException {@inheritDoc}
      */
-    public boolean offerLast(E e)
-    {
+    public boolean offerLast(E e) {
         if (e == null)
             throw new NullPointerException();
         Node<E> node = new Node<E>(e);
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
+        try {
             return linkLast(node);
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -357,20 +327,16 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * @throws NullPointerException {@inheritDoc}
      * @throws InterruptedException {@inheritDoc}
      */
-    public void putFirst(E e) throws InterruptedException
-    {
+    public void putFirst(E e) throws InterruptedException {
         if (e == null)
             throw new NullPointerException();
         Node<E> node = new Node<E>(e);
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
+        try {
             while (!linkFirst(node))
                 notFull.await();
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -379,20 +345,16 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * @throws NullPointerException {@inheritDoc}
      * @throws InterruptedException {@inheritDoc}
      */
-    public void putLast(E e) throws InterruptedException
-    {
+    public void putLast(E e) throws InterruptedException {
         if (e == null)
             throw new NullPointerException();
         Node<E> node = new Node<E>(e);
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
+        try {
             while (!linkLast(node))
                 notFull.await();
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -401,26 +363,21 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * @throws NullPointerException {@inheritDoc}
      * @throws InterruptedException {@inheritDoc}
      */
-    public boolean offerFirst(E e, long timeout, TimeUnit unit) throws InterruptedException
-    {
+    public boolean offerFirst(E e, long timeout, TimeUnit unit) throws InterruptedException {
         if (e == null)
             throw new NullPointerException();
         Node<E> node = new Node<E>(e);
         long nanos = unit.toNanos(timeout);
         final ReentrantLock lock = this.lock;
         lock.lockInterruptibly();
-        try
-        {
-            while (!linkFirst(node))
-            {
+        try {
+            while (!linkFirst(node)) {
                 if (nanos <= 0)
                     return false;
                 nanos = notFull.awaitNanos(nanos);
             }
             return true;
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -429,26 +386,21 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * @throws NullPointerException {@inheritDoc}
      * @throws InterruptedException {@inheritDoc}
      */
-    public boolean offerLast(E e, long timeout, TimeUnit unit) throws InterruptedException
-    {
+    public boolean offerLast(E e, long timeout, TimeUnit unit) throws InterruptedException {
         if (e == null)
             throw new NullPointerException();
         Node<E> node = new Node<E>(e);
         long nanos = unit.toNanos(timeout);
         final ReentrantLock lock = this.lock;
         lock.lockInterruptibly();
-        try
-        {
-            while (!linkLast(node))
-            {
+        try {
+            while (!linkLast(node)) {
                 if (nanos <= 0)
                     return false;
                 nanos = notFull.awaitNanos(nanos);
             }
             return true;
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -456,8 +408,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
     /**
      * @throws NoSuchElementException {@inheritDoc}
      */
-    public E removeFirst()
-    {
+    public E removeFirst() {
         E x = pollFirst();
         if (x == null)
             throw new NoSuchElementException();
@@ -467,116 +418,89 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
     /**
      * @throws NoSuchElementException {@inheritDoc}
      */
-    public E removeLast()
-    {
+    public E removeLast() {
         E x = pollLast();
         if (x == null)
             throw new NoSuchElementException();
         return x;
     }
 
-    public E pollFirst()
-    {
+    public E pollFirst() {
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
+        try {
             return unlinkFirst();
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
 
-    public E pollLast()
-    {
+    public E pollLast() {
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
+        try {
             return unlinkLast();
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
 
-    public E takeFirst() throws InterruptedException
-    {
+    public E takeFirst() throws InterruptedException {
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
+        try {
             E x;
             while ((x = unlinkFirst()) == null)
                 notEmpty.await();
             return x;
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
 
-    public E takeLast() throws InterruptedException
-    {
+    public E takeLast() throws InterruptedException {
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
+        try {
             E x;
             while ((x = unlinkLast()) == null)
                 notEmpty.await();
             return x;
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
 
-    public E pollFirst(long timeout, TimeUnit unit) throws InterruptedException
-    {
+    public E pollFirst(long timeout, TimeUnit unit) throws InterruptedException {
         long nanos = unit.toNanos(timeout);
         final ReentrantLock lock = this.lock;
         lock.lockInterruptibly();
-        try
-        {
+        try {
             E x;
-            while ((x = unlinkFirst()) == null)
-            {
+            while ((x = unlinkFirst()) == null) {
                 if (nanos <= 0)
                     return null;
                 nanos = notEmpty.awaitNanos(nanos);
             }
             return x;
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
 
-    public E pollLast(long timeout, TimeUnit unit) throws InterruptedException
-    {
+    public E pollLast(long timeout, TimeUnit unit) throws InterruptedException {
         long nanos = unit.toNanos(timeout);
         final ReentrantLock lock = this.lock;
         lock.lockInterruptibly();
-        try
-        {
+        try {
             E x;
-            while ((x = unlinkLast()) == null)
-            {
+            while ((x = unlinkLast()) == null) {
                 if (nanos <= 0)
                     return null;
                 nanos = notEmpty.awaitNanos(nanos);
             }
             return x;
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -584,8 +508,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
     /**
      * @throws NoSuchElementException {@inheritDoc}
      */
-    public E getFirst()
-    {
+    public E getFirst() {
         E x = peekFirst();
         if (x == null)
             throw new NoSuchElementException();
@@ -595,86 +518,65 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
     /**
      * @throws NoSuchElementException {@inheritDoc}
      */
-    public E getLast()
-    {
+    public E getLast() {
         E x = peekLast();
         if (x == null)
             throw new NoSuchElementException();
         return x;
     }
 
-    public E peekFirst()
-    {
+    public E peekFirst() {
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
+        try {
             return (first == null) ? null : first.item;
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
 
-    public E peekLast()
-    {
+    public E peekLast() {
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
+        try {
             return (last == null) ? null : last.item;
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
 
-    public boolean removeFirstOccurrence(Object o)
-    {
+    public boolean removeFirstOccurrence(Object o) {
         if (o == null)
             return false;
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
-            for (Node<E> p = first; p != null; p = p.next)
-            {
-                if (o.equals(p.item))
-                {
+        try {
+            for (Node<E> p = first; p != null; p = p.next) {
+                if (o.equals(p.item)) {
                     unlink(p);
                     return true;
                 }
             }
             return false;
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
 
-    public boolean removeLastOccurrence(Object o)
-    {
+    public boolean removeLastOccurrence(Object o) {
         if (o == null)
             return false;
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
-            for (Node<E> p = last; p != null; p = p.prev)
-            {
-                if (o.equals(p.item))
-                {
+        try {
+            for (Node<E> p = last; p != null; p = p.prev) {
+                if (o.equals(p.item)) {
                     unlink(p);
                     return true;
                 }
             }
             return false;
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -692,8 +594,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      *             time due to capacity restrictions
      * @throws NullPointerException if the specified element is null
      */
-    public boolean add(E e)
-    {
+    public boolean add(E e) {
         addLast(e);
         return true;
     }
@@ -701,8 +602,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
     /**
      * @throws NullPointerException if the specified element is null
      */
-    public boolean offer(E e)
-    {
+    public boolean offer(E e) {
         return offerLast(e);
     }
 
@@ -710,8 +610,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * @throws NullPointerException {@inheritDoc}
      * @throws InterruptedException {@inheritDoc}
      */
-    public void put(E e) throws InterruptedException
-    {
+    public void put(E e) throws InterruptedException {
         putLast(e);
     }
 
@@ -719,8 +618,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * @throws NullPointerException {@inheritDoc}
      * @throws InterruptedException {@inheritDoc}
      */
-    public boolean offer(E e, long timeout, TimeUnit unit) throws InterruptedException
-    {
+    public boolean offer(E e, long timeout, TimeUnit unit) throws InterruptedException {
         return offerLast(e, timeout, unit);
     }
 
@@ -734,23 +632,19 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * @return the head of the queue represented by this deque
      * @throws NoSuchElementException if this deque is empty
      */
-    public E remove()
-    {
+    public E remove() {
         return removeFirst();
     }
 
-    public E poll()
-    {
+    public E poll() {
         return pollFirst();
     }
 
-    public E take() throws InterruptedException
-    {
+    public E take() throws InterruptedException {
         return takeFirst();
     }
 
-    public E poll(long timeout, TimeUnit unit) throws InterruptedException
-    {
+    public E poll(long timeout, TimeUnit unit) throws InterruptedException {
         return pollFirst(timeout, unit);
     }
 
@@ -764,13 +658,11 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * @return the head of the queue represented by this deque
      * @throws NoSuchElementException if this deque is empty
      */
-    public E element()
-    {
+    public E element() {
         return getFirst();
     }
 
-    public E peek()
-    {
+    public E peek() {
         return peekFirst();
     }
 
@@ -785,16 +677,12 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * may be the case that another thread is about to insert or remove an
      * element.
      */
-    public int remainingCapacity()
-    {
+    public int remainingCapacity() {
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
+        try {
             return capacity - count;
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -805,8 +693,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * @throws NullPointerException {@inheritDoc}
      * @throws IllegalArgumentException {@inheritDoc}
      */
-    public int drainTo(Collection<? super E> c)
-    {
+    public int drainTo(Collection<? super E> c) {
         return drainTo(c, Integer.MAX_VALUE);
     }
 
@@ -816,26 +703,21 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * @throws NullPointerException {@inheritDoc}
      * @throws IllegalArgumentException {@inheritDoc}
      */
-    public int drainTo(Collection<? super E> c, int maxElements)
-    {
+    public int drainTo(Collection<? super E> c, int maxElements) {
         if (c == null)
             throw new NullPointerException();
         if (c == this)
             throw new IllegalArgumentException();
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
+        try {
             int n = Math.min(maxElements, count);
-            for (int i = 0; i < n; i++)
-            {
+            for (int i = 0; i < n; i++) {
                 c.add(first.item); // In this order, in case add() throws.
                 unlinkFirst();
             }
             return n;
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -846,16 +728,14 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * @throws IllegalStateException {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public void push(E e)
-    {
+    public void push(E e) {
         addFirst(e);
     }
 
     /**
      * @throws NoSuchElementException {@inheritDoc}
      */
-    public E pop()
-    {
+    public E pop() {
         return removeFirst();
     }
 
@@ -875,8 +755,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * @param o element to be removed from this deque, if present
      * @return {@code true} if this deque changed as a result of the call
      */
-    public boolean remove(Object o)
-    {
+    public boolean remove(Object o) {
         return removeFirstOccurrence(o);
     }
 
@@ -885,16 +764,12 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * 
      * @return the number of elements in this deque
      */
-    public int size()
-    {
+    public int size() {
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
+        try {
             return count;
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -907,21 +782,17 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * @param o object to be checked for containment in this deque
      * @return {@code true} if this deque contains the specified element
      */
-    public boolean contains(Object o)
-    {
+    public boolean contains(Object o) {
         if (o == null)
             return false;
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
+        try {
             for (Node<E> p = first; p != null; p = p.next)
                 if (o.equals(p.item))
                     return true;
             return false;
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -979,20 +850,16 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * 
      * @return an array containing all of the elements in this deque
      */
-    public Object[] toArray()
-    {
+    public Object[] toArray() {
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
+        try {
             Object[] a = new Object[count];
             int k = 0;
             for (Node<E> p = first; p != null; p = p.next)
                 a[k++] = p.item;
             return a;
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -1034,12 +901,10 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * @throws NullPointerException if the specified array is null
      */
     @SuppressWarnings("unchecked")
-    public <T> T[] toArray(T[] a)
-    {
+    public <T> T[] toArray(T[] a) {
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
+        try {
             if (a.length < count)
                 a = (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), count);
 
@@ -1049,27 +914,22 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
             if (a.length > k)
                 a[k] = null;
             return a;
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
 
-    public String toString()
-    {
+    public String toString() {
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
+        try {
             Node<E> p = first;
             if (p == null)
                 return "[]";
 
             StringBuilder sb = new StringBuilder();
             sb.append('[');
-            for (;;)
-            {
+            for (;;) {
                 E e = p.item;
                 sb.append(e == this ? "(this Collection)" : e);
                 p = p.next;
@@ -1077,9 +937,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
                     return sb.append(']').toString();
                 sb.append(',').append(' ');
             }
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -1088,14 +946,11 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * Atomically removes all of the elements from this deque. The deque will
      * be empty after this call returns.
      */
-    public void clear()
-    {
+    public void clear() {
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
-            for (Node<E> f = first; f != null;)
-            {
+        try {
+            for (Node<E> f = first; f != null;) {
                 f.item = null;
                 Node<E> n = f.next;
                 f.prev = null;
@@ -1105,9 +960,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
             first = last = null;
             count = 0;
             notFull.signalAll();
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -1125,8 +978,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * 
      * @return an iterator over the elements in this deque in proper sequence
      */
-    public Iterator<E> iterator()
-    {
+    public Iterator<E> iterator() {
         return new Itr();
     }
 
@@ -1143,16 +995,14 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * 
      * @return an iterator over the elements in this deque in reverse order
      */
-    public Iterator<E> descendingIterator()
-    {
+    public Iterator<E> descendingIterator() {
         return new DescendingItr();
     }
 
     /**
      * Base class for Iterators for LinkedBlockingDeque
      */
-    private abstract class AbstractItr implements Iterator<E>
-    {
+    private abstract class AbstractItr implements Iterator<E> {
         /**
          * The next node to return in next()
          */
@@ -1176,18 +1026,14 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
 
         abstract Node<E> nextNode(Node<E> n);
 
-        AbstractItr()
-        {
+        AbstractItr() {
             // set to initial position
             final ReentrantLock lock = LinkedBlockingDeque.this.lock;
             lock.lock();
-            try
-            {
+            try {
                 next = firstNode();
                 nextItem = (next == null) ? null : next.item;
-            }
-            finally
-            {
+            } finally {
                 lock.unlock();
             }
         }
@@ -1196,12 +1042,10 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
          * Returns the successor node of the given non-null, but possibly
          * previously deleted, node.
          */
-        private Node<E> succ(Node<E> n)
-        {
+        private Node<E> succ(Node<E> n) {
             // Chains of deleted nodes ending in null or self-links
             // are possible if multiple interior nodes are removed.
-            for (;;)
-            {
+            for (;;) {
                 Node<E> s = nextNode(n);
                 if (s == null)
                     return null;
@@ -1217,29 +1061,23 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
         /**
          * Advances next.
          */
-        void advance()
-        {
+        void advance() {
             final ReentrantLock lock = LinkedBlockingDeque.this.lock;
             lock.lock();
-            try
-            {
+            try {
                 // assert next != null;
                 next = succ(next);
                 nextItem = (next == null) ? null : next.item;
-            }
-            finally
-            {
+            } finally {
                 lock.unlock();
             }
         }
 
-        public boolean hasNext()
-        {
+        public boolean hasNext() {
             return next != null;
         }
 
-        public E next()
-        {
+        public E next() {
             if (next == null)
                 throw new NoSuchElementException();
             lastRet = next;
@@ -1248,50 +1086,40 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
             return x;
         }
 
-        public void remove()
-        {
+        public void remove() {
             Node<E> n = lastRet;
             if (n == null)
                 throw new IllegalStateException();
             lastRet = null;
             final ReentrantLock lock = LinkedBlockingDeque.this.lock;
             lock.lock();
-            try
-            {
+            try {
                 if (n.item != null)
                     unlink(n);
-            }
-            finally
-            {
+            } finally {
                 lock.unlock();
             }
         }
     }
 
     /** Forward iterator */
-    private class Itr extends AbstractItr
-    {
-        Node<E> firstNode()
-        {
+    private class Itr extends AbstractItr {
+        Node<E> firstNode() {
             return first;
         }
 
-        Node<E> nextNode(Node<E> n)
-        {
+        Node<E> nextNode(Node<E> n) {
             return n.next;
         }
     }
 
     /** Descending iterator */
-    private class DescendingItr extends AbstractItr
-    {
-        Node<E> firstNode()
-        {
+    private class DescendingItr extends AbstractItr {
+        Node<E> firstNode() {
             return last;
         }
 
-        Node<E> nextNode(Node<E> n)
-        {
+        Node<E> nextNode(Node<E> n) {
             return n.prev;
         }
     }
@@ -1303,12 +1131,10 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      *             {@code Object}) in the proper order, followed by a null
      * @param s the stream
      */
-    private void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException
-    {
+    private void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
         final ReentrantLock lock = this.lock;
         lock.lock();
-        try
-        {
+        try {
             // Write out capacity and any hidden stuff
             s.defaultWriteObject();
             // Write out all elements in the proper order.
@@ -1316,9 +1142,7 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
                 s.writeObject(p.item);
             // Use trailing null as sentinel
             s.writeObject(null);
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -1328,15 +1152,13 @@ public class LinkedBlockingDeque<E> extends AbstractQueue<E> implements Blocking
      * 
      * @param s the stream
      */
-    private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException
-    {
+    private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
         s.defaultReadObject();
         count = 0;
         first = null;
         last = null;
         // Read in all elements and place in queue
-        for (;;)
-        {
+        for (;;) {
             @SuppressWarnings("unchecked")
             E item = (E) s.readObject();
             if (item == null)

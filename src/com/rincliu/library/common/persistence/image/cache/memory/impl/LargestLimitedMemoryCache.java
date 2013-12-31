@@ -40,8 +40,7 @@ import java.util.Set;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.0.0
  */
-public class LargestLimitedMemoryCache extends LimitedMemoryCache<String, Bitmap>
-{
+public class LargestLimitedMemoryCache extends LimitedMemoryCache<String, Bitmap> {
     /**
      * Contains strong references to stored objects (keys) and last object
      * usage date (in milliseconds). If hard cache size will exceed limit then
@@ -50,69 +49,53 @@ public class LargestLimitedMemoryCache extends LimitedMemoryCache<String, Bitmap
      */
     private final Map<Bitmap, Integer> valueSizes = Collections.synchronizedMap(new HashMap<Bitmap, Integer>());
 
-    public LargestLimitedMemoryCache(int sizeLimit)
-    {
+    public LargestLimitedMemoryCache(int sizeLimit) {
         super(sizeLimit);
     }
 
     @Override
-    public boolean put(String key, Bitmap value)
-    {
-        if (super.put(key, value))
-        {
+    public boolean put(String key, Bitmap value) {
+        if (super.put(key, value)) {
             valueSizes.put(value, getSize(value));
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
     @Override
-    public void remove(String key)
-    {
+    public void remove(String key) {
         Bitmap value = super.get(key);
-        if (value != null)
-        {
+        if (value != null) {
             valueSizes.remove(value);
         }
         super.remove(key);
     }
 
     @Override
-    public void clear()
-    {
+    public void clear() {
         valueSizes.clear();
         super.clear();
     }
 
     @Override
-    protected int getSize(Bitmap value)
-    {
+    protected int getSize(Bitmap value) {
         return value.getRowBytes() * value.getHeight();
     }
 
     @Override
-    protected Bitmap removeNext()
-    {
+    protected Bitmap removeNext() {
         Integer maxSize = null;
         Bitmap largestValue = null;
         Set<Entry<Bitmap, Integer>> entries = valueSizes.entrySet();
-        synchronized (valueSizes)
-        {
-            for (Entry<Bitmap, Integer> entry : entries)
-            {
-                if (largestValue == null)
-                {
+        synchronized (valueSizes) {
+            for (Entry<Bitmap, Integer> entry : entries) {
+                if (largestValue == null) {
                     largestValue = entry.getKey();
                     maxSize = entry.getValue();
-                }
-                else
-                {
+                } else {
                     Integer size = entry.getValue();
-                    if (size > maxSize)
-                    {
+                    if (size > maxSize) {
                         maxSize = size;
                         largestValue = entry.getKey();
                     }
@@ -124,8 +107,7 @@ public class LargestLimitedMemoryCache extends LimitedMemoryCache<String, Bitmap
     }
 
     @Override
-    protected Reference<Bitmap> createReference(Bitmap value)
-    {
+    protected Reference<Bitmap> createReference(Bitmap value) {
         return new WeakReference<Bitmap>(value);
     }
 }

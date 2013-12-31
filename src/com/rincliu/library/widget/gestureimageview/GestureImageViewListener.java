@@ -18,8 +18,7 @@ package com.rincliu.library.widget.gestureimageview;
 /**
  * @author jasonpolites
  */
-public interface GestureImageViewListener
-{
+public interface GestureImageViewListener {
 
     public void onTouch(float x, float y);
 

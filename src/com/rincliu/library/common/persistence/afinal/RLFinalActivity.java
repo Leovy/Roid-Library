@@ -28,54 +28,42 @@ import com.rincliu.library.common.persistence.afinal.annotation.view.EventListen
 import com.rincliu.library.common.persistence.afinal.annotation.view.Select;
 import com.rincliu.library.common.persistence.afinal.annotation.view.ViewInject;
 
-public class RLFinalActivity extends Activity
-{
+public class RLFinalActivity extends Activity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public void setContentView(int layoutResID)
-    {
+    public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         initView();
     }
 
     @Override
-    public void setContentView(View view, LayoutParams params)
-    {
+    public void setContentView(View view, LayoutParams params) {
         super.setContentView(view, params);
         initView();
     }
 
     @Override
-    public void setContentView(View view)
-    {
+    public void setContentView(View view) {
         super.setContentView(view);
         initView();
     }
 
-    private void initView()
-    {
+    private void initView() {
         Field[] fields = getClass().getDeclaredFields();
-        if (fields != null && fields.length > 0)
-        {
-            for (Field field : fields)
-            {
+        if (fields != null && fields.length > 0) {
+            for (Field field : fields) {
                 ViewInject viewInject = field.getAnnotation(ViewInject.class);
-                if (viewInject != null)
-                {
+                if (viewInject != null) {
                     int viewId = viewInject.id();
-                    try
-                    {
+                    try {
                         field.setAccessible(true);
                         field.set(this, findViewById(viewId));
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -104,82 +92,57 @@ public class RLFinalActivity extends Activity
         }
     }
 
-    private void setViewClickListener(Field field, String clickMethod)
-    {
-        try
-        {
+    private void setViewClickListener(Field field, String clickMethod) {
+        try {
             Object obj = field.get(this);
-            if (obj instanceof View)
-            {
+            if (obj instanceof View) {
                 ((View) obj).setOnClickListener(new EventListener(this).click(clickMethod));
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void setViewLongClickListener(Field field, String clickMethod)
-    {
-        try
-        {
+    private void setViewLongClickListener(Field field, String clickMethod) {
+        try {
             Object obj = field.get(this);
-            if (obj instanceof View)
-            {
+            if (obj instanceof View) {
                 ((View) obj).setOnLongClickListener(new EventListener(this).longClick(clickMethod));
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void setItemClickListener(Field field, String itemClickMethod)
-    {
-        try
-        {
+    private void setItemClickListener(Field field, String itemClickMethod) {
+        try {
             Object obj = field.get(this);
-            if (obj instanceof AbsListView)
-            {
+            if (obj instanceof AbsListView) {
                 ((AbsListView) obj).setOnItemClickListener(new EventListener(this).itemClick(itemClickMethod));
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void setItemLongClickListener(Field field, String itemClickMethod)
-    {
-        try
-        {
+    private void setItemLongClickListener(Field field, String itemClickMethod) {
+        try {
             Object obj = field.get(this);
-            if (obj instanceof AbsListView)
-            {
+            if (obj instanceof AbsListView) {
                 ((AbsListView) obj).setOnItemLongClickListener(new EventListener(this).itemLongClick(itemClickMethod));
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void setViewSelectListener(Field field, String select, String noSelect)
-    {
-        try
-        {
+    private void setViewSelectListener(Field field, String select, String noSelect) {
+        try {
             Object obj = field.get(this);
-            if (obj instanceof View)
-            {
+            if (obj instanceof View) {
                 ((AbsListView) obj).setOnItemSelectedListener(new EventListener(this).select(select).noSelect(noSelect));
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

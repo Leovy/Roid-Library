@@ -35,8 +35,7 @@ import com.rincliu.library.common.persistence.image.core.ImageLoader;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.7.0
  */
-public class PauseOnScrollListener implements OnScrollListener
-{
+public class PauseOnScrollListener implements OnScrollListener {
 
     private ImageLoader imageLoader;
 
@@ -55,8 +54,7 @@ public class PauseOnScrollListener implements OnScrollListener
      * @param pauseOnFling Whether {@linkplain ImageLoader#pause() pause
      *            ImageLoader} during fling
      */
-    public PauseOnScrollListener(ImageLoader imageLoader, boolean pauseOnScroll, boolean pauseOnFling)
-    {
+    public PauseOnScrollListener(ImageLoader imageLoader, boolean pauseOnScroll, boolean pauseOnFling) {
         this(imageLoader, pauseOnScroll, pauseOnFling, null);
     }
 
@@ -73,8 +71,7 @@ public class PauseOnScrollListener implements OnScrollListener
      *            scroll events
      */
     public PauseOnScrollListener(ImageLoader imageLoader, boolean pauseOnScroll, boolean pauseOnFling,
-            OnScrollListener customListener)
-    {
+            OnScrollListener customListener) {
         this.imageLoader = imageLoader;
         this.pauseOnScroll = pauseOnScroll;
         this.pauseOnFling = pauseOnFling;
@@ -82,37 +79,30 @@ public class PauseOnScrollListener implements OnScrollListener
     }
 
     @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState)
-    {
-        switch (scrollState)
-        {
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        switch (scrollState) {
             case OnScrollListener.SCROLL_STATE_IDLE:
                 imageLoader.resume();
                 break;
             case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
-                if (pauseOnScroll)
-                {
+                if (pauseOnScroll) {
                     imageLoader.pause();
                 }
                 break;
             case OnScrollListener.SCROLL_STATE_FLING:
-                if (pauseOnFling)
-                {
+                if (pauseOnFling) {
                     imageLoader.pause();
                 }
                 break;
         }
-        if (externalListener != null)
-        {
+        if (externalListener != null) {
             externalListener.onScrollStateChanged(view, scrollState);
         }
     }
 
     @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount)
-    {
-        if (externalListener != null)
-        {
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (externalListener != null) {
             externalListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
         }
     }

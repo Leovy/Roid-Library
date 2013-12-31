@@ -23,8 +23,7 @@ import android.view.View;
  * 
  * @author chris
  */
-public interface EmptyViewMethodAccessor
-{
+public interface EmptyViewMethodAccessor {
 
     /**
      * Calls upto AdapterView.setEmptyView()

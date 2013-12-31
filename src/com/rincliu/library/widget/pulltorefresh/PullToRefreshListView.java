@@ -36,8 +36,7 @@ import com.rincliu.library.R;
 import com.rincliu.library.widget.pulltorefresh.EmptyViewMethodAccessor;
 import com.rincliu.library.widget.pulltorefresh.LoadingLayout;
 
-public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView>
-{
+public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView> {
 
     private LoadingLayout mHeaderLoadingView;
 
@@ -47,48 +46,40 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 
     private boolean mListViewExtrasEnabled;
 
-    public PullToRefreshListView(Context context)
-    {
+    public PullToRefreshListView(Context context) {
         super(context);
     }
 
-    public PullToRefreshListView(Context context, AttributeSet attrs)
-    {
+    public PullToRefreshListView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public PullToRefreshListView(Context context, Mode mode)
-    {
+    public PullToRefreshListView(Context context, Mode mode) {
         super(context, mode);
     }
 
-    public PullToRefreshListView(Context context, Mode mode, AnimationStyle style)
-    {
+    public PullToRefreshListView(Context context, Mode mode, AnimationStyle style) {
         super(context, mode, style);
     }
 
     @Override
-    public ContextMenuInfo getContextMenuInfo()
-    {
+    public ContextMenuInfo getContextMenuInfo() {
         return ((InternalListView) getRefreshableView()).getContextMenuInfo();
     }
 
     @Override
-    public final Orientation getPullToRefreshScrollDirection()
-    {
+    public final Orientation getPullToRefreshScrollDirection() {
         return Orientation.VERTICAL;
     }
 
     @Override
-    void onRefreshing(final boolean doScroll)
-    {
+    void onRefreshing(final boolean doScroll) {
         /**
          * If we're not showing the Refreshing view, or the list is empty, the
          * the header/footer views won't show so we use the normal method.
          */
         ListAdapter adapter = mRefreshableView.getAdapter();
-        if (!mListViewExtrasEnabled || !getShowViewWhileRefreshing() || null == adapter || adapter.isEmpty())
-        {
+        if (!mListViewExtrasEnabled || !getShowViewWhileRefreshing() || null == adapter || adapter.isEmpty()) {
             super.onRefreshing(doScroll);
             return;
         }
@@ -98,8 +89,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         final LoadingLayout origLoadingView, listViewLoadingView, oppositeListViewLoadingView;
         final int selection, scrollToY;
 
-        switch (getCurrentMode())
-        {
+        switch (getCurrentMode()) {
             case MANUAL_REFRESH_ONLY:
             case PULL_FROM_END:
                 origLoadingView = getFooterLayout();
@@ -128,8 +118,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         listViewLoadingView.setVisibility(View.VISIBLE);
         listViewLoadingView.refreshing();
 
-        if (doScroll)
-        {
+        if (doScroll) {
             // We need to disable the automatic visibility changes for now
             disableLoadingLayoutVisibilityChanges();
 
@@ -148,13 +137,11 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
     }
 
     @Override
-    void onReset()
-    {
+    void onReset() {
         /**
          * If the extras are not enabled, just call up to super and return.
          */
-        if (!mListViewExtrasEnabled)
-        {
+        if (!mListViewExtrasEnabled) {
             super.onReset();
             return;
         }
@@ -163,8 +150,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         final int scrollToHeight, selection;
         final boolean scrollLvToEdge;
 
-        switch (getCurrentMode())
-        {
+        switch (getCurrentMode()) {
             case MANUAL_REFRESH_ONLY:
             case PULL_FROM_END:
                 originalLoadingLayout = getFooterLayout();
@@ -185,8 +171,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 
         // If the ListView header loading layout is showing, then we need to
         // flip so that the original one is showing instead
-        if (listViewLoadingLayout.getVisibility() == View.VISIBLE)
-        {
+        if (listViewLoadingLayout.getVisibility() == View.VISIBLE) {
 
             // Set our Original View to Visible
             originalLoadingLayout.setVisibility(View.VISIBLE);
@@ -199,8 +184,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
              * header/footer, but only scroll if: we've pulled to refresh,
              * it's positioned correctly
              */
-            if (scrollLvToEdge && getState() != State.MANUAL_REFRESHING)
-            {
+            if (scrollLvToEdge && getState() != State.MANUAL_REFRESHING) {
                 mRefreshableView.setSelection(selection);
                 setHeaderScroll(scrollToHeight);
             }
@@ -211,20 +195,16 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
     }
 
     @Override
-    protected LoadingLayoutProxy createLoadingLayoutProxy(final boolean includeStart, final boolean includeEnd)
-    {
+    protected LoadingLayoutProxy createLoadingLayoutProxy(final boolean includeStart, final boolean includeEnd) {
         LoadingLayoutProxy proxy = super.createLoadingLayoutProxy(includeStart, includeEnd);
 
-        if (mListViewExtrasEnabled)
-        {
+        if (mListViewExtrasEnabled) {
             final Mode mode = getMode();
 
-            if (includeStart && mode.showHeaderLoadingLayout())
-            {
+            if (includeStart && mode.showHeaderLoadingLayout()) {
                 proxy.addLayout(mHeaderLoadingView);
             }
-            if (includeEnd && mode.showFooterLoadingLayout())
-            {
+            if (includeEnd && mode.showFooterLoadingLayout()) {
                 proxy.addLayout(mFooterLoadingView);
             }
         }
@@ -232,23 +212,18 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         return proxy;
     }
 
-    protected ListView createListView(Context context, AttributeSet attrs)
-    {
+    protected ListView createListView(Context context, AttributeSet attrs) {
         final ListView lv;
-        if (VERSION.SDK_INT >= VERSION_CODES.GINGERBREAD)
-        {
+        if (VERSION.SDK_INT >= VERSION_CODES.GINGERBREAD) {
             lv = new InternalListViewSDK9(context, attrs);
-        }
-        else
-        {
+        } else {
             lv = new InternalListView(context, attrs);
         }
         return lv;
     }
 
     @Override
-    protected ListView createRefreshableView(Context context, AttributeSet attrs)
-    {
+    protected ListView createRefreshableView(Context context, AttributeSet attrs) {
         ListView lv = createListView(context, attrs);
         lv.setScrollingCacheEnabled(false);
         lv.setFadingEdgeLength(0);
@@ -260,14 +235,12 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
     }
 
     @Override
-    protected void handleStyledAttributes(TypedArray a)
-    {
+    protected void handleStyledAttributes(TypedArray a) {
         super.handleStyledAttributes(a);
 
         mListViewExtrasEnabled = a.getBoolean(R.styleable.PullToRefresh_ptrListViewExtrasEnabled, true);
 
-        if (mListViewExtrasEnabled)
-        {
+        if (mListViewExtrasEnabled) {
             final FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                     FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL);
 
@@ -287,26 +260,22 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
              * If the value for Scrolling While Refreshing hasn't been
              * explicitly set via XML, enable Scrolling While Refreshing.
              */
-            if (!a.hasValue(R.styleable.PullToRefresh_ptrScrollingWhileRefreshingEnabled))
-            {
+            if (!a.hasValue(R.styleable.PullToRefresh_ptrScrollingWhileRefreshingEnabled)) {
                 setScrollingWhileRefreshingEnabled(true);
             }
         }
     }
 
     @TargetApi(9)
-    final class InternalListViewSDK9 extends InternalListView
-    {
+    final class InternalListViewSDK9 extends InternalListView {
 
-        public InternalListViewSDK9(Context context, AttributeSet attrs)
-        {
+        public InternalListViewSDK9(Context context, AttributeSet attrs) {
             super(context, attrs);
         }
 
         @Override
         protected boolean overScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX,
-                int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent)
-        {
+                int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent) {
 
             final boolean returnValue = super.overScrollBy(deltaX, deltaY, scrollX, scrollY, scrollRangeX,
                     scrollRangeY, maxOverScrollX, maxOverScrollY, isTouchEvent);
@@ -318,64 +287,51 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         }
     }
 
-    protected class InternalListView extends ListView implements EmptyViewMethodAccessor
-    {
+    protected class InternalListView extends ListView implements EmptyViewMethodAccessor {
 
         private boolean mAddedLvFooter = false;
 
-        public InternalListView(Context context, AttributeSet attrs)
-        {
+        public InternalListView(Context context, AttributeSet attrs) {
             super(context, attrs);
         }
 
         @Override
-        protected void dispatchDraw(Canvas canvas)
-        {
+        protected void dispatchDraw(Canvas canvas) {
             /**
              * This is a bit hacky, but Samsung's ListView has got a bug in it
              * when using Header/Footer Views and the list is empty. This
              * masks the issue so that it doesn't cause an FC. See Issue #66.
              */
-            try
-            {
+            try {
                 super.dispatchDraw(canvas);
-            }
-            catch (IndexOutOfBoundsException e)
-            {
+            } catch (IndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
         }
 
         @Override
-        public boolean dispatchTouchEvent(MotionEvent ev)
-        {
+        public boolean dispatchTouchEvent(MotionEvent ev) {
             /**
              * This is a bit hacky, but Samsung's ListView has got a bug in it
              * when using Header/Footer Views and the list is empty. This
              * masks the issue so that it doesn't cause an FC. See Issue #66.
              */
-            try
-            {
+            try {
                 return super.dispatchTouchEvent(ev);
-            }
-            catch (IndexOutOfBoundsException e)
-            {
+            } catch (IndexOutOfBoundsException e) {
                 e.printStackTrace();
                 return false;
             }
         }
 
-        public ContextMenuInfo getContextMenuInfo()
-        {
+        public ContextMenuInfo getContextMenuInfo() {
             return super.getContextMenuInfo();
         }
 
         @Override
-        public void setAdapter(ListAdapter adapter)
-        {
+        public void setAdapter(ListAdapter adapter) {
             // Add the Footer View at the last possible moment
-            if (null != mLvFooterLoadingFrame && !mAddedLvFooter)
-            {
+            if (null != mLvFooterLoadingFrame && !mAddedLvFooter) {
                 addFooterView(mLvFooterLoadingFrame, null, false);
                 mAddedLvFooter = true;
             }
@@ -384,14 +340,12 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         }
 
         @Override
-        public void setEmptyView(View emptyView)
-        {
+        public void setEmptyView(View emptyView) {
             PullToRefreshListView.this.setEmptyView(emptyView);
         }
 
         @Override
-        public void setEmptyViewInternal(View emptyView)
-        {
+        public void setEmptyViewInternal(View emptyView) {
             super.setEmptyView(emptyView);
         }
     }

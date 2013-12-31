@@ -8,144 +8,116 @@ import com.rincliu.library.common.persistence.rootmanager.utils.RootUtils;
  * 
  * @author Chris Jiang
  */
-public class Result
-{
+public class Result {
 
     /* members */
     private String message;
 
     private int statusCode;
 
-    public String getMessage()
-    {
+    public String getMessage() {
         return message;
     }
 
-    public int getStatusCode()
-    {
+    public int getStatusCode() {
         return statusCode;
     }
 
-    public Boolean getResult()
-    {
+    public Boolean getResult() {
         RootUtils.Log("Status Code is " + statusCode);
-        if (statusCode == 0)
-        {
+        if (statusCode == 0) {
             return true;
-        }
-        else if (statusCode <= 100)
-        {
+        } else if (statusCode <= 100) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
-    private Result()
-    {
+    private Result() {
 
     }
 
-    public static ResultBuilder newBuilder()
-    {
+    public static ResultBuilder newBuilder() {
         return new ResultBuilder();
     }
 
-    public static class ResultBuilder
-    {
+    public static class ResultBuilder {
         private ResultEnum inEnum = null;
 
-        public ResultBuilder setCommandSuccess()
-        {
+        public ResultBuilder setCommandSuccess() {
             inEnum = ResultEnum.RUNCOMMAND_SUCCESS;
             return this;
         }
 
-        public ResultBuilder setCommandFailedTimeout()
-        {
+        public ResultBuilder setCommandFailedTimeout() {
             inEnum = ResultEnum.RUNCOMMAND_FAILED_TIMEOUT;
             return this;
         }
 
-        public ResultBuilder setCommandFailedDenied()
-        {
+        public ResultBuilder setCommandFailedDenied() {
             inEnum = ResultEnum.RUNCOMMAND_FAILED_DENIED;
             return this;
         }
 
-        public ResultBuilder setCommandFailedInterrupted()
-        {
+        public ResultBuilder setCommandFailedInterrupted() {
             inEnum = ResultEnum.RUNCOMMAND_FAILED_INTERRUPTED;
             return this;
         }
 
-        public ResultBuilder setCommandFailed()
-        {
+        public ResultBuilder setCommandFailed() {
             inEnum = ResultEnum.RUNCOMMAND_FAILED;
             return this;
         }
 
-        public ResultBuilder setInstallSuccess()
-        {
+        public ResultBuilder setInstallSuccess() {
             inEnum = ResultEnum.INSTALL_SUCCESS;
             return this;
         }
 
-        public ResultBuilder setInsallFailedNoSpace()
-        {
+        public ResultBuilder setInsallFailedNoSpace() {
             inEnum = ResultEnum.INSTALL_FAILED_NOSPACE;
             return this;
         }
 
-        public ResultBuilder setInstallFailedWrongContainer()
-        {
+        public ResultBuilder setInstallFailedWrongContainer() {
             inEnum = ResultEnum.INSTALL_FAILED_WRONGCONTAINER;
             return this;
         }
 
-        public ResultBuilder setInstallFailedWrongCer()
-        {
+        public ResultBuilder setInstallFailedWrongCer() {
             inEnum = ResultEnum.INSTALL_FAILED_WRONGCER;
             return this;
         }
 
-        public ResultBuilder setInstallFailed()
-        {
+        public ResultBuilder setInstallFailed() {
             inEnum = ResultEnum.INSTALL_FIALED;
             return this;
         }
 
-        public ResultBuilder setUninstallSuccess()
-        {
+        public ResultBuilder setUninstallSuccess() {
             inEnum = ResultEnum.UNINSTALL_SUCCESS;
             return this;
         }
 
-        public ResultBuilder setUninstallFailed()
-        {
+        public ResultBuilder setUninstallFailed() {
             inEnum = ResultEnum.UNINSTALL_SUCCESS;
             return this;
         }
 
-        public ResultBuilder setFailed()
-        {
+        public ResultBuilder setFailed() {
             inEnum = ResultEnum.FAILED;
             return this;
         }
 
-        public ResultBuilder setCustomMessage(String customMessage)
-        {
+        public ResultBuilder setCustomMessage(String customMessage) {
             inEnum = ResultEnum.CUSTOM;
             inEnum.setCustomMessage(customMessage);
             return this;
         }
 
-        public Result build()
-        {
-            if (inEnum == null)
-            {
+        public Result build() {
+            if (inEnum == null) {
                 throw new IllegalStateException(
                         "Get a empty or null error message during command execution, can not generate result object");
             }
@@ -157,8 +129,7 @@ public class Result
         }
     }
 
-    public enum ResultEnum
-    {
+    public enum ResultEnum {
 
         RUNCOMMAND_SUCCESS(90, "Command Executed Successfully"), RUNCOMMAND_FAILED_TIMEOUT(401, "Run Command Timeout"), RUNCOMMAND_FAILED_DENIED(
                 402, "Run Command Permission Denied"), RUNCOMMAND_FAILED_INTERRUPTED(403, "Run Command Interrupted"), RUNCOMMAND_FAILED(
@@ -177,24 +148,20 @@ public class Result
 
         private String message;
 
-        private ResultEnum(int sc, String msg)
-        {
+        private ResultEnum(int sc, String msg) {
             statusCode = sc;
             message = msg;
         }
 
-        public void setCustomMessage(String customMessage)
-        {
+        public void setCustomMessage(String customMessage) {
             message = customMessage;
         }
 
-        public String getMessage()
-        {
+        public String getMessage() {
             return message;
         }
 
-        public int getStatusCode()
-        {
+        public int getStatusCode() {
             return statusCode;
         }
 

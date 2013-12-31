@@ -31,12 +31,9 @@ import java.lang.reflect.Field;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.8.3
  */
-public final class ImageSizeUtils
-{
+public final class ImageSizeUtils {
 
-    private ImageSizeUtils()
-    {
-    }
+    private ImageSizeUtils() {}
 
     /**
      * Defines target size for image. Size is defined by target
@@ -54,8 +51,7 @@ public final class ImageSizeUtils
      * If both of them are not set (equal 0) then go to step #5.<br />
      * 5) Get device screen dimensions.
      */
-    public static ImageSize defineTargetSizeForView(ImageView imageView, int maxImageWidth, int maxImageHeight)
-    {
+    public static ImageSize defineTargetSizeForView(ImageView imageView, int maxImageWidth, int maxImageHeight) {
         final DisplayMetrics displayMetrics = imageView.getContext().getResources().getDisplayMetrics();
 
         final LayoutParams params = imageView.getLayoutParams();
@@ -92,21 +88,16 @@ public final class ImageSizeUtils
         return new ImageSize(width, height);
     }
 
-    private static int getImageViewFieldValue(Object object, String fieldName)
-    {
+    private static int getImageViewFieldValue(Object object, String fieldName) {
         int value = 0;
-        try
-        {
+        try {
             Field field = ImageView.class.getDeclaredField(fieldName);
             field.setAccessible(true);
             int fieldValue = (Integer) field.get(object);
-            if (fieldValue > 0 && fieldValue < Integer.MAX_VALUE)
-            {
+            if (fieldValue > 0 && fieldValue < Integer.MAX_VALUE) {
                 value = fieldValue;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             L.e(e);
         }
         return value;
@@ -145,8 +136,7 @@ public final class ImageSizeUtils
      * @return Computed sample size
      */
     public static int computeImageSampleSize(ImageSize srcSize, ImageSize targetSize, ViewScaleType viewScaleType,
-            boolean powerOf2Scale)
-    {
+            boolean powerOf2Scale) {
         int srcWidth = srcSize.getWidth();
         int srcHeight = srcSize.getHeight();
         int targetWidth = targetSize.getWidth();
@@ -157,42 +147,32 @@ public final class ImageSizeUtils
         int widthScale = srcWidth / targetWidth;
         int heightScale = srcHeight / targetHeight;
 
-        switch (viewScaleType)
-        {
+        switch (viewScaleType) {
             case FIT_INSIDE:
-                if (powerOf2Scale)
-                {
-                    while (srcWidth / 2 >= targetWidth || srcHeight / 2 >= targetHeight)
-                    { // ||
+                if (powerOf2Scale) {
+                    while (srcWidth / 2 >= targetWidth || srcHeight / 2 >= targetHeight) { // ||
                         srcWidth /= 2;
                         srcHeight /= 2;
                         scale *= 2;
                     }
-                }
-                else
-                {
+                } else {
                     scale = Math.max(widthScale, heightScale); // max
                 }
                 break;
             case CROP:
-                if (powerOf2Scale)
-                {
-                    while (srcWidth / 2 >= targetWidth && srcHeight / 2 >= targetHeight)
-                    { // &&
+                if (powerOf2Scale) {
+                    while (srcWidth / 2 >= targetWidth && srcHeight / 2 >= targetHeight) { // &&
                         srcWidth /= 2;
                         srcHeight /= 2;
                         scale *= 2;
                     }
-                }
-                else
-                {
+                } else {
                     scale = Math.min(widthScale, heightScale); // min
                 }
                 break;
         }
 
-        if (scale < 1)
-        {
+        if (scale < 1) {
             scale = 1;
         }
 
@@ -226,8 +206,7 @@ public final class ImageSizeUtils
      * @return Computed scale
      */
     public static float computeImageScale(ImageSize srcSize, ImageSize targetSize, ViewScaleType viewScaleType,
-            boolean stretch)
-    {
+            boolean stretch) {
         int srcWidth = srcSize.getWidth();
         int srcHeight = srcSize.getHeight();
         int targetWidth = targetSize.getWidth();
@@ -239,21 +218,17 @@ public final class ImageSizeUtils
         int destWidth;
         int destHeight;
         if ((viewScaleType == ViewScaleType.FIT_INSIDE && widthScale >= heightScale)
-                || (viewScaleType == ViewScaleType.CROP && widthScale < heightScale))
-        {
+                || (viewScaleType == ViewScaleType.CROP && widthScale < heightScale)) {
             destWidth = targetWidth;
             destHeight = (int) (srcHeight / widthScale);
-        }
-        else
-        {
+        } else {
             destWidth = (int) (srcWidth / heightScale);
             destHeight = targetHeight;
         }
 
         float scale = 1;
         if ((!stretch && destWidth < srcWidth && destHeight < srcHeight)
-                || (stretch && destWidth != srcWidth && destHeight != srcHeight))
-        {
+                || (stretch && destWidth != srcWidth && destHeight != srcHeight)) {
             scale = (float) destWidth / srcWidth;
         }
 

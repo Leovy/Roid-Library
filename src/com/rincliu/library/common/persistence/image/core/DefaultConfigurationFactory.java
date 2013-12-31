@@ -49,13 +49,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.5.6
  */
-public class DefaultConfigurationFactory
-{
+public class DefaultConfigurationFactory {
 
     /** Creates default implementation of task executor */
     public static Executor createExecutor(int threadPoolSize, int threadPriority,
-            QueueProcessingType tasksProcessingType)
-    {
+            QueueProcessingType tasksProcessingType) {
         boolean lifo = tasksProcessingType == QueueProcessingType.LIFO;
         BlockingQueue<Runnable> taskQueue = lifo ? new LIFOLinkedBlockingDeque<Runnable>()
                 : new LinkedBlockingQueue<Runnable>();
@@ -67,8 +65,7 @@ public class DefaultConfigurationFactory
      * Creates {@linkplain HashCodeFileNameGenerator default implementation}
      * of FileNameGenerator
      */
-    public static FileNameGenerator createFileNameGenerator()
-    {
+    public static FileNameGenerator createFileNameGenerator() {
         return new HashCodeFileNameGenerator();
     }
 
@@ -77,20 +74,14 @@ public class DefaultConfigurationFactory
      * incoming parameters
      */
     public static DiscCacheAware createDiscCache(Context context, FileNameGenerator discCacheFileNameGenerator,
-            int discCacheSize, int discCacheFileCount)
-    {
-        if (discCacheSize > 0)
-        {
+            int discCacheSize, int discCacheFileCount) {
+        if (discCacheSize > 0) {
             File individualCacheDir = StorageUtils.getIndividualCacheDirectory(context);
             return new TotalSizeLimitedDiscCache(individualCacheDir, discCacheFileNameGenerator, discCacheSize);
-        }
-        else if (discCacheFileCount > 0)
-        {
+        } else if (discCacheFileCount > 0) {
             File individualCacheDir = StorageUtils.getIndividualCacheDirectory(context);
             return new FileCountLimitedDiscCache(individualCacheDir, discCacheFileNameGenerator, discCacheFileCount);
-        }
-        else
-        {
+        } else {
             File cacheDir = StorageUtils.getCacheDirectory(context);
             return new UnlimitedDiscCache(cacheDir, discCacheFileNameGenerator);
         }
@@ -100,12 +91,10 @@ public class DefaultConfigurationFactory
      * Creates reserve disc cache which will be used if primary disc cache
      * becomes unavailable
      */
-    public static DiscCacheAware createReserveDiscCache(Context context)
-    {
+    public static DiscCacheAware createReserveDiscCache(Context context) {
         File cacheDir = context.getCacheDir();
         File individualDir = new File(cacheDir, "uil-images");
-        if (individualDir.exists() || individualDir.mkdir())
-        {
+        if (individualDir.exists() || individualDir.mkdir()) {
             cacheDir = individualDir;
         }
         return new TotalSizeLimitedDiscCache(cacheDir, 2 * 1024 * 1024); // limit
@@ -121,19 +110,14 @@ public class DefaultConfigurationFactory
      * (for API < 9).<br />
      * Default cache size = 1/8 of available app memory.
      */
-    public static MemoryCacheAware<String, Bitmap> createMemoryCache(int memoryCacheSize)
-    {
-        if (memoryCacheSize == 0)
-        {
+    public static MemoryCacheAware<String, Bitmap> createMemoryCache(int memoryCacheSize) {
+        if (memoryCacheSize == 0) {
             memoryCacheSize = (int) (Runtime.getRuntime().maxMemory() / 8);
         }
         MemoryCacheAware<String, Bitmap> memoryCache;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
             memoryCache = new LruMemoryCache(memoryCacheSize);
-        }
-        else
-        {
+        } else {
             memoryCache = new LRULimitedMemoryCache(memoryCacheSize);
         }
         return memoryCache;
@@ -143,8 +127,7 @@ public class DefaultConfigurationFactory
      * Creates default implementation of {@link ImageDownloader} -
      * {@link BaseImageDownloader}
      */
-    public static ImageDownloader createImageDownloader(Context context)
-    {
+    public static ImageDownloader createImageDownloader(Context context) {
         return new BaseImageDownloader(context);
     }
 
@@ -152,8 +135,7 @@ public class DefaultConfigurationFactory
      * Creates default implementation of {@link ImageDecoder} -
      * {@link BaseImageDecoder}
      */
-    public static ImageDecoder createImageDecoder(boolean loggingEnabled)
-    {
+    public static ImageDecoder createImageDecoder(boolean loggingEnabled) {
         return new BaseImageDecoder(loggingEnabled);
     }
 
@@ -161,8 +143,7 @@ public class DefaultConfigurationFactory
      * Creates default implementation of {@link BitmapDisplayer} -
      * {@link SimpleBitmapDisplayer}
      */
-    public static BitmapDisplayer createBitmapDisplayer()
-    {
+    public static BitmapDisplayer createBitmapDisplayer() {
         return new SimpleBitmapDisplayer();
     }
 
@@ -170,13 +151,11 @@ public class DefaultConfigurationFactory
      * Creates default implementation of {@linkplain ThreadFactory thread
      * factory} for task executor
      */
-    private static ThreadFactory createThreadFactory(int threadPriority)
-    {
+    private static ThreadFactory createThreadFactory(int threadPriority) {
         return new DefaultThreadFactory(threadPriority);
     }
 
-    private static class DefaultThreadFactory implements ThreadFactory
-    {
+    private static class DefaultThreadFactory implements ThreadFactory {
 
         private static final AtomicInteger poolNumber = new AtomicInteger(1);
 
@@ -188,16 +167,14 @@ public class DefaultConfigurationFactory
 
         private final int threadPriority;
 
-        DefaultThreadFactory(int threadPriority)
-        {
+        DefaultThreadFactory(int threadPriority) {
             this.threadPriority = threadPriority;
             SecurityManager s = System.getSecurityManager();
             group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
             namePrefix = "pool-" + poolNumber.getAndIncrement() + "-thread-";
         }
 
-        public Thread newThread(Runnable r)
-        {
+        public Thread newThread(Runnable r) {
             Thread t = new Thread(group, r, namePrefix + threadNumber.getAndIncrement(), 0);
             if (t.isDaemon())
                 t.setDaemon(false);

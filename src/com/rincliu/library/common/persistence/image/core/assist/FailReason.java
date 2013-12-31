@@ -21,34 +21,29 @@ package com.rincliu.library.common.persistence.image.core.assist;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.0.0
  */
-public class FailReason
-{
+public class FailReason {
 
     private final FailType type;
 
     private final Throwable cause;
 
-    public FailReason(FailType type, Throwable cause)
-    {
+    public FailReason(FailType type, Throwable cause) {
         this.type = type;
         this.cause = cause;
     }
 
     /** @return {@linkplain FailType Fail type} */
-    public FailType getType()
-    {
+    public FailType getType() {
         return type;
     }
 
     /** @return Thrown exception/error, can be <b>null</b> */
-    public Throwable getCause()
-    {
+    public Throwable getCause() {
         return cause;
     }
 
     /** Presents type of fail while image loading */
-    public static enum FailType
-    {
+    public static enum FailType {
         /**
          * Input/output error. Can be caused by network communication fail or
          * error while caching image on file system.

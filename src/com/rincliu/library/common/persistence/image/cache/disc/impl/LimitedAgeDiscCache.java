@@ -32,8 +32,7 @@ import java.util.Map;
  * @see BaseDiscCache
  * @since 1.3.1
  */
-public class LimitedAgeDiscCache extends BaseDiscCache
-{
+public class LimitedAgeDiscCache extends BaseDiscCache {
 
     private final long maxFileAge;
 
@@ -45,8 +44,7 @@ public class LimitedAgeDiscCache extends BaseDiscCache
      *            value then it'll be removed on next treatment (and therefore
      *            be reloaded).
      */
-    public LimitedAgeDiscCache(File cacheDir, long maxAge)
-    {
+    public LimitedAgeDiscCache(File cacheDir, long maxAge) {
         this(cacheDir, DefaultConfigurationFactory.createFileNameGenerator(), maxAge);
     }
 
@@ -57,44 +55,34 @@ public class LimitedAgeDiscCache extends BaseDiscCache
      *            value then it'll be removed on next treatment (and therefore
      *            be reloaded).
      */
-    public LimitedAgeDiscCache(File cacheDir, FileNameGenerator fileNameGenerator, long maxAge)
-    {
+    public LimitedAgeDiscCache(File cacheDir, FileNameGenerator fileNameGenerator, long maxAge) {
         super(cacheDir, fileNameGenerator);
         this.maxFileAge = maxAge * 1000; // to milliseconds
     }
 
     @Override
-    public void put(String key, File file)
-    {
+    public void put(String key, File file) {
         long currentTime = System.currentTimeMillis();
         file.setLastModified(currentTime);
         loadingDates.put(file, currentTime);
     }
 
     @Override
-    public File get(String key)
-    {
+    public File get(String key) {
         File file = super.get(key);
-        if (file.exists())
-        {
+        if (file.exists()) {
             boolean cached;
             Long loadingDate = loadingDates.get(file);
-            if (loadingDate == null)
-            {
+            if (loadingDate == null) {
                 cached = false;
                 loadingDate = file.lastModified();
-            }
-            else
-            {
+            } else {
                 cached = true;
             }
-            if (System.currentTimeMillis() - loadingDate > maxFileAge)
-            {
+            if (System.currentTimeMillis() - loadingDate > maxFileAge) {
                 file.delete();
                 loadingDates.remove(file);
-            }
-            else if (!cached)
-            {
+            } else if (!cached) {
                 loadingDates.put(file, loadingDate);
             }
         }

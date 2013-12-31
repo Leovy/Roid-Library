@@ -3,8 +3,7 @@ package com.rincliu.library.widget.pulltorefresh;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 
-public interface ILoadingLayout
-{
+public interface ILoadingLayout {
 
     /**
      * Set the Last Updated Text. This displayed under the main label when

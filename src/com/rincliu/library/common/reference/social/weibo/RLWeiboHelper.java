@@ -39,18 +39,15 @@ import com.weibo.sdk.android.keep.AccessTokenKeeper;
 import com.weibo.sdk.android.net.RequestListener;
 import com.weibo.sdk.android.sso.SsoHandler;
 
-public class RLWeiboHelper
-{
+public class RLWeiboHelper {
     private static RLWeiboHelper helper;
 
     private static Weibo weibo;
 
     private static final String REDIRECT_URL = "http://open.weibo.com/apps/";
 
-    private RLWeiboHelper(Context context)
-    {
-        if (weibo == null)
-        {
+    private RLWeiboHelper(Context context) {
+        if (weibo == null) {
             String key = context.getString(R.string.weibo_key);
             weibo = Weibo.getInstance(key, REDIRECT_URL + key);
         }
@@ -60,10 +57,8 @@ public class RLWeiboHelper
      * @param context
      * @return
      */
-    public static RLWeiboHelper getInstance(Context context)
-    {
-        if (helper == null)
-        {
+    public static RLWeiboHelper getInstance(Context context) {
+        if (helper == null) {
             helper = new RLWeiboHelper(context);
         }
         return helper;
@@ -73,8 +68,7 @@ public class RLWeiboHelper
      * @param context
      * @return
      */
-    public boolean isTokenAvailable(Context context)
-    {
+    public boolean isTokenAvailable(Context context) {
         Oauth2AccessToken token = AccessTokenKeeper.readAccessToken(context);
         return token != null && token.isSessionValid();
     }
@@ -84,14 +78,11 @@ public class RLWeiboHelper
      * @param handler
      * @return
      */
-    public SsoHandler auth(final Activity activity, final ReqHandler handler)
-    {
+    public SsoHandler auth(final Activity activity, final ReqHandler handler) {
         SsoHandler ssoHandler = new SsoHandler(activity, weibo);
-        ssoHandler.authorize(new WeiboAuthListener()
-        {
+        ssoHandler.authorize(new WeiboAuthListener() {
             @Override
-            public void onComplete(Bundle data)
-            {
+            public void onComplete(Bundle data) {
                 AccessTokenKeeper.clear(activity);
                 Oauth2AccessToken token = new Oauth2AccessToken(data.getString("access_token"),
                         data.getString("expires_in"));
@@ -100,20 +91,17 @@ public class RLWeiboHelper
             }
 
             @Override
-            public void onCancel()
-            {
+            public void onCancel() {
                 handler.onFail(activity.getString(R.string.weibo_auth_cancel));
             }
 
             @Override
-            public void onError(WeiboDialogError error)
-            {
+            public void onError(WeiboDialogError error) {
                 handler.onFail(error.getMessage());
             }
 
             @Override
-            public void onWeiboException(WeiboException exception)
-            {
+            public void onWeiboException(WeiboException exception) {
                 handler.onFail(exception.getMessage());
             }
         });
@@ -126,10 +114,8 @@ public class RLWeiboHelper
      * @param resultCode
      * @param data
      */
-    public void onActivityResult(SsoHandler handler, int requestCode, int resultCode, Intent data)
-    {
-        if (handler != null)
-        {
+    public void onActivityResult(SsoHandler handler, int requestCode, int resultCode, Intent data) {
+        if (handler != null) {
             handler.authorizeCallBack(requestCode, resultCode, data);
         }
     }
@@ -137,8 +123,7 @@ public class RLWeiboHelper
     /**
 	 * 
 	 */
-    public interface ReqHandler
-    {
+    public interface ReqHandler {
         public void onSucceed();
 
         public void onFail(String error);
@@ -152,8 +137,7 @@ public class RLWeiboHelper
      * @param handler
      */
     public void sendText(final Context context, String content, String latitude, String longitude,
-            final ReqHandler handler)
-    {
+            final ReqHandler handler) {
         new StatusesAPI(AccessTokenKeeper.readAccessToken(context)).update(content, latitude, longitude,
                 getRequestListener(context, handler));
     }
@@ -167,8 +151,7 @@ public class RLWeiboHelper
      * @param handler
      */
     public void sendImageText(final Context context, String content, File imgFile, String latitude, String longitude,
-            final ReqHandler handler)
-    {
+            final ReqHandler handler) {
         new StatusesAPI(AccessTokenKeeper.readAccessToken(context)).upload(content, imgFile.getPath(), latitude,
                 longitude, getRequestListener(context, handler));
     }
@@ -182,54 +165,39 @@ public class RLWeiboHelper
      * @param handler
      */
     public void sendImageText(final Context context, String content, URL imgUrl, String latitude, String longitude,
-            final ReqHandler handler)
-    {
+            final ReqHandler handler) {
         new StatusesAPI(AccessTokenKeeper.readAccessToken(context)).uploadUrlText(content, imgUrl.toString(), latitude,
                 longitude, getRequestListener(context, handler));
     }
 
-    private RequestListener getRequestListener(final Context context, final ReqHandler handler)
-    {
-        return new RequestListener()
-        {
+    private RequestListener getRequestListener(final Context context, final ReqHandler handler) {
+        return new RequestListener() {
             @Override
-            public void onComplete(String arg0)
-            {
+            public void onComplete(String arg0) {
                 handler.onSucceed();
             }
 
             @Override
-            public void onError(WeiboException exception)
-            {
+            public void onError(WeiboException exception) {
                 String msg = exception.getMessage();
-                if (msg != null && !msg.equals(""))
-                {
-                    try
-                    {
+                if (msg != null && !msg.equals("")) {
+                    try {
                         JSONObject obj = new JSONObject(msg);
-                        if (obj != null && obj.has("error"))
-                        {
+                        if (obj != null && obj.has("error")) {
                             handler.onFail(obj.get("error").toString());
-                        }
-                        else
-                        {
+                        } else {
                             handler.onFail(context.getString(R.string.weibo_unknow_error));
                         }
-                    }
-                    catch (JSONException e)
-                    {
+                    } catch (JSONException e) {
                         handler.onFail(context.getString(R.string.weibo_unknow_error));
                     }
-                }
-                else
-                {
+                } else {
                     handler.onFail(context.getString(R.string.weibo_unknow_error));
                 }
             }
 
             @Override
-            public void onIOException(IOException arg0)
-            {
+            public void onIOException(IOException arg0) {
                 handler.onFail(context.getString(R.string.weibo_io_error));
             }
         };

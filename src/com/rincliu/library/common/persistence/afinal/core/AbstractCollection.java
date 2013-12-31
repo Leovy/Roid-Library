@@ -30,19 +30,15 @@ import java.util.Iterator;
  * 
  * @since 1.2
  */
-public abstract class AbstractCollection<E> implements Collection<E>
-{
+public abstract class AbstractCollection<E> implements Collection<E> {
 
     /**
      * Constructs a new instance of this AbstractCollection.
      */
-    protected AbstractCollection()
-    {
-    }
+    protected AbstractCollection() {}
 
     @Override
-    public boolean add(E object)
-    {
+    public boolean add(E object) {
         throw new UnsupportedOperationException();
     }
 
@@ -73,14 +69,11 @@ public abstract class AbstractCollection<E> implements Collection<E>
      *             {@code Collection} does not support such elements.
      */
     @Override
-    public boolean addAll(Collection<? extends E> collection)
-    {
+    public boolean addAll(Collection<? extends E> collection) {
         boolean result = false;
         Iterator<? extends E> it = collection.iterator();
-        while (it.hasNext())
-        {
-            if (add(it.next()))
-            {
+        while (it.hasNext()) {
+            if (add(it.next())) {
                 result = true;
             }
         }
@@ -104,11 +97,9 @@ public abstract class AbstractCollection<E> implements Collection<E>
      * @see #size
      */
     @Override
-    public void clear()
-    {
+    public void clear() {
         Iterator<E> it = iterator();
-        while (it.hasNext())
-        {
+        while (it.hasNext()) {
             it.next();
             it.remove();
         }
@@ -133,25 +124,17 @@ public abstract class AbstractCollection<E> implements Collection<E>
      *             elements.
      */
     @Override
-    public boolean contains(Object object)
-    {
+    public boolean contains(Object object) {
         Iterator<E> it = iterator();
-        if (object != null)
-        {
-            while (it.hasNext())
-            {
-                if (object.equals(it.next()))
-                {
+        if (object != null) {
+            while (it.hasNext()) {
+                if (object.equals(it.next())) {
                     return true;
                 }
             }
-        }
-        else
-        {
-            while (it.hasNext())
-            {
-                if (it.next() == null)
-                {
+        } else {
+            while (it.hasNext()) {
+                if (it.next() == null) {
                     return true;
                 }
             }
@@ -178,13 +161,10 @@ public abstract class AbstractCollection<E> implements Collection<E>
      * @throws NullPointerException if {@code collection} is {@code null}.
      */
     @Override
-    public boolean containsAll(Collection<?> collection)
-    {
+    public boolean containsAll(Collection<?> collection) {
         Iterator<?> it = collection.iterator();
-        while (it.hasNext())
-        {
-            if (!contains(it.next()))
-            {
+        while (it.hasNext()) {
+            if (!contains(it.next())) {
                 return false;
             }
         }
@@ -200,8 +180,7 @@ public abstract class AbstractCollection<E> implements Collection<E>
      * @see #size
      */
     @Override
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return size() == 0;
     }
 
@@ -243,26 +222,18 @@ public abstract class AbstractCollection<E> implements Collection<E>
      *             {@code Collection} doesn't support {@code null} elements.
      */
     @Override
-    public boolean remove(Object object)
-    {
+    public boolean remove(Object object) {
         Iterator<?> it = iterator();
-        if (object != null)
-        {
-            while (it.hasNext())
-            {
-                if (object.equals(it.next()))
-                {
+        if (object != null) {
+            while (it.hasNext()) {
+                if (object.equals(it.next())) {
                     it.remove();
                     return true;
                 }
             }
-        }
-        else
-        {
-            while (it.hasNext())
-            {
-                if (it.next() == null)
-                {
+        } else {
+            while (it.hasNext()) {
+                if (it.next() == null) {
                     it.remove();
                     return true;
                 }
@@ -297,14 +268,11 @@ public abstract class AbstractCollection<E> implements Collection<E>
      * @throws NullPointerException if {@code collection} is {@code null}.
      */
     @Override
-    public boolean removeAll(Collection<?> collection)
-    {
+    public boolean removeAll(Collection<?> collection) {
         boolean result = false;
         Iterator<?> it = iterator();
-        while (it.hasNext())
-        {
-            if (collection.contains(it.next()))
-            {
+        while (it.hasNext()) {
+            if (collection.contains(it.next())) {
                 it.remove();
                 result = true;
             }
@@ -338,14 +306,11 @@ public abstract class AbstractCollection<E> implements Collection<E>
      * @throws NullPointerException if {@code collection} is {@code null}.
      */
     @Override
-    public boolean retainAll(Collection<?> collection)
-    {
+    public boolean retainAll(Collection<?> collection) {
         boolean result = false;
         Iterator<?> it = iterator();
-        while (it.hasNext())
-        {
-            if (!collection.contains(it.next()))
-            {
+        while (it.hasNext()) {
+            if (!collection.contains(it.next())) {
                 it.remove();
                 result = true;
             }
@@ -367,13 +332,11 @@ public abstract class AbstractCollection<E> implements Collection<E>
     public abstract int size();
 
     @Override
-    public Object[] toArray()
-    {
+    public Object[] toArray() {
         int size = size(), index = 0;
         Iterator<?> it = iterator();
         Object[] array = new Object[size];
-        while (index < size)
-        {
+        while (index < size) {
             array[index++] = it.next();
         }
         return array;
@@ -381,20 +344,16 @@ public abstract class AbstractCollection<E> implements Collection<E>
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T[] toArray(T[] contents)
-    {
+    public <T> T[] toArray(T[] contents) {
         int size = size(), index = 0;
-        if (size > contents.length)
-        {
+        if (size > contents.length) {
             Class<?> ct = contents.getClass().getComponentType();
             contents = (T[]) Array.newInstance(ct, size);
         }
-        for (E entry : this)
-        {
+        for (E entry : this) {
             contents[index++] = (T) entry;
         }
-        if (index < contents.length)
-        {
+        if (index < contents.length) {
             contents[index] = null;
         }
         return contents;
@@ -408,29 +367,22 @@ public abstract class AbstractCollection<E> implements Collection<E>
      * @return the string representation of this {@code Collection}.
      */
     @Override
-    public String toString()
-    {
-        if (isEmpty())
-        {
+    public String toString() {
+        if (isEmpty()) {
             return "[]";
         }
 
         StringBuilder buffer = new StringBuilder(size() * 16);
         buffer.append('[');
         Iterator<?> it = iterator();
-        while (it.hasNext())
-        {
+        while (it.hasNext()) {
             Object next = it.next();
-            if (next != this)
-            {
+            if (next != this) {
                 buffer.append(next);
-            }
-            else
-            {
+            } else {
                 buffer.append("(this Collection)");
             }
-            if (it.hasNext())
-            {
+            if (it.hasNext()) {
                 buffer.append(", ");
             }
         }

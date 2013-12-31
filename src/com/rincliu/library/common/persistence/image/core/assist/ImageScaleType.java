@@ -21,8 +21,7 @@ package com.rincliu.library.common.persistence.image.core.assist;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.5.0
  */
-public enum ImageScaleType
-{
+public enum ImageScaleType {
     /** Image won't be scaled */
     NONE,
     /**

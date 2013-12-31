@@ -26,14 +26,12 @@ import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
 
-public class RLAdHelper
-{
+public class RLAdHelper {
 
     /**
 	 * 
 	 */
-    public interface AdListener
-    {
+    public interface AdListener {
         public void onClick();
 
         public void onReceive();
@@ -46,76 +44,59 @@ public class RLAdHelper
      * @param listener
      * @return
      */
-    public static View onCreateView(Activity activity, final AdListener listener)
-    {
+    public static View onCreateView(Activity activity, final AdListener listener) {
         DomobAdView adView = null;
         int width = RLSysUtil.getDisplayInfo(activity).getDisplayWidth();
         String key = activity.getString(R.string.domob_key);
-        if (width < 320)
-        {
+        if (width < 320) {
             return null;
-        }
-        else
-        {
+        } else {
             String size = null;
-            if (320 <= width && width < 600)
-            {
+            if (320 <= width && width < 600) {
                 size = DomobAdView.INLINE_SIZE_320X50;
-            }
-            else if (600 <= width && width < 728)
-            {
+            } else if (600 <= width && width < 728) {
                 size = DomobAdView.INLINE_SIZE_600X94;
-            }
-            else if (728 <= width)
-            {
+            } else if (728 <= width) {
                 size = DomobAdView.INLINE_SIZE_728X90;
             }
             adView = new DomobAdView(activity, key, size, true);
         }
 
         adView.setGravity(Gravity.CENTER);
-        adView.setAdEventListener(new DomobAdEventListener()
-        {
+        adView.setAdEventListener(new DomobAdEventListener() {
             @Override
-            public void onDomobAdClicked(DomobAdView adView)
-            {
+            public void onDomobAdClicked(DomobAdView adView) {
                 listener.onClick();
             }
 
             @Override
-            public void onDomobAdFailed(DomobAdView adView, ErrorCode errorCode)
-            {
+            public void onDomobAdFailed(DomobAdView adView, ErrorCode errorCode) {
                 listener.onFailedReceive();
             }
 
             @Override
-            public void onDomobAdOverlayDismissed(DomobAdView adView)
-            {
+            public void onDomobAdOverlayDismissed(DomobAdView adView) {
                 // TODO Auto-generated method stub
             }
 
             @Override
-            public void onDomobAdOverlayPresented(DomobAdView adView)
-            {
+            public void onDomobAdOverlayPresented(DomobAdView adView) {
                 // TODO Auto-generated method stub
             }
 
             @Override
-            public Context onDomobAdRequiresCurrentContext()
-            {
+            public Context onDomobAdRequiresCurrentContext() {
                 // TODO Auto-generated method stub
                 return null;
             }
 
             @Override
-            public void onDomobAdReturned(DomobAdView adView)
-            {
+            public void onDomobAdReturned(DomobAdView adView) {
                 listener.onReceive();
             }
 
             @Override
-            public void onDomobLeaveApplication(DomobAdView adView)
-            {
+            public void onDomobLeaveApplication(DomobAdView adView) {
                 // TODO Auto-generated method stub
             }
         });
@@ -125,10 +106,8 @@ public class RLAdHelper
     /**
      * @param view
      */
-    public static void onDestroy(View view)
-    {
-        if (view == null)
-        {
+    public static void onDestroy(View view) {
+        if (view == null) {
             return;
         }
         DomobAdView adView = (DomobAdView) view;

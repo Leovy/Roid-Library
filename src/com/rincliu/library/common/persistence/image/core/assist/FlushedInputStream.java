@@ -9,30 +9,22 @@ import java.io.InputStream;
  * href="http://code.google.com/p/android/issues/detail?id=6066">this
  * problem</a>.
  */
-public class FlushedInputStream extends FilterInputStream
-{
+public class FlushedInputStream extends FilterInputStream {
 
-    public FlushedInputStream(InputStream inputStream)
-    {
+    public FlushedInputStream(InputStream inputStream) {
         super(inputStream);
     }
 
     @Override
-    public long skip(long n) throws IOException
-    {
+    public long skip(long n) throws IOException {
         long totalBytesSkipped = 0L;
-        while (totalBytesSkipped < n)
-        {
+        while (totalBytesSkipped < n) {
             long bytesSkipped = in.skip(n - totalBytesSkipped);
-            if (bytesSkipped == 0L)
-            {
+            if (bytesSkipped == 0L) {
                 int by_te = read();
-                if (by_te < 0)
-                {
+                if (by_te < 0) {
                     break; // we reached EOF
-                }
-                else
-                {
+                } else {
                     bytesSkipped = 1; // we read one byte
                 }
             }

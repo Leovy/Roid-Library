@@ -23,8 +23,7 @@ import java.util.Collection;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.0.0
  */
-public interface MemoryCacheAware<K, V>
-{
+public interface MemoryCacheAware<K, V> {
     /**
      * Puts value into cache by key
      * 

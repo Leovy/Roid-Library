@@ -40,8 +40,7 @@ import java.util.Map.Entry;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.3.0
  */
-public class LRULimitedMemoryCache extends LimitedMemoryCache<String, Bitmap>
-{
+public class LRULimitedMemoryCache extends LimitedMemoryCache<String, Bitmap> {
 
     private static final int INITIAL_CAPACITY = 10;
 
@@ -52,61 +51,49 @@ public class LRULimitedMemoryCache extends LimitedMemoryCache<String, Bitmap>
             INITIAL_CAPACITY, LOAD_FACTOR, true));
 
     /** @param maxSize Maximum sum of the sizes of the Bitmaps in this cache */
-    public LRULimitedMemoryCache(int maxSize)
-    {
+    public LRULimitedMemoryCache(int maxSize) {
         super(maxSize);
     }
 
     @Override
-    public boolean put(String key, Bitmap value)
-    {
-        if (super.put(key, value))
-        {
+    public boolean put(String key, Bitmap value) {
+        if (super.put(key, value)) {
             lruCache.put(key, value);
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
     @Override
-    public Bitmap get(String key)
-    {
+    public Bitmap get(String key) {
         lruCache.get(key); // call "get" for LRU logic
         return super.get(key);
     }
 
     @Override
-    public void remove(String key)
-    {
+    public void remove(String key) {
         lruCache.remove(key);
         super.remove(key);
     }
 
     @Override
-    public void clear()
-    {
+    public void clear() {
         lruCache.clear();
         super.clear();
     }
 
     @Override
-    protected int getSize(Bitmap value)
-    {
+    protected int getSize(Bitmap value) {
         return value.getRowBytes() * value.getHeight();
     }
 
     @Override
-    protected Bitmap removeNext()
-    {
+    protected Bitmap removeNext() {
         Bitmap mostLongUsedValue = null;
-        synchronized (lruCache)
-        {
+        synchronized (lruCache) {
             Iterator<Entry<String, Bitmap>> it = lruCache.entrySet().iterator();
-            if (it.hasNext())
-            {
+            if (it.hasNext()) {
                 Entry<String, Bitmap> entry = it.next();
                 mostLongUsedValue = entry.getValue();
                 it.remove();
@@ -116,8 +103,7 @@ public class LRULimitedMemoryCache extends LimitedMemoryCache<String, Bitmap>
     }
 
     @Override
-    protected Reference<Bitmap> createReference(Bitmap value)
-    {
+    protected Reference<Bitmap> createReference(Bitmap value) {
         return new WeakReference<Bitmap>(value);
     }
 }

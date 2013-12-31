@@ -9,46 +9,38 @@ import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-public class RightDrawer extends HorizontalDrawer
-{
+public class RightDrawer extends HorizontalDrawer {
 
     private int mIndicatorTop;
 
-    RightDrawer(Activity activity, int dragMode)
-    {
+    RightDrawer(Activity activity, int dragMode) {
         super(activity, dragMode);
     }
 
-    public RightDrawer(Context context)
-    {
+    public RightDrawer(Context context) {
         super(context);
     }
 
-    public RightDrawer(Context context, AttributeSet attrs)
-    {
+    public RightDrawer(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public RightDrawer(Context context, AttributeSet attrs, int defStyle)
-    {
+    public RightDrawer(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
     @Override
-    public void openMenu(boolean animate)
-    {
+    public void openMenu(boolean animate) {
         animateOffsetTo(-mMenuSize, 0, animate);
     }
 
     @Override
-    public void closeMenu(boolean animate)
-    {
+    public void closeMenu(boolean animate) {
         animateOffsetTo(0, 0, animate);
     }
 
     @Override
-    public void setDropShadowColor(int color)
-    {
+    public void setDropShadowColor(int color) {
         final int endColor = color & 0x00FFFFFF;
         mDropShadowDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
                 new int[] {color, endColor,});
@@ -56,8 +48,7 @@ public class RightDrawer extends HorizontalDrawer
     }
 
     @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b)
-    {
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
         final int width = r - l;
         final int height = b - t;
         final int offsetPixels = (int) mOffsetPixels;
@@ -65,12 +56,9 @@ public class RightDrawer extends HorizontalDrawer
         mMenuContainer.layout(width - mMenuSize, 0, width, height);
         offsetMenu(offsetPixels);
 
-        if (USE_TRANSLATIONS)
-        {
+        if (USE_TRANSLATIONS) {
             mContentContainer.layout(0, 0, width, height);
-        }
-        else
-        {
+        } else {
             mContentContainer.layout(offsetPixels, 0, width + offsetPixels, height);
         }
     }
@@ -83,28 +71,20 @@ public class RightDrawer extends HorizontalDrawer
      */
 
     @SuppressLint("NewApi")
-    private void offsetMenu(int offsetPixels)
-    {
-        if (mOffsetMenu && mMenuSize != 0)
-        {
+    private void offsetMenu(int offsetPixels) {
+        if (mOffsetMenu && mMenuSize != 0) {
             final int menuWidth = mMenuSize;
             final float openRatio = (menuWidth + (float) offsetPixels) / menuWidth;
 
-            if (USE_TRANSLATIONS)
-            {
-                if (offsetPixels != 0)
-                {
+            if (USE_TRANSLATIONS) {
+                if (offsetPixels != 0) {
                     final int offset = (int) (0.25f * (openRatio * menuWidth));
                     mMenuContainer.setTranslationX(offset);
-                }
-                else
-                {
+                } else {
                     mMenuContainer.setTranslationX(-menuWidth);
                 }
 
-            }
-            else
-            {
+            } else {
                 final int width = getWidth();
                 final int oldMenuRight = mMenuContainer.getRight();
                 final int newRight = width + (int) (0.25f * (openRatio * menuWidth));
@@ -116,8 +96,7 @@ public class RightDrawer extends HorizontalDrawer
     }
 
     @Override
-    protected void drawDropShadow(Canvas canvas, int offsetPixels)
-    {
+    protected void drawDropShadow(Canvas canvas, int offsetPixels) {
         final int height = getHeight();
         final int width = getWidth();
         final int left = width + offsetPixels;
@@ -128,8 +107,7 @@ public class RightDrawer extends HorizontalDrawer
     }
 
     @Override
-    protected void drawMenuOverlay(Canvas canvas, int offsetPixels)
-    {
+    protected void drawMenuOverlay(Canvas canvas, int offsetPixels) {
         final int height = getHeight();
         final int width = getWidth();
         final int left = width + offsetPixels;
@@ -142,15 +120,12 @@ public class RightDrawer extends HorizontalDrawer
     }
 
     @Override
-    protected void drawIndicator(Canvas canvas, int offsetPixels)
-    {
-        if (mActiveView != null && isViewDescendant(mActiveView))
-        {
+    protected void drawIndicator(Canvas canvas, int offsetPixels) {
+        if (mActiveView != null && isViewDescendant(mActiveView)) {
             Integer position = (Integer) mActiveView.getTag(R.id.mdActiveViewPosition);
             final int pos = position == null ? 0 : position;
 
-            if (pos == mActivePosition)
-            {
+            if (pos == mActivePosition) {
                 final int width = getWidth();
                 final int menuWidth = mMenuSize;
                 final int indicatorWidth = mActiveIndicator.getWidth();
@@ -167,17 +142,14 @@ public class RightDrawer extends HorizontalDrawer
                 final int indicatorRight = contentRight + interpolatedWidth;
                 final int indicatorLeft = indicatorRight - indicatorWidth;
 
-                if (mIndicatorAnimating)
-                {
+                if (mIndicatorAnimating) {
                     final int indicatorFinalTop = mActiveRect.top
                             + ((mActiveRect.height() - mActiveIndicator.getHeight()) / 2);
                     final int indicatorStartTop = mIndicatorStartPos;
                     final int diff = indicatorFinalTop - indicatorStartTop;
                     final int startOffset = (int) (diff * mIndicatorOffset);
                     mIndicatorTop = indicatorStartTop + startOffset;
-                }
-                else
-                {
+                } else {
                     mIndicatorTop = mActiveRect.top + ((mActiveRect.height() - mActiveIndicator.getHeight()) / 2);
                 }
 
@@ -190,30 +162,24 @@ public class RightDrawer extends HorizontalDrawer
     }
 
     @Override
-    protected int getIndicatorStartPos()
-    {
+    protected int getIndicatorStartPos() {
         return mIndicatorTop;
     }
 
     @Override
-    protected void initPeekScroller()
-    {
+    protected void initPeekScroller() {
         final int dx = -mMenuSize / 3;
         mPeekScroller.startScroll(0, 0, dx, 0, PEEK_DURATION);
     }
 
     @SuppressLint("NewApi")
     @Override
-    protected void onOffsetPixelsChanged(int offsetPixels)
-    {
-        if (USE_TRANSLATIONS)
-        {
+    protected void onOffsetPixelsChanged(int offsetPixels) {
+        if (USE_TRANSLATIONS) {
             mContentContainer.setTranslationX(offsetPixels);
             offsetMenu(offsetPixels);
             invalidate();
-        }
-        else
-        {
+        } else {
             mContentContainer.offsetLeftAndRight(offsetPixels - mContentContainer.getLeft());
             offsetMenu(offsetPixels);
             invalidate();
@@ -225,14 +191,12 @@ public class RightDrawer extends HorizontalDrawer
     // ////////////////////////////////////////////////////////////////////
 
     @Override
-    protected boolean isContentTouch(MotionEvent ev)
-    {
+    protected boolean isContentTouch(MotionEvent ev) {
         return ev.getX() < getWidth() + mOffsetPixels;
     }
 
     @Override
-    protected boolean onDownAllowDrag(MotionEvent ev)
-    {
+    protected boolean onDownAllowDrag(MotionEvent ev) {
         final int width = getWidth();
         final int initialMotionX = (int) mInitialMotionX;
 
@@ -241,8 +205,7 @@ public class RightDrawer extends HorizontalDrawer
     }
 
     @Override
-    protected boolean onMoveAllowDrag(MotionEvent ev, float diff)
-    {
+    protected boolean onMoveAllowDrag(MotionEvent ev, float diff) {
         final int width = getWidth();
         final int initialMotionX = (int) mInitialMotionX;
 
@@ -251,20 +214,17 @@ public class RightDrawer extends HorizontalDrawer
     }
 
     @Override
-    protected void onMoveEvent(float dx)
-    {
+    protected void onMoveEvent(float dx) {
         final float newOffset = Math.max(Math.min(mOffsetPixels + dx, 0), -mMenuSize);
         setOffsetPixels(newOffset);
     }
 
     @Override
-    protected void onUpEvent(MotionEvent ev)
-    {
+    protected void onUpEvent(MotionEvent ev) {
         final int offsetPixels = (int) mOffsetPixels;
         final int width = getWidth();
 
-        if (mIsDragging)
-        {
+        if (mIsDragging) {
             mVelocityTracker.computeCurrentVelocity(1000, mMaxVelocity);
             final int initialVelocity = (int) mVelocityTracker.getXVelocity();
             mLastMotionX = ev.getX();
@@ -272,9 +232,7 @@ public class RightDrawer extends HorizontalDrawer
 
             // Close the menu when content is clicked while the menu is
             // visible.
-        }
-        else if (mMenuVisible && ev.getX() < width + offsetPixels)
-        {
+        } else if (mMenuVisible && ev.getX() < width + offsetPixels) {
             closeMenu();
         }
     }

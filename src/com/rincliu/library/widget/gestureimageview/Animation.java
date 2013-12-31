@@ -18,8 +18,7 @@ package com.rincliu.library.widget.gestureimageview;
 /**
  * @author Jason Polites
  */
-public interface Animation
-{
+public interface Animation {
 
     /**
      * Transforms the view.

@@ -35,8 +35,7 @@ import com.rincliu.library.common.persistence.image.core.DefaultConfigurationFac
  * @see FileNameGenerator
  * @since 1.0.0
  */
-public abstract class LimitedDiscCache extends BaseDiscCache
-{
+public abstract class LimitedDiscCache extends BaseDiscCache {
 
     private static final int INVALID_SIZE = -1;
 
@@ -53,8 +52,7 @@ public abstract class LimitedDiscCache extends BaseDiscCache
      * @param sizeLimit Cache limit value. If cache exceeds this limit then
      *            file with the most oldest last usage date will be deleted.
      */
-    public LimitedDiscCache(File cacheDir, int sizeLimit)
-    {
+    public LimitedDiscCache(File cacheDir, int sizeLimit) {
         this(cacheDir, DefaultConfigurationFactory.createFileNameGenerator(), sizeLimit);
     }
 
@@ -66,27 +64,22 @@ public abstract class LimitedDiscCache extends BaseDiscCache
      * @param sizeLimit Cache limit value. If cache exceeds this limit then
      *            file with the most oldest last usage date will be deleted.
      */
-    public LimitedDiscCache(File cacheDir, FileNameGenerator fileNameGenerator, int sizeLimit)
-    {
+    public LimitedDiscCache(File cacheDir, FileNameGenerator fileNameGenerator, int sizeLimit) {
         super(cacheDir, fileNameGenerator);
         this.sizeLimit = sizeLimit;
         cacheSize = new AtomicInteger();
         calculateCacheSizeAndFillUsageMap();
     }
 
-    private void calculateCacheSizeAndFillUsageMap()
-    {
-        new Thread(new Runnable()
-        {
+    private void calculateCacheSizeAndFillUsageMap() {
+        new Thread(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 int size = 0;
                 File[] cachedFiles = cacheDir.listFiles();
-                if (cachedFiles != null)
-                { // rarely but it can happen, don't know why
-                    for (File cachedFile : cachedFiles)
-                    {
+                if (cachedFiles != null) { // rarely but it can happen, don't
+                                           // know why
+                    for (File cachedFile : cachedFiles) {
                         size += getSize(cachedFile);
                         lastUsageDates.put(cachedFile, cachedFile.lastModified());
                     }
@@ -97,13 +90,11 @@ public abstract class LimitedDiscCache extends BaseDiscCache
     }
 
     @Override
-    public void put(String key, File file)
-    {
+    public void put(String key, File file) {
         int valueSize = getSize(file);
         int curCacheSize = cacheSize.get();
 
-        while (curCacheSize + valueSize > sizeLimit)
-        {
+        while (curCacheSize + valueSize > sizeLimit) {
             int freedSize = removeNext();
             if (freedSize == INVALID_SIZE)
                 break; // cache is empty (have nothing to delete)
@@ -117,8 +108,7 @@ public abstract class LimitedDiscCache extends BaseDiscCache
     }
 
     @Override
-    public File get(String key)
-    {
+    public File get(String key) {
         File file = super.get(key);
 
         Long currentTime = System.currentTimeMillis();
@@ -129,37 +119,28 @@ public abstract class LimitedDiscCache extends BaseDiscCache
     }
 
     @Override
-    public void clear()
-    {
+    public void clear() {
         lastUsageDates.clear();
         cacheSize.set(0);
         super.clear();
     }
 
     /** Remove next file and returns it's size */
-    private int removeNext()
-    {
-        if (lastUsageDates.isEmpty())
-        {
+    private int removeNext() {
+        if (lastUsageDates.isEmpty()) {
             return INVALID_SIZE;
         }
         Long oldestUsage = null;
         File mostLongUsedFile = null;
         Set<Entry<File, Long>> entries = lastUsageDates.entrySet();
-        synchronized (lastUsageDates)
-        {
-            for (Entry<File, Long> entry : entries)
-            {
-                if (mostLongUsedFile == null)
-                {
+        synchronized (lastUsageDates) {
+            for (Entry<File, Long> entry : entries) {
+                if (mostLongUsedFile == null) {
                     mostLongUsedFile = entry.getKey();
                     oldestUsage = entry.getValue();
-                }
-                else
-                {
+                } else {
                     Long lastValueUsage = entry.getValue();
-                    if (lastValueUsage < oldestUsage)
-                    {
+                    if (lastValueUsage < oldestUsage) {
                         oldestUsage = lastValueUsage;
                         mostLongUsedFile = entry.getKey();
                     }
@@ -168,18 +149,13 @@ public abstract class LimitedDiscCache extends BaseDiscCache
         }
 
         int fileSize = 0;
-        if (mostLongUsedFile != null)
-        {
-            if (mostLongUsedFile.exists())
-            {
+        if (mostLongUsedFile != null) {
+            if (mostLongUsedFile.exists()) {
                 fileSize = getSize(mostLongUsedFile);
-                if (mostLongUsedFile.delete())
-                {
+                if (mostLongUsedFile.delete()) {
                     lastUsageDates.remove(mostLongUsedFile);
                 }
-            }
-            else
-            {
+            } else {
                 lastUsageDates.remove(mostLongUsedFile);
             }
         }

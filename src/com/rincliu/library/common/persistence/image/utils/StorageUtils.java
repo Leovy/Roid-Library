@@ -30,16 +30,13 @@ import static android.os.Environment.MEDIA_MOUNTED;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.0.0
  */
-public final class StorageUtils
-{
+public final class StorageUtils {
 
     private static final String EXTERNAL_STORAGE_PERMISSION = "android.permission.WRITE_EXTERNAL_STORAGE";
 
     private static final String INDIVIDUAL_DIR_NAME = "uil-images";
 
-    private StorageUtils()
-    {
-    }
+    private StorageUtils() {}
 
     /**
      * Returns application cache directory. Cache directory will be created on
@@ -50,19 +47,15 @@ public final class StorageUtils
      * @param context Application context
      * @return Cache {@link File directory}
      */
-    public static File getCacheDirectory(Context context)
-    {
+    public static File getCacheDirectory(Context context) {
         File appCacheDir = null;
-        if (MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) && hasExternalStoragePermission(context))
-        {
+        if (MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) && hasExternalStoragePermission(context)) {
             appCacheDir = getExternalCacheDir(context);
         }
-        if (appCacheDir == null)
-        {
+        if (appCacheDir == null) {
             appCacheDir = context.getCacheDir();
         }
-        if (appCacheDir == null)
-        {
+        if (appCacheDir == null) {
             L.w("Can't define system cache directory! The app should be re-installed.");
         }
         return appCacheDir;
@@ -78,14 +71,11 @@ public final class StorageUtils
      * @param context Application context
      * @return Cache {@link File directory}
      */
-    public static File getIndividualCacheDirectory(Context context)
-    {
+    public static File getIndividualCacheDirectory(Context context) {
         File cacheDir = getCacheDirectory(context);
         File individualCacheDir = new File(cacheDir, INDIVIDUAL_DIR_NAME);
-        if (!individualCacheDir.exists())
-        {
-            if (!individualCacheDir.mkdir())
-            {
+        if (!individualCacheDir.exists()) {
+            if (!individualCacheDir.mkdir()) {
                 individualCacheDir = cacheDir;
             }
         }
@@ -103,45 +93,35 @@ public final class StorageUtils
      *            "AppDir/cache/images")
      * @return Cache {@link File directory}
      */
-    public static File getOwnCacheDirectory(Context context, String cacheDir)
-    {
+    public static File getOwnCacheDirectory(Context context, String cacheDir) {
         File appCacheDir = null;
-        if (MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) && hasExternalStoragePermission(context))
-        {
+        if (MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) && hasExternalStoragePermission(context)) {
             appCacheDir = new File(Environment.getExternalStorageDirectory(), cacheDir);
         }
-        if (appCacheDir == null || (!appCacheDir.exists() && !appCacheDir.mkdirs()))
-        {
+        if (appCacheDir == null || (!appCacheDir.exists() && !appCacheDir.mkdirs())) {
             appCacheDir = context.getCacheDir();
         }
         return appCacheDir;
     }
 
-    private static File getExternalCacheDir(Context context)
-    {
+    private static File getExternalCacheDir(Context context) {
         File dataDir = new File(new File(Environment.getExternalStorageDirectory(), "Android"), "data");
         File appCacheDir = new File(new File(dataDir, context.getPackageName()), "cache");
-        if (!appCacheDir.exists())
-        {
-            if (!appCacheDir.mkdirs())
-            {
+        if (!appCacheDir.exists()) {
+            if (!appCacheDir.mkdirs()) {
                 L.w("Unable to create external cache directory");
                 return null;
             }
-            try
-            {
+            try {
                 new File(appCacheDir, ".nomedia").createNewFile();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 L.i("Can't create \".nomedia\" file in application external cache directory");
             }
         }
         return appCacheDir;
     }
 
-    private static boolean hasExternalStoragePermission(Context context)
-    {
+    private static boolean hasExternalStoragePermission(Context context) {
         int perm = context.checkCallingOrSelfPermission(EXTERNAL_STORAGE_PERMISSION);
         return perm == PackageManager.PERMISSION_GRANTED;
     }

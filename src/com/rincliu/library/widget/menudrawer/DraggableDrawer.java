@@ -15,8 +15,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
 
-public abstract class DraggableDrawer extends MenuDrawer
-{
+public abstract class DraggableDrawer extends MenuDrawer {
 
     /**
      * Key used when saving menu visibility state.
@@ -69,11 +68,9 @@ public abstract class DraggableDrawer extends MenuDrawer
     /**
      * Runnable used when the peek animation is running.
      */
-    protected final Runnable mPeekRunnable = new Runnable()
-    {
+    protected final Runnable mPeekRunnable = new Runnable() {
         @Override
-        public void run()
-        {
+        public void run() {
             peekDrawerInvalidate();
         }
     };
@@ -81,11 +78,9 @@ public abstract class DraggableDrawer extends MenuDrawer
     /**
      * Runnable used when animating the drawer open/closed.
      */
-    private final Runnable mDragRunnable = new Runnable()
-    {
+    private final Runnable mDragRunnable = new Runnable() {
         @Override
-        public void run()
-        {
+        public void run() {
             postAnimationInvalidate();
         }
     };
@@ -170,29 +165,24 @@ public abstract class DraggableDrawer extends MenuDrawer
      */
     private boolean mLayerTypeHardware;
 
-    DraggableDrawer(Activity activity, int dragMode)
-    {
+    DraggableDrawer(Activity activity, int dragMode) {
         super(activity, dragMode);
     }
 
-    public DraggableDrawer(Context context)
-    {
+    public DraggableDrawer(Context context) {
         super(context);
     }
 
-    public DraggableDrawer(Context context, AttributeSet attrs)
-    {
+    public DraggableDrawer(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public DraggableDrawer(Context context, AttributeSet attrs, int defStyle)
-    {
+    public DraggableDrawer(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
     @Override
-    protected void initDrawer(Context context, AttributeSet attrs, int defStyle)
-    {
+    protected void initDrawer(Context context, AttributeSet attrs, int defStyle) {
         super.initDrawer(context, attrs, defStyle);
 
         final ViewConfiguration configuration = ViewConfiguration.get(context);
@@ -205,68 +195,53 @@ public abstract class DraggableDrawer extends MenuDrawer
         mCloseEnough = dpToPx(DraggableDrawer.CLOSE_ENOUGH);
     }
 
-    public void toggleMenu(boolean animate)
-    {
-        if (mDrawerState == STATE_OPEN || mDrawerState == STATE_OPENING)
-        {
+    public void toggleMenu(boolean animate) {
+        if (mDrawerState == STATE_OPEN || mDrawerState == STATE_OPENING) {
             closeMenu(animate);
-        }
-        else if (mDrawerState == STATE_CLOSED || mDrawerState == STATE_CLOSING)
-        {
+        } else if (mDrawerState == STATE_CLOSED || mDrawerState == STATE_CLOSING) {
             openMenu(animate);
         }
     }
 
-    public boolean isMenuVisible()
-    {
+    public boolean isMenuVisible() {
         return mMenuVisible;
     }
 
-    public void setMenuSize(final int size)
-    {
+    public void setMenuSize(final int size) {
         mMenuSize = size;
         mMenuSizeSet = true;
-        if (mDrawerState == STATE_OPEN || mDrawerState == STATE_OPENING)
-        {
+        if (mDrawerState == STATE_OPEN || mDrawerState == STATE_OPENING) {
             setOffsetPixels(mMenuSize);
         }
         requestLayout();
         invalidate();
     }
 
-    public void setOffsetMenuEnabled(boolean offsetMenu)
-    {
-        if (offsetMenu != mOffsetMenu)
-        {
+    public void setOffsetMenuEnabled(boolean offsetMenu) {
+        if (offsetMenu != mOffsetMenu) {
             mOffsetMenu = offsetMenu;
             requestLayout();
             invalidate();
         }
     }
 
-    public boolean getOffsetMenuEnabled()
-    {
+    public boolean getOffsetMenuEnabled() {
         return mOffsetMenu;
     }
 
-    public void peekDrawer()
-    {
+    public void peekDrawer() {
         peekDrawer(DEFAULT_PEEK_START_DELAY, DEFAULT_PEEK_DELAY);
     }
 
-    public void peekDrawer(long delay)
-    {
+    public void peekDrawer(long delay) {
         peekDrawer(DEFAULT_PEEK_START_DELAY, delay);
     }
 
-    public void peekDrawer(final long startDelay, final long delay)
-    {
-        if (startDelay < 0)
-        {
+    public void peekDrawer(final long startDelay, final long delay) {
+        if (startDelay < 0) {
             throw new IllegalArgumentException("startDelay must be zero or larger.");
         }
-        if (delay < 0)
-        {
+        if (delay < 0) {
             throw new IllegalArgumentException("delay must be zero or larger");
         }
 
@@ -274,21 +249,17 @@ public abstract class DraggableDrawer extends MenuDrawer
         removeCallbacks(mPeekStartRunnable);
 
         mPeekDelay = delay;
-        mPeekStartRunnable = new Runnable()
-        {
+        mPeekStartRunnable = new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 startPeek();
             }
         };
         postDelayed(mPeekStartRunnable, startDelay);
     }
 
-    public void setHardwareLayerEnabled(boolean enabled)
-    {
-        if (enabled != mHardwareLayersEnabled)
-        {
+    public void setHardwareLayerEnabled(boolean enabled) {
+        if (enabled != mHardwareLayersEnabled) {
             mHardwareLayersEnabled = enabled;
             mMenuContainer.setHardwareLayersEnabled(enabled);
             mContentContainer.setHardwareLayersEnabled(enabled);
@@ -296,27 +267,22 @@ public abstract class DraggableDrawer extends MenuDrawer
         }
     }
 
-    public int getTouchMode()
-    {
+    public int getTouchMode() {
         return mTouchMode;
     }
 
-    public void setTouchMode(int mode)
-    {
-        if (mTouchMode != mode)
-        {
+    public void setTouchMode(int mode) {
+        if (mTouchMode != mode) {
             mTouchMode = mode;
             updateTouchAreaSize();
         }
     }
 
-    public void setTouchBezelSize(int size)
-    {
+    public void setTouchBezelSize(int size) {
         mTouchBezelSize = size;
     }
 
-    public int getTouchBezelSize()
-    {
+    public int getTouchBezelSize() {
         return mTouchBezelSize;
     }
 
@@ -325,15 +291,13 @@ public abstract class DraggableDrawer extends MenuDrawer
      * 
      * @param offsetPixels The number of pixels to offset the content by.
      */
-    protected void setOffsetPixels(float offsetPixels)
-    {
+    protected void setOffsetPixels(float offsetPixels) {
         final int oldOffset = (int) mOffsetPixels;
         final int newOffset = (int) offsetPixels;
 
         mOffsetPixels = offsetPixels;
 
-        if (newOffset != oldOffset)
-        {
+        if (newOffset != oldOffset) {
             onOffsetPixelsChanged(newOffset);
             mMenuVisible = newOffset != 0;
         }
@@ -351,10 +315,8 @@ public abstract class DraggableDrawer extends MenuDrawer
      * If possible, set the layer type to
      * {@link android.view.View#LAYER_TYPE_HARDWARE}.
      */
-    protected void startLayerTranslation()
-    {
-        if (USE_TRANSLATIONS && mHardwareLayersEnabled && !mLayerTypeHardware)
-        {
+    protected void startLayerTranslation() {
+        if (USE_TRANSLATIONS && mHardwareLayersEnabled && !mLayerTypeHardware) {
             mLayerTypeHardware = true;
             mContentContainer.setLayerType(View.LAYER_TYPE_HARDWARE, null);
             mMenuContainer.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -366,10 +328,8 @@ public abstract class DraggableDrawer extends MenuDrawer
      * {@link android.view.View#LAYER_TYPE_HARDWARE}, this will set it to
      * {@link View#LAYER_TYPE_NONE}.
      */
-    private void stopLayerTranslation()
-    {
-        if (mLayerTypeHardware)
-        {
+    private void stopLayerTranslation() {
+        if (mLayerTypeHardware) {
             mLayerTypeHardware = false;
             mContentContainer.setLayerType(View.LAYER_TYPE_NONE, null);
             mMenuContainer.setLayerType(View.LAYER_TYPE_NONE, null);
@@ -379,18 +339,12 @@ public abstract class DraggableDrawer extends MenuDrawer
     /**
      * Compute the touch area based on the touch mode.
      */
-    protected void updateTouchAreaSize()
-    {
-        if (mTouchMode == TOUCH_MODE_BEZEL)
-        {
+    protected void updateTouchAreaSize() {
+        if (mTouchMode == TOUCH_MODE_BEZEL) {
             mTouchSize = mTouchBezelSize;
-        }
-        else if (mTouchMode == TOUCH_MODE_FULLSCREEN)
-        {
+        } else if (mTouchMode == TOUCH_MODE_FULLSCREEN) {
             mTouchSize = getMeasuredWidth();
-        }
-        else
-        {
+        } else {
             mTouchSize = 0;
         }
     }
@@ -398,12 +352,10 @@ public abstract class DraggableDrawer extends MenuDrawer
     /**
      * Called when a drag has been ended.
      */
-    protected void endDrag()
-    {
+    protected void endDrag() {
         mIsDragging = false;
 
-        if (mVelocityTracker != null)
-        {
+        if (mVelocityTracker != null) {
             mVelocityTracker.recycle();
             mVelocityTracker = null;
         }
@@ -412,8 +364,7 @@ public abstract class DraggableDrawer extends MenuDrawer
     /**
      * Stops ongoing animation of the drawer.
      */
-    protected void stopAnimation()
-    {
+    protected void stopAnimation() {
         removeCallbacks(mDragRunnable);
         mScroller.abortAnimation();
         stopLayerTranslation();
@@ -422,8 +373,7 @@ public abstract class DraggableDrawer extends MenuDrawer
     /**
      * Called when a drawer animation has successfully completed.
      */
-    private void completeAnimation()
-    {
+    private void completeAnimation() {
         mScroller.abortAnimation();
         final int finalX = mScroller.getFinalX();
         setOffsetPixels(finalX);
@@ -438,15 +388,13 @@ public abstract class DraggableDrawer extends MenuDrawer
      * @param velocity Optional velocity if called by releasing a drag event.
      * @param animate Whether the move is animated.
      */
-    protected void animateOffsetTo(int position, int velocity, boolean animate)
-    {
+    protected void animateOffsetTo(int position, int velocity, boolean animate) {
         endDrag();
         endPeek();
 
         final int startX = (int) mOffsetPixels;
         final int dx = position - startX;
-        if (dx == 0 || !animate)
-        {
+        if (dx == 0 || !animate) {
             setOffsetPixels(position);
             setDrawerState(position == 0 ? STATE_CLOSED : STATE_OPEN);
             stopLayerTranslation();
@@ -456,24 +404,18 @@ public abstract class DraggableDrawer extends MenuDrawer
         int duration;
 
         velocity = Math.abs(velocity);
-        if (velocity > 0)
-        {
+        if (velocity > 0) {
             duration = 4 * Math.round(1000.f * Math.abs((float) dx / velocity));
-        }
-        else
-        {
+        } else {
             duration = (int) (600.f * Math.abs((float) dx / mMenuSize));
         }
 
         duration = Math.min(duration, mMaxAnimationDuration);
 
-        if (dx > 0)
-        {
+        if (dx > 0) {
             setDrawerState(STATE_OPENING);
             mScroller.startScroll(startX, 0, dx, 0, duration);
-        }
-        else
-        {
+        } else {
             setDrawerState(STATE_CLOSING);
             mScroller.startScroll(startX, 0, dx, 0, duration);
         }
@@ -486,17 +428,14 @@ public abstract class DraggableDrawer extends MenuDrawer
     /**
      * Callback when each frame in the drawer animation should be drawn.
      */
-    private void postAnimationInvalidate()
-    {
-        if (mScroller.computeScrollOffset())
-        {
+    private void postAnimationInvalidate() {
+        if (mScroller.computeScrollOffset()) {
             final int oldX = (int) mOffsetPixels;
             final int x = mScroller.getCurrX();
 
             if (x != oldX)
                 setOffsetPixels(x);
-            if (x != mScroller.getFinalX())
-            {
+            if (x != mScroller.getFinalX()) {
                 postOnAnimation(mDragRunnable);
                 return;
             }
@@ -508,8 +447,7 @@ public abstract class DraggableDrawer extends MenuDrawer
     /**
      * Starts peek drawer animation.
      */
-    protected void startPeek()
-    {
+    protected void startPeek() {
         initPeekScroller();
 
         startLayerTranslation();
@@ -521,28 +459,21 @@ public abstract class DraggableDrawer extends MenuDrawer
     /**
      * Callback when each frame in the peek drawer animation should be drawn.
      */
-    private void peekDrawerInvalidate()
-    {
-        if (mPeekScroller.computeScrollOffset())
-        {
+    private void peekDrawerInvalidate() {
+        if (mPeekScroller.computeScrollOffset()) {
             final int oldX = (int) mOffsetPixels;
             final int x = mPeekScroller.getCurrX();
             if (x != oldX)
                 setOffsetPixels(x);
 
-            if (!mPeekScroller.isFinished())
-            {
+            if (!mPeekScroller.isFinished()) {
                 postOnAnimation(mPeekRunnable);
                 return;
 
-            }
-            else if (mPeekDelay > 0)
-            {
-                mPeekStartRunnable = new Runnable()
-                {
+            } else if (mPeekDelay > 0) {
+                mPeekStartRunnable = new Runnable() {
                     @Override
-                    public void run()
-                    {
+                    public void run() {
                         startPeek();
                     }
                 };
@@ -556,8 +487,7 @@ public abstract class DraggableDrawer extends MenuDrawer
     /**
      * Called when the peek drawer animation has successfully completed.
      */
-    private void completePeek()
-    {
+    private void completePeek() {
         mPeekScroller.abortAnimation();
 
         setOffsetPixels(0);
@@ -569,15 +499,13 @@ public abstract class DraggableDrawer extends MenuDrawer
     /**
      * Stops ongoing peek drawer animation.
      */
-    protected void endPeek()
-    {
+    protected void endPeek() {
         removeCallbacks(mPeekStartRunnable);
         removeCallbacks(mPeekRunnable);
         stopLayerTranslation();
     }
 
-    protected boolean isCloseEnough()
-    {
+    protected boolean isCloseEnough() {
         return Math.abs(mOffsetPixels) <= mCloseEnough;
     }
 
@@ -609,17 +537,14 @@ public abstract class DraggableDrawer extends MenuDrawer
      * @param y Y coordinate of the active touch point
      * @return true if child views of v can be scrolled by delta of dx.
      */
-    protected boolean canChildScrollHorizontally(View v, boolean checkV, int dx, int x, int y)
-    {
-        if (v instanceof ViewGroup)
-        {
+    protected boolean canChildScrollHorizontally(View v, boolean checkV, int dx, int x, int y) {
+        if (v instanceof ViewGroup) {
             final ViewGroup group = (ViewGroup) v;
 
             final int count = group.getChildCount();
             // Count backwards - let topmost views consume scroll distance
             // first.
-            for (int i = count - 1; i >= 0; i--)
-            {
+            for (int i = count - 1; i >= 0; i--) {
                 final View child = group.getChildAt(i);
 
                 final int childLeft = child.getLeft() + supportGetTranslationX(child);
@@ -628,8 +553,7 @@ public abstract class DraggableDrawer extends MenuDrawer
                 final int childBottom = child.getBottom() + supportGetTranslationY(child);
 
                 if (x >= childLeft && x < childRight && y >= childTop && y < childBottom
-                        && canChildScrollHorizontally(child, true, dx, x - childLeft, y - childTop))
-                {
+                        && canChildScrollHorizontally(child, true, dx, x - childLeft, y - childTop)) {
                     return true;
                 }
             }
@@ -648,17 +572,14 @@ public abstract class DraggableDrawer extends MenuDrawer
      * @param y Y coordinate of the active touch point
      * @return true if child views of v can be scrolled by delta of dx.
      */
-    protected boolean canChildScrollVertically(View v, boolean checkV, int dx, int x, int y)
-    {
-        if (v instanceof ViewGroup)
-        {
+    protected boolean canChildScrollVertically(View v, boolean checkV, int dx, int x, int y) {
+        if (v instanceof ViewGroup) {
             final ViewGroup group = (ViewGroup) v;
 
             final int count = group.getChildCount();
             // Count backwards - let topmost views consume scroll distance
             // first.
-            for (int i = count - 1; i >= 0; i--)
-            {
+            for (int i = count - 1; i >= 0; i--) {
                 final View child = group.getChildAt(i);
 
                 final int childLeft = child.getLeft() + supportGetTranslationX(child);
@@ -667,8 +588,7 @@ public abstract class DraggableDrawer extends MenuDrawer
                 final int childBottom = child.getBottom() + supportGetTranslationY(child);
 
                 if (x >= childLeft && x < childRight && y >= childTop && y < childBottom
-                        && canChildScrollVertically(child, true, dx, x - childLeft, y - childTop))
-                {
+                        && canChildScrollVertically(child, true, dx, x - childLeft, y - childTop)) {
                     return true;
                 }
             }
@@ -677,20 +597,16 @@ public abstract class DraggableDrawer extends MenuDrawer
         return checkV && mOnInterceptMoveEventListener.isViewDraggable(v, dx, x, y);
     }
 
-    private int supportGetTranslationY(View v)
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-        {
+    private int supportGetTranslationY(View v) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             return (int) v.getTranslationY();
         }
 
         return 0;
     }
 
-    private int supportGetTranslationX(View v)
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-        {
+    private int supportGetTranslationX(View v) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             return (int) v.getTranslationX();
         }
 
@@ -726,8 +642,7 @@ public abstract class DraggableDrawer extends MenuDrawer
     protected abstract void onUpEvent(MotionEvent ev);
 
     @Override
-    protected void dispatchDraw(Canvas canvas)
-    {
+    protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         final int offsetPixels = (int) mOffsetPixels;
 
@@ -763,23 +678,18 @@ public abstract class DraggableDrawer extends MenuDrawer
      */
     protected abstract void drawIndicator(Canvas canvas, int offsetPixels);
 
-    void saveState(Bundle state)
-    {
+    void saveState(Bundle state) {
         final boolean menuVisible = mDrawerState == STATE_OPEN || mDrawerState == STATE_OPENING;
         state.putBoolean(STATE_MENU_VISIBLE, menuVisible);
     }
 
-    public void restoreState(Parcelable in)
-    {
+    public void restoreState(Parcelable in) {
         super.restoreState(in);
         Bundle state = (Bundle) in;
         final boolean menuOpen = state.getBoolean(STATE_MENU_VISIBLE);
-        if (menuOpen)
-        {
+        if (menuOpen) {
             openMenu(false);
-        }
-        else
-        {
+        } else {
             setOffsetPixels(0);
         }
         mDrawerState = menuOpen ? STATE_OPEN : STATE_CLOSED;

@@ -31,8 +31,7 @@ import android.widget.ListAdapter;
 import com.rincliu.library.widget.pulltorefresh.EmptyViewMethodAccessor;
 
 public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extends PullToRefreshBase<T> implements
-        OnScrollListener
-{
+        OnScrollListener {
 
     private int mSavedLastVisibleIndex = -1;
 
@@ -44,26 +43,22 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 
     private boolean mScrollEmptyView = true;
 
-    public PullToRefreshAdapterViewBase(Context context)
-    {
+    public PullToRefreshAdapterViewBase(Context context) {
         super(context);
         mRefreshableView.setOnScrollListener(this);
     }
 
-    public PullToRefreshAdapterViewBase(Context context, AttributeSet attrs)
-    {
+    public PullToRefreshAdapterViewBase(Context context, AttributeSet attrs) {
         super(context, attrs);
         mRefreshableView.setOnScrollListener(this);
     }
 
-    public PullToRefreshAdapterViewBase(Context context, Mode mode)
-    {
+    public PullToRefreshAdapterViewBase(Context context, Mode mode) {
         super(context, mode);
         mRefreshableView.setOnScrollListener(this);
     }
 
-    public PullToRefreshAdapterViewBase(Context context, Mode mode, AnimationStyle animStyle)
-    {
+    public PullToRefreshAdapterViewBase(Context context, Mode mode, AnimationStyle animStyle) {
         super(context, mode, animStyle);
         mRefreshableView.setOnScrollListener(this);
     }
@@ -71,12 +66,10 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
     // abstract public ContextMenuInfo getContextMenuInfo();
 
     public final void onScroll(final AbsListView view, final int firstVisibleItem, final int visibleItemCount,
-            final int totalItemCount)
-    {
+            final int totalItemCount) {
 
         // If we have a OnItemVisibleListener, do check...
-        if (null != mOnLastItemVisibleListener)
-        {
+        if (null != mOnLastItemVisibleListener) {
 
             // Detect whether the last visible item has changed
             final int lastVisibleItemIndex = firstVisibleItem + visibleItemCount;
@@ -87,10 +80,8 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
              * zero-based index, so we add one to it to check against
              * totalItemCount.
              */
-            if (visibleItemCount > 0 && (lastVisibleItemIndex + 1) >= totalItemCount)
-            {
-                if (lastVisibleItemIndex != mSavedLastVisibleIndex)
-                {
+            if (visibleItemCount > 0 && (lastVisibleItemIndex + 1) >= totalItemCount) {
+                if (lastVisibleItemIndex != mSavedLastVisibleIndex) {
                     mSavedLastVisibleIndex = lastVisibleItemIndex;
                     mOnLastItemVisibleListener.onLastItemVisible();
                 }
@@ -98,16 +89,13 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
         }
 
         // Finally call OnScrollListener if we have one
-        if (null != mOnScrollListener)
-        {
+        if (null != mOnScrollListener) {
             mOnScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
         }
     }
 
-    public final void onScrollStateChanged(final AbsListView view, final int scrollState)
-    {
-        if (null != mOnScrollListener)
-        {
+    public final void onScrollStateChanged(final AbsListView view, final int scrollState) {
+        if (null != mOnScrollListener) {
             mOnScrollListener.onScrollStateChanged(view, scrollState);
         }
     }
@@ -120,8 +108,7 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
      * 
      * @param adapter - Adapter to set
      */
-    public void setAdapter(ListAdapter adapter)
-    {
+    public void setAdapter(ListAdapter adapter) {
         ((AdapterView<ListAdapter>) mRefreshableView).setAdapter(adapter);
     }
 
@@ -139,26 +126,22 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
      * 
      * @param newEmptyView - Empty View to be used
      */
-    public final void setEmptyView(View newEmptyView)
-    {
+    public final void setEmptyView(View newEmptyView) {
         FrameLayout refreshableViewWrapper = getRefreshableViewWrapper();
 
         // If we already have an Empty View, remove it
-        if (null != mEmptyView)
-        {
+        if (null != mEmptyView) {
             refreshableViewWrapper.removeView(mEmptyView);
         }
 
-        if (null != newEmptyView)
-        {
+        if (null != newEmptyView) {
             // New view needs to be clickable so that Android recognizes it as
             // a
             // target for Touch Events
             newEmptyView.setClickable(true);
 
             ViewParent newEmptyViewParent = newEmptyView.getParent();
-            if (null != newEmptyViewParent && newEmptyViewParent instanceof ViewGroup)
-            {
+            if (null != newEmptyViewParent && newEmptyViewParent instanceof ViewGroup) {
                 ((ViewGroup) newEmptyViewParent).removeView(newEmptyView);
             }
 
@@ -166,12 +149,9 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
                     ViewGroup.LayoutParams.MATCH_PARENT);
         }
 
-        if (mRefreshableView instanceof EmptyViewMethodAccessor)
-        {
+        if (mRefreshableView instanceof EmptyViewMethodAccessor) {
             ((EmptyViewMethodAccessor) mRefreshableView).setEmptyViewInternal(newEmptyView);
-        }
-        else
-        {
+        } else {
             mRefreshableView.setEmptyView(newEmptyView);
         }
         mEmptyView = newEmptyView;
@@ -185,57 +165,45 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
      * 
      * @param listener - OnItemClickListener to use
      */
-    public void setOnItemClickListener(OnItemClickListener listener)
-    {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         mRefreshableView.setOnItemClickListener(listener);
     }
 
-    public final void setOnLastItemVisibleListener(OnLastItemVisibleListener listener)
-    {
+    public final void setOnLastItemVisibleListener(OnLastItemVisibleListener listener) {
         mOnLastItemVisibleListener = listener;
     }
 
-    public final void setOnScrollListener(OnScrollListener listener)
-    {
+    public final void setOnScrollListener(OnScrollListener listener) {
         mOnScrollListener = listener;
     }
 
-    public final void setScrollEmptyView(boolean doScroll)
-    {
+    public final void setScrollEmptyView(boolean doScroll) {
         mScrollEmptyView = doScroll;
     }
 
-    protected boolean isReadyForPullStart()
-    {
+    protected boolean isReadyForPullStart() {
         return isFirstItemVisible();
     }
 
-    protected boolean isReadyForPullEnd()
-    {
+    protected boolean isReadyForPullEnd() {
         return isLastItemVisible();
     }
 
     @Override
-    protected void onScrollChanged(int l, int t, int oldl, int oldt)
-    {
+    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-        if (null != mEmptyView && !mScrollEmptyView)
-        {
+        if (null != mEmptyView && !mScrollEmptyView) {
             mEmptyView.scrollTo(-l, -t);
         }
     }
 
-    private boolean isFirstItemVisible()
-    {
+    private boolean isFirstItemVisible() {
         final Adapter adapter = mRefreshableView.getAdapter();
 
-        if (null == adapter || adapter.isEmpty())
-        {
+        if (null == adapter || adapter.isEmpty()) {
             return true;
 
-        }
-        else
-        {
+        } else {
 
             /**
              * This check should really just be:
@@ -244,11 +212,9 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
              * positions up. For now we'll just add one to account for it and
              * rely on the inner condition which checks getTop().
              */
-            if (mRefreshableView.getFirstVisiblePosition() <= 1)
-            {
+            if (mRefreshableView.getFirstVisiblePosition() <= 1) {
                 final View firstVisibleChild = mRefreshableView.getChildAt(0);
-                if (firstVisibleChild != null)
-                {
+                if (firstVisibleChild != null) {
                     return firstVisibleChild.getTop() >= mRefreshableView.getTop();
                 }
             }
@@ -257,16 +223,12 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
         return false;
     }
 
-    private boolean isLastItemVisible()
-    {
+    private boolean isLastItemVisible() {
         final Adapter adapter = mRefreshableView.getAdapter();
 
-        if (null == adapter || adapter.isEmpty())
-        {
+        if (null == adapter || adapter.isEmpty()) {
             return true;
-        }
-        else
-        {
+        } else {
             final int lastItemPosition = mRefreshableView.getCount() - 1;
             final int lastVisiblePosition = mRefreshableView.getLastVisiblePosition();
 
@@ -277,12 +239,10 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
              * to account for it and rely on the inner condition which checks
              * getBottom().
              */
-            if (lastVisiblePosition >= lastItemPosition - 1)
-            {
+            if (lastVisiblePosition >= lastItemPosition - 1) {
                 final int childIndex = lastVisiblePosition - mRefreshableView.getFirstVisiblePosition();
                 final View lastVisibleChild = mRefreshableView.getChildAt(childIndex);
-                if (lastVisibleChild != null)
-                {
+                if (lastVisibleChild != null) {
                     return lastVisibleChild.getBottom() <= mRefreshableView.getBottom();
                 }
             }

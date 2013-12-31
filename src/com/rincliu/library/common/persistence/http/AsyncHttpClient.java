@@ -81,18 +81,15 @@ import android.content.Context;
  * 
  * <pre>
  * AsyncHttpClient client = new AsyncHttpClient();
- * client.get(&quot;http://www.google.com&quot;, new AsyncHttpResponseHandler()
- * {
+ * client.get(&quot;http://www.google.com&quot;, new AsyncHttpResponseHandler() {
  *     &#064;Override
- *     public void onSuccess(String response)
- *     {
+ *     public void onSuccess(String response) {
  *         System.out.println(response);
  *     }
  * });
  * </pre>
  */
-public class AsyncHttpClient
-{
+public class AsyncHttpClient {
     private static final String VERSION = "1.4.3";
 
     private static final int DEFAULT_MAX_CONNECTIONS = 10;
@@ -124,8 +121,7 @@ public class AsyncHttpClient
     /**
      * Creates a new AsyncHttpClient.
      */
-    public AsyncHttpClient()
-    {
+    public AsyncHttpClient() {
         BasicHttpParams httpParams = new BasicHttpParams();
 
         ConnManagerParams.setTimeout(httpParams, socketTimeout);
@@ -148,39 +144,29 @@ public class AsyncHttpClient
 
         httpContext = new SyncBasicHttpContext(new BasicHttpContext());
         httpClient = new DefaultHttpClient(cm, httpParams);
-        httpClient.addRequestInterceptor(new HttpRequestInterceptor()
-        {
+        httpClient.addRequestInterceptor(new HttpRequestInterceptor() {
             @Override
-            public void process(HttpRequest request, HttpContext context)
-            {
-                if (!request.containsHeader(HEADER_ACCEPT_ENCODING))
-                {
+            public void process(HttpRequest request, HttpContext context) {
+                if (!request.containsHeader(HEADER_ACCEPT_ENCODING)) {
                     request.addHeader(HEADER_ACCEPT_ENCODING, ENCODING_GZIP);
                 }
-                for (String header : clientHeaderMap.keySet())
-                {
+                for (String header : clientHeaderMap.keySet()) {
                     request.addHeader(header, clientHeaderMap.get(header));
                 }
             }
         });
 
-        httpClient.addResponseInterceptor(new HttpResponseInterceptor()
-        {
+        httpClient.addResponseInterceptor(new HttpResponseInterceptor() {
             @Override
-            public void process(HttpResponse response, HttpContext context)
-            {
+            public void process(HttpResponse response, HttpContext context) {
                 final HttpEntity entity = response.getEntity();
-                if (entity == null)
-                {
+                if (entity == null) {
                     return;
                 }
                 final Header encoding = entity.getContentEncoding();
-                if (encoding != null)
-                {
-                    for (HeaderElement element : encoding.getElements())
-                    {
-                        if (element.getName().equalsIgnoreCase(ENCODING_GZIP))
-                        {
+                if (encoding != null) {
+                    for (HeaderElement element : encoding.getElements()) {
+                        if (element.getName().equalsIgnoreCase(ENCODING_GZIP)) {
                             response.setEntity(new InflatingEntity(response.getEntity()));
                             break;
                         }
@@ -202,8 +188,7 @@ public class AsyncHttpClient
      * additional fine-grained settings for requests by accessing the client's
      * ConnectionManager, HttpParams and SchemeRegistry.
      */
-    public HttpClient getHttpClient()
-    {
+    public HttpClient getHttpClient() {
         return this.httpClient;
     }
 
@@ -212,8 +197,7 @@ public class AsyncHttpClient
      * setting fine-grained settings for requests by accessing the context's
      * attributes such as the CookieStore.
      */
-    public HttpContext getHttpContext()
-    {
+    public HttpContext getHttpContext() {
         return this.httpContext;
     }
 
@@ -223,8 +207,7 @@ public class AsyncHttpClient
      * @param cookieStore The CookieStore implementation to use, usually an
      *            instance of {@link PersistentCookieStore}
      */
-    public void setCookieStore(CookieStore cookieStore)
-    {
+    public void setCookieStore(CookieStore cookieStore) {
         httpContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
     }
 
@@ -235,8 +218,7 @@ public class AsyncHttpClient
      * @param threadPool an instance of {@link ThreadPoolExecutor} to use for
      *            queuing/pooling requests.
      */
-    public void setThreadPool(ThreadPoolExecutor threadPool)
-    {
+    public void setThreadPool(ThreadPoolExecutor threadPool) {
         this.threadPool = threadPool;
     }
 
@@ -247,8 +229,7 @@ public class AsyncHttpClient
      * 
      * @param userAgent the string to use in the User-Agent header.
      */
-    public void setUserAgent(String userAgent)
-    {
+    public void setUserAgent(String userAgent) {
         HttpProtocolParams.setUserAgent(this.httpClient.getParams(), userAgent);
     }
 
@@ -257,8 +238,7 @@ public class AsyncHttpClient
      * 
      * @param timeout the connect/socket timeout in milliseconds
      */
-    public void setTimeout(int timeout)
-    {
+    public void setTimeout(int timeout) {
         final HttpParams httpParams = this.httpClient.getParams();
         ConnManagerParams.setTimeout(httpParams, timeout);
         HttpConnectionParams.setSoTimeout(httpParams, timeout);
@@ -271,8 +251,7 @@ public class AsyncHttpClient
      * 
      * @param sslSocketFactory the socket factory to use for https requests.
      */
-    public void setSSLSocketFactory(SSLSocketFactory sslSocketFactory)
-    {
+    public void setSSLSocketFactory(SSLSocketFactory sslSocketFactory) {
         this.httpClient.getConnectionManager().getSchemeRegistry().register(new Scheme("https", sslSocketFactory, 443));
     }
 
@@ -283,8 +262,7 @@ public class AsyncHttpClient
      * @param header the name of the header
      * @param value the contents of the header
      */
-    public void addHeader(String header, String value)
-    {
+    public void addHeader(String header, String value) {
         clientHeaderMap.put(header, value);
     }
 
@@ -295,8 +273,7 @@ public class AsyncHttpClient
      * @param username
      * @param password
      */
-    public void setBasicAuth(String user, String pass)
-    {
+    public void setBasicAuth(String user, String pass) {
         AuthScope scope = AuthScope.ANY;
         setBasicAuth(user, pass, scope);
     }
@@ -311,8 +288,7 @@ public class AsyncHttpClient
      * @param password
      * @param scope - an AuthScope object
      */
-    public void setBasicAuth(String user, String pass, AuthScope scope)
-    {
+    public void setBasicAuth(String user, String pass, AuthScope scope) {
         UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user, pass);
         this.httpClient.getCredentialsProvider().setCredentials(scope, credentials);
     }
@@ -330,16 +306,12 @@ public class AsyncHttpClient
      * @param mayInterruptIfRunning specifies if active requests should be
      *            cancelled along with pending requests.
      */
-    public void cancelRequests(Context context, boolean mayInterruptIfRunning)
-    {
+    public void cancelRequests(Context context, boolean mayInterruptIfRunning) {
         List<WeakReference<Future<?>>> requestList = requestMap.get(context);
-        if (requestList != null)
-        {
-            for (WeakReference<Future<?>> requestRef : requestList)
-            {
+        if (requestList != null) {
+            for (WeakReference<Future<?>> requestRef : requestList) {
                 Future<?> request = requestRef.get();
-                if (request != null)
-                {
+                if (request != null) {
                     request.cancel(mayInterruptIfRunning);
                 }
             }
@@ -358,8 +330,7 @@ public class AsyncHttpClient
      * @param responseHandler the response handler instance that should handle
      *            the response.
      */
-    public void get(String url, AsyncHttpResponseHandler responseHandler)
-    {
+    public void get(String url, AsyncHttpResponseHandler responseHandler) {
         get(null, url, null, responseHandler);
     }
 
@@ -371,8 +342,7 @@ public class AsyncHttpClient
      * @param responseHandler the response handler instance that should handle
      *            the response.
      */
-    public void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler)
-    {
+    public void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         get(null, url, params, responseHandler);
     }
 
@@ -385,8 +355,7 @@ public class AsyncHttpClient
      * @param responseHandler the response handler instance that should handle
      *            the response.
      */
-    public void get(Context context, String url, AsyncHttpResponseHandler responseHandler)
-    {
+    public void get(Context context, String url, AsyncHttpResponseHandler responseHandler) {
         get(context, url, null, responseHandler);
     }
 
@@ -400,8 +369,7 @@ public class AsyncHttpClient
      * @param responseHandler the response handler instance that should handle
      *            the response.
      */
-    public void get(Context context, String url, RequestParams params, AsyncHttpResponseHandler responseHandler)
-    {
+    public void get(Context context, String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         sendRequest(httpClient, httpContext, new HttpGet(getUrlWithQueryString(url, params)), null, responseHandler,
                 context);
     }
@@ -417,8 +385,7 @@ public class AsyncHttpClient
      *            the response.
      */
     public void get(Context context, String url, Header[] headers, RequestParams params,
-            AsyncHttpResponseHandler responseHandler)
-    {
+            AsyncHttpResponseHandler responseHandler) {
         HttpUriRequest request = new HttpGet(getUrlWithQueryString(url, params));
         if (headers != null)
             request.setHeaders(headers);
@@ -436,8 +403,7 @@ public class AsyncHttpClient
      * @param responseHandler the response handler instance that should handle
      *            the response.
      */
-    public void post(String url, AsyncHttpResponseHandler responseHandler)
-    {
+    public void post(String url, AsyncHttpResponseHandler responseHandler) {
         post(null, url, null, responseHandler);
     }
 
@@ -450,8 +416,7 @@ public class AsyncHttpClient
      * @param responseHandler the response handler instance that should handle
      *            the response.
      */
-    public void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler)
-    {
+    public void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         post(null, url, params, responseHandler);
     }
 
@@ -466,8 +431,7 @@ public class AsyncHttpClient
      * @param responseHandler the response handler instance that should handle
      *            the response.
      */
-    public void post(Context context, String url, RequestParams params, AsyncHttpResponseHandler responseHandler)
-    {
+    public void post(Context context, String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         post(context, url, paramsToEntity(params), null, responseHandler);
     }
 
@@ -487,8 +451,7 @@ public class AsyncHttpClient
      *            the response.
      */
     public void post(Context context, String url, HttpEntity entity, String contentType,
-            AsyncHttpResponseHandler responseHandler)
-    {
+            AsyncHttpResponseHandler responseHandler) {
         sendRequest(httpClient, httpContext, addEntityToRequestBase(new HttpPost(url), entity), contentType,
                 responseHandler, context);
     }
@@ -507,8 +470,7 @@ public class AsyncHttpClient
      *            the response.
      */
     public void post(Context context, String url, Header[] headers, RequestParams params, String contentType,
-            AsyncHttpResponseHandler responseHandler)
-    {
+            AsyncHttpResponseHandler responseHandler) {
         HttpEntityEnclosingRequestBase request = new HttpPost(url);
         if (params != null)
             request.setEntity(paramsToEntity(params));
@@ -534,8 +496,7 @@ public class AsyncHttpClient
      *            the response.
      */
     public void post(Context context, String url, Header[] headers, HttpEntity entity, String contentType,
-            AsyncHttpResponseHandler responseHandler)
-    {
+            AsyncHttpResponseHandler responseHandler) {
         HttpEntityEnclosingRequestBase request = addEntityToRequestBase(new HttpPost(url), entity);
         if (headers != null)
             request.setHeaders(headers);
@@ -553,8 +514,7 @@ public class AsyncHttpClient
      * @param responseHandler the response handler instance that should handle
      *            the response.
      */
-    public void put(String url, AsyncHttpResponseHandler responseHandler)
-    {
+    public void put(String url, AsyncHttpResponseHandler responseHandler) {
         put(null, url, null, responseHandler);
     }
 
@@ -567,8 +527,7 @@ public class AsyncHttpClient
      * @param responseHandler the response handler instance that should handle
      *            the response.
      */
-    public void put(String url, RequestParams params, AsyncHttpResponseHandler responseHandler)
-    {
+    public void put(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         put(null, url, params, responseHandler);
     }
 
@@ -583,8 +542,7 @@ public class AsyncHttpClient
      * @param responseHandler the response handler instance that should handle
      *            the response.
      */
-    public void put(Context context, String url, RequestParams params, AsyncHttpResponseHandler responseHandler)
-    {
+    public void put(Context context, String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         put(context, url, paramsToEntity(params), null, responseHandler);
     }
 
@@ -604,8 +562,7 @@ public class AsyncHttpClient
      *            the response.
      */
     public void put(Context context, String url, HttpEntity entity, String contentType,
-            AsyncHttpResponseHandler responseHandler)
-    {
+            AsyncHttpResponseHandler responseHandler) {
         sendRequest(httpClient, httpContext, addEntityToRequestBase(new HttpPut(url), entity), contentType,
                 responseHandler, context);
     }
@@ -627,8 +584,7 @@ public class AsyncHttpClient
      *            the response.
      */
     public void put(Context context, String url, Header[] headers, HttpEntity entity, String contentType,
-            AsyncHttpResponseHandler responseHandler)
-    {
+            AsyncHttpResponseHandler responseHandler) {
         HttpEntityEnclosingRequestBase request = addEntityToRequestBase(new HttpPut(url), entity);
         if (headers != null)
             request.setHeaders(headers);
@@ -646,8 +602,7 @@ public class AsyncHttpClient
      * @param responseHandler the response handler instance that should handle
      *            the response.
      */
-    public void delete(String url, AsyncHttpResponseHandler responseHandler)
-    {
+    public void delete(String url, AsyncHttpResponseHandler responseHandler) {
         delete(null, url, responseHandler);
     }
 
@@ -659,8 +614,7 @@ public class AsyncHttpClient
      * @param responseHandler the response handler instance that should handle
      *            the response.
      */
-    public void delete(Context context, String url, AsyncHttpResponseHandler responseHandler)
-    {
+    public void delete(Context context, String url, AsyncHttpResponseHandler responseHandler) {
         final HttpDelete delete = new HttpDelete(url);
         sendRequest(httpClient, httpContext, delete, null, responseHandler, context);
     }
@@ -674,8 +628,7 @@ public class AsyncHttpClient
      * @param responseHandler the response handler instance that should handle
      *            the response.
      */
-    public void delete(Context context, String url, Header[] headers, AsyncHttpResponseHandler responseHandler)
-    {
+    public void delete(Context context, String url, Header[] headers, AsyncHttpResponseHandler responseHandler) {
         final HttpDelete delete = new HttpDelete(url);
         if (headers != null)
             delete.setHeaders(headers);
@@ -684,21 +637,17 @@ public class AsyncHttpClient
 
     // Private stuff
     protected void sendRequest(DefaultHttpClient client, HttpContext httpContext, HttpUriRequest uriRequest,
-            String contentType, AsyncHttpResponseHandler responseHandler, Context context)
-    {
-        if (contentType != null)
-        {
+            String contentType, AsyncHttpResponseHandler responseHandler, Context context) {
+        if (contentType != null) {
             uriRequest.addHeader("Content-Type", contentType);
         }
 
         Future<?> request = threadPool.submit(new AsyncHttpRequest(client, httpContext, uriRequest, responseHandler));
 
-        if (context != null)
-        {
+        if (context != null) {
             // Add request to request map
             List<WeakReference<Future<?>>> requestList = requestMap.get(context);
-            if (requestList == null)
-            {
+            if (requestList == null) {
                 requestList = new LinkedList<WeakReference<Future<?>>>();
                 requestMap.put(context, requestList);
             }
@@ -709,17 +658,12 @@ public class AsyncHttpClient
         }
     }
 
-    public static String getUrlWithQueryString(String url, RequestParams params)
-    {
-        if (params != null)
-        {
+    public static String getUrlWithQueryString(String url, RequestParams params) {
+        if (params != null) {
             String paramString = params.getParamString();
-            if (url.indexOf("?") == -1)
-            {
+            if (url.indexOf("?") == -1) {
                 url += "?" + paramString;
-            }
-            else
-            {
+            } else {
                 url += "&" + paramString;
             }
         }
@@ -727,12 +671,10 @@ public class AsyncHttpClient
         return url;
     }
 
-    private HttpEntity paramsToEntity(RequestParams params)
-    {
+    private HttpEntity paramsToEntity(RequestParams params) {
         HttpEntity entity = null;
 
-        if (params != null)
-        {
+        if (params != null) {
             entity = params.getEntity();
         }
 
@@ -740,32 +682,26 @@ public class AsyncHttpClient
     }
 
     private HttpEntityEnclosingRequestBase addEntityToRequestBase(HttpEntityEnclosingRequestBase requestBase,
-            HttpEntity entity)
-    {
-        if (entity != null)
-        {
+            HttpEntity entity) {
+        if (entity != null) {
             requestBase.setEntity(entity);
         }
 
         return requestBase;
     }
 
-    private static class InflatingEntity extends HttpEntityWrapper
-    {
-        public InflatingEntity(HttpEntity wrapped)
-        {
+    private static class InflatingEntity extends HttpEntityWrapper {
+        public InflatingEntity(HttpEntity wrapped) {
             super(wrapped);
         }
 
         @Override
-        public InputStream getContent() throws IOException
-        {
+        public InputStream getContent() throws IOException {
             return new GZIPInputStream(wrappedEntity.getContent());
         }
 
         @Override
-        public long getContentLength()
-        {
+        public long getContentLength() {
             return -1;
         }
     }

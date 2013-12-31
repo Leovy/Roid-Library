@@ -162,8 +162,7 @@ import java.util.Stack;
  * @param <E> the type of elements held in this collection
  */
 
-public interface Deque<E> extends Queue<E>
-{
+public interface Deque<E> extends Queue<E> {
     /**
      * Inserts the specified element at the front of this deque if it is
      * possible to do so immediately without violating capacity restrictions.

@@ -25,8 +25,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import android.os.Environment;
 
-public class RLFileUtil
-{
+public class RLFileUtil {
 
     private static RLFileUtil fileUtil;
 
@@ -35,10 +34,8 @@ public class RLFileUtil
     /**
      * @return
      */
-    public synchronized static RLFileUtil getInstance()
-    {
-        if (fileUtil == null)
-        {
+    public synchronized static RLFileUtil getInstance() {
+        if (fileUtil == null) {
             fileUtil = new RLFileUtil();
         }
         return fileUtil;
@@ -47,16 +44,14 @@ public class RLFileUtil
     /**
      * @return
      */
-    public static boolean hasExternalStorage()
-    {
+    public static boolean hasExternalStorage() {
         return hasSDCard() || !RLSysUtil.isExternalStorageRemovable();
     }
 
     /**
      * @return
      */
-    public static boolean hasSDCard()
-    {
+    public static boolean hasSDCard() {
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
     }
 
@@ -64,54 +59,38 @@ public class RLFileUtil
      * @param name
      * @param content
      */
-    public void saveFile(final String name, final String content)
-    {
-        new Thread()
-        {
+    public void saveFile(final String name, final String content) {
+        new Thread() {
             @Override
-            public void run()
-            {
+            public void run() {
                 FileOutputStream os = null;
                 OutputStreamWriter osw = null;
                 BufferedWriter bw = null;
-                try
-                {
+                try {
                     os = new FileOutputStream(rootPath + name);
                     osw = new OutputStreamWriter(os);
                     bw = new BufferedWriter(osw);
                     bw.write(content);
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
-                }
-                finally
-                {
-                    try
-                    {
-                        if (bw != null)
-                        {
+                } finally {
+                    try {
+                        if (bw != null) {
                             bw.flush();
                         }
-                        if (osw != null)
-                        {
+                        if (osw != null) {
                             osw.flush();
                         }
-                        if (bw != null)
-                        {
+                        if (bw != null) {
                             bw.close();
                         }
-                        if (osw != null)
-                        {
+                        if (osw != null) {
                             osw.close();
                         }
-                        if (os != null)
-                        {
+                        if (os != null) {
                             os.close();
                         }
-                    }
-                    catch (IOException e)
-                    {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
@@ -124,42 +103,31 @@ public class RLFileUtil
      * @param name
      * @return
      */
-    public String readFile(String name)
-    {
+    public String readFile(String name) {
         FileInputStream is = null;
         InputStreamReader isr = null;
         BufferedReader br = null;
         File file = new File(rootPath + name);
-        if (!file.exists())
-        {
+        if (!file.exists()) {
             return null;
         }
         StringBuffer res = new StringBuffer();
-        try
-        {
+        try {
             is = new FileInputStream(rootPath + name);
             isr = new InputStreamReader(is);
             br = new BufferedReader(isr);
             String x = null;
-            while ((x = br.readLine()) != null)
-            {
+            while ((x = br.readLine()) != null) {
                 res.append(x);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
+        } finally {
+            try {
                 br.close();
                 isr.close();
                 is.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -170,10 +138,8 @@ public class RLFileUtil
      * @param filename
      * @param content
      */
-    public void write2Sd(String filename, String content)
-    {
-        try
-        {
+    public void write2Sd(String filename, String content) {
+        try {
             FileOutputStream fos = new FileOutputStream(filename);
             OutputStreamWriter osw = new OutputStreamWriter(fos);
             BufferedWriter bw = new BufferedWriter(osw);
@@ -183,9 +149,7 @@ public class RLFileUtil
             bw.close();
             osw.close();
             fos.close();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -194,26 +158,21 @@ public class RLFileUtil
      * @param filename
      * @return
      */
-    public String readFromSd(String filename)
-    {
-        try
-        {
+    public String readFromSd(String filename) {
+        try {
             FileInputStream fis = new FileInputStream(filename);
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr);
             StringBuffer res = new StringBuffer();
             String x = null;
-            while ((x = br.readLine()) != null)
-            {
+            while ((x = br.readLine()) != null) {
                 res.append(x);
             }
             br.close();
             isr.close();
             fis.close();
             return res.toString();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
@@ -222,13 +181,10 @@ public class RLFileUtil
     /**
      * @param dir
      */
-    public static void deleteDir(File dir)
-    {
-        if (dir != null && dir.isDirectory())
-        {
+    public static void deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
             String[] children = dir.list();
-            for (int i = 0; i < children.length; i++)
-            {
+            for (int i = 0; i < children.length; i++) {
                 deleteDir(new File(dir, children[i]));
             }
         }
@@ -239,24 +195,17 @@ public class RLFileUtil
      * @param f
      * @return
      */
-    public static long getDirectorySize(File f)
-    {
-        if (f == null || !f.exists() || !f.isDirectory())
-        {
+    public static long getDirectorySize(File f) {
+        if (f == null || !f.exists() || !f.isDirectory()) {
             return 0;
         }
         long size = 0;
         File[] flist = f.listFiles();
-        if (flist != null)
-        {
-            for (int i = 0; i < flist.length; i++)
-            {
-                if (flist[i].isDirectory())
-                {
+        if (flist != null) {
+            for (int i = 0; i < flist.length; i++) {
+                if (flist[i].isDirectory()) {
                     size = size + getDirectorySize(flist[i]);
-                }
-                else
-                {
+                } else {
                     size = size + flist[i].length();
                 }
             }

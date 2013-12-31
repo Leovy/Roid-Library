@@ -47,8 +47,7 @@ import com.rincliu.library.common.persistence.image.utils.L;
  * @see ImageDownloader
  * @see FileNameGenerator
  */
-public final class ImageLoaderConfiguration
-{
+public final class ImageLoaderConfiguration {
 
     final Context context;
 
@@ -98,8 +97,7 @@ public final class ImageLoaderConfiguration
 
     final ImageDownloader slowNetworkDownloader;
 
-    private ImageLoaderConfiguration(final Builder builder)
-    {
+    private ImageLoaderConfiguration(final Builder builder) {
         context = builder.context;
         maxImageWidthForMemoryCache = builder.maxImageWidthForMemoryCache;
         maxImageHeightForMemoryCache = builder.maxImageHeightForMemoryCache;
@@ -155,8 +153,7 @@ public final class ImageLoaderConfiguration
      * <li>detailed logging disabled</li>
      * </ul>
      */
-    public static ImageLoaderConfiguration createDefault(Context context)
-    {
+    public static ImageLoaderConfiguration createDefault(Context context) {
         return new Builder(context).build();
     }
 
@@ -165,8 +162,7 @@ public final class ImageLoaderConfiguration
      * 
      * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
      */
-    public static class Builder
-    {
+    public static class Builder {
 
         private static final String WARNING_OVERLAP_DISC_CACHE_PARAMS = "discCache(), discCacheSize() and discCacheFileCount calls overlap each other";
 
@@ -238,8 +234,7 @@ public final class ImageLoaderConfiguration
 
         private boolean writeLogs = false;
 
-        public Builder(Context context)
-        {
+        public Builder(Context context) {
             this.context = context.getApplicationContext();
         }
 
@@ -255,8 +250,7 @@ public final class ImageLoaderConfiguration
          *            {@link android.graphics.Bitmap Bitmap}. <b>Default
          *            value</b> - device's screen height
          */
-        public Builder memoryCacheExtraOptions(int maxImageWidthForMemoryCache, int maxImageHeightForMemoryCache)
-        {
+        public Builder memoryCacheExtraOptions(int maxImageWidthForMemoryCache, int maxImageHeightForMemoryCache) {
             this.maxImageWidthForMemoryCache = maxImageWidthForMemoryCache;
             this.maxImageHeightForMemoryCache = maxImageHeightForMemoryCache;
             return this;
@@ -284,8 +278,7 @@ public final class ImageLoaderConfiguration
          *            them in disc cache
          */
         public Builder discCacheExtraOptions(int maxImageWidthForDiscCache, int maxImageHeightForDiscCache,
-                CompressFormat compressFormat, int compressQuality, BitmapProcessor processorForDiscCache)
-        {
+                CompressFormat compressFormat, int compressQuality, BitmapProcessor processorForDiscCache) {
             this.maxImageWidthForDiscCache = maxImageWidthForDiscCache;
             this.maxImageHeightForDiscCache = maxImageHeightForDiscCache;
             this.imageCompressFormatForDiscCache = compressFormat;
@@ -308,11 +301,9 @@ public final class ImageLoaderConfiguration
          * 
          * @see #taskExecutorForCachedImages(Executor)
          */
-        public Builder taskExecutor(Executor executor)
-        {
+        public Builder taskExecutor(Executor executor) {
             if (threadPoolSize != DEFAULT_THREAD_POOL_SIZE || threadPriority != DEFAULT_THREAD_PRIORITY
-                    || tasksProcessingType != DEFAULT_TASK_PROCESSING_TYPE)
-            {
+                    || tasksProcessingType != DEFAULT_TASK_PROCESSING_TYPE) {
                 L.w(WARNING_OVERLAP_EXECUTOR);
             }
 
@@ -341,11 +332,9 @@ public final class ImageLoaderConfiguration
          * 
          * @see #taskExecutor(Executor)
          */
-        public Builder taskExecutorForCachedImages(Executor executorForCachedImages)
-        {
+        public Builder taskExecutorForCachedImages(Executor executorForCachedImages) {
             if (threadPoolSize != DEFAULT_THREAD_POOL_SIZE || threadPriority != DEFAULT_THREAD_PRIORITY
-                    || tasksProcessingType != DEFAULT_TASK_PROCESSING_TYPE)
-            {
+                    || tasksProcessingType != DEFAULT_TASK_PROCESSING_TYPE) {
                 L.w(WARNING_OVERLAP_EXECUTOR);
             }
 
@@ -357,10 +346,8 @@ public final class ImageLoaderConfiguration
          * Sets thread pool size for image display tasks.<br />
          * Default value - {@link #DEFAULT_THREAD_POOL_SIZE this}
          */
-        public Builder threadPoolSize(int threadPoolSize)
-        {
-            if (taskExecutor != null || taskExecutorForCachedImages != null)
-            {
+        public Builder threadPoolSize(int threadPoolSize) {
+            if (taskExecutor != null || taskExecutorForCachedImages != null) {
                 L.w(WARNING_OVERLAP_EXECUTOR);
             }
 
@@ -374,25 +361,17 @@ public final class ImageLoaderConfiguration
          * {@link Thread#MIN_PRIORITY}<br />
          * Default value - {@link #DEFAULT_THREAD_PRIORITY this}
          */
-        public Builder threadPriority(int threadPriority)
-        {
-            if (taskExecutor != null || taskExecutorForCachedImages != null)
-            {
+        public Builder threadPriority(int threadPriority) {
+            if (taskExecutor != null || taskExecutorForCachedImages != null) {
                 L.w(WARNING_OVERLAP_EXECUTOR);
             }
 
-            if (threadPriority < Thread.MIN_PRIORITY)
-            {
+            if (threadPriority < Thread.MIN_PRIORITY) {
                 this.threadPriority = Thread.MIN_PRIORITY;
-            }
-            else
-            {
-                if (threadPriority > Thread.MAX_PRIORITY)
-                {
+            } else {
+                if (threadPriority > Thread.MAX_PRIORITY) {
                     threadPriority = Thread.MAX_PRIORITY;
-                }
-                else
-                {
+                } else {
                     this.threadPriority = threadPriority;
                 }
             }
@@ -412,8 +391,7 @@ public final class ImageLoaderConfiguration
          * then previous cached size of this image (if it exists) will be
          * removed from memory cache before.
          */
-        public Builder denyCacheImageMultipleSizesInMemory()
-        {
+        public Builder denyCacheImageMultipleSizesInMemory() {
             this.denyCacheImageMultipleSizesInMemory = true;
             return this;
         }
@@ -423,10 +401,8 @@ public final class ImageLoaderConfiguration
          * images.<br />
          * Default value - {@link QueueProcessingType#FIFO}
          */
-        public Builder tasksProcessingOrder(QueueProcessingType tasksProcessingType)
-        {
-            if (taskExecutor != null || taskExecutorForCachedImages != null)
-            {
+        public Builder tasksProcessingOrder(QueueProcessingType tasksProcessingType) {
+            if (taskExecutor != null || taskExecutorForCachedImages != null) {
                 L.w(WARNING_OVERLAP_EXECUTOR);
             }
 
@@ -444,13 +420,11 @@ public final class ImageLoaderConfiguration
          * {@link #memoryCache(MemoryCacheAware)} method to set your own
          * implementation of {@link MemoryCacheAware}.
          */
-        public Builder memoryCacheSize(int memoryCacheSize)
-        {
+        public Builder memoryCacheSize(int memoryCacheSize) {
             if (memoryCacheSize <= 0)
                 throw new IllegalArgumentException("memoryCacheSize must be a positive number");
 
-            if (memoryCache != null)
-            {
+            if (memoryCache != null) {
                 L.w(WARNING_OVERLAP_MEMORY_CACHE);
             }
 
@@ -468,13 +442,11 @@ public final class ImageLoaderConfiguration
          * {@link #memoryCache(MemoryCacheAware)} method to set your own
          * implementation of {@link MemoryCacheAware}.
          */
-        public Builder memoryCacheSizePercentage(int avaialbleMemoryPercent)
-        {
+        public Builder memoryCacheSizePercentage(int avaialbleMemoryPercent) {
             if (avaialbleMemoryPercent <= 0 || avaialbleMemoryPercent >= 100)
                 throw new IllegalArgumentException("avaialbleMemoryPercent must be in range (0 < % < 100)");
 
-            if (memoryCache != null)
-            {
+            if (memoryCache != null) {
                 L.w(WARNING_OVERLAP_MEMORY_CACHE);
             }
 
@@ -496,10 +468,8 @@ public final class ImageLoaderConfiguration
          * <li>{@link #memoryCacheSize(int)}</li>
          * </ul>
          */
-        public Builder memoryCache(MemoryCacheAware<String, Bitmap> memoryCache)
-        {
-            if (memoryCacheSize != 0)
-            {
+        public Builder memoryCache(MemoryCacheAware<String, Bitmap> memoryCache) {
+            if (memoryCacheSize != 0) {
                 L.w(WARNING_OVERLAP_MEMORY_CACHE);
             }
 
@@ -516,13 +486,11 @@ public final class ImageLoaderConfiguration
          * {@link #discCache(DiscCacheAware)} method for introduction your own
          * implementation of {@link DiscCacheAware}
          */
-        public Builder discCacheSize(int maxCacheSize)
-        {
+        public Builder discCacheSize(int maxCacheSize) {
             if (maxCacheSize <= 0)
                 throw new IllegalArgumentException("maxCacheSize must be a positive number");
 
-            if (discCache != null || discCacheFileCount > 0)
-            {
+            if (discCache != null || discCacheFileCount > 0) {
                 L.w(WARNING_OVERLAP_DISC_CACHE_PARAMS);
             }
 
@@ -539,13 +507,11 @@ public final class ImageLoaderConfiguration
          * {@link #discCache(DiscCacheAware)} method for introduction your own
          * implementation of {@link DiscCacheAware}
          */
-        public Builder discCacheFileCount(int maxFileCount)
-        {
+        public Builder discCacheFileCount(int maxFileCount) {
             if (maxFileCount <= 0)
                 throw new IllegalArgumentException("maxFileCount must be a positive number");
 
-            if (discCache != null || discCacheSize > 0)
-            {
+            if (discCache != null || discCacheSize > 0) {
                 L.w(WARNING_OVERLAP_DISC_CACHE_PARAMS);
             }
 
@@ -560,10 +526,8 @@ public final class ImageLoaderConfiguration
          * {@link com.rincliu.library.common.persistence.image.core.DefaultConfigurationFactory#createFileNameGenerator()
          * DefaultConfigurationFactory.createFileNameGenerator()}
          */
-        public Builder discCacheFileNameGenerator(FileNameGenerator fileNameGenerator)
-        {
-            if (discCache != null)
-            {
+        public Builder discCacheFileNameGenerator(FileNameGenerator fileNameGenerator) {
+            if (discCache != null) {
                 L.w(WARNING_OVERLAP_DISC_CACHE_NAME_GENERATOR);
             }
 
@@ -577,8 +541,7 @@ public final class ImageLoaderConfiguration
          * {@link com.rincliu.library.common.persistence.image.core.DefaultConfigurationFactory#createImageDownloader(Context)
          * DefaultConfigurationFactory.createImageDownloader()}
          */
-        public Builder imageDownloader(ImageDownloader imageDownloader)
-        {
+        public Builder imageDownloader(ImageDownloader imageDownloader) {
             this.downloader = imageDownloader;
             return this;
         }
@@ -590,8 +553,7 @@ public final class ImageLoaderConfiguration
          * {@link com.rincliu.library.common.persistence.image.core.DefaultConfigurationFactory#createImageDecoder(boolean)
          * DefaultConfigurationFactory.createImageDecoder()}
          */
-        public Builder imageDecoder(ImageDecoder imageDecoder)
-        {
+        public Builder imageDecoder(ImageDecoder imageDecoder) {
             this.decoder = imageDecoder;
             return this;
         }
@@ -612,14 +574,11 @@ public final class ImageLoaderConfiguration
          * <li>{@link #discCacheFileNameGenerator(FileNameGenerator)}</li>
          * </ul>
          */
-        public Builder discCache(DiscCacheAware discCache)
-        {
-            if (discCacheSize > 0 || discCacheFileCount > 0)
-            {
+        public Builder discCache(DiscCacheAware discCache) {
+            if (discCacheSize > 0 || discCacheFileCount > 0) {
                 L.w(WARNING_OVERLAP_DISC_CACHE_PARAMS);
             }
-            if (discCacheFileNameGenerator != null)
-            {
+            if (discCacheFileNameGenerator != null) {
                 L.w(WARNING_OVERLAP_DISC_CACHE_NAME_GENERATOR);
             }
 
@@ -636,8 +595,7 @@ public final class ImageLoaderConfiguration
          * Default value - {@link DisplayImageOptions#createSimple() Simple
          * options}
          */
-        public Builder defaultDisplayImageOptions(DisplayImageOptions defaultDisplayImageOptions)
-        {
+        public Builder defaultDisplayImageOptions(DisplayImageOptions defaultDisplayImageOptions) {
             this.defaultDisplayImageOptions = defaultDisplayImageOptions;
             return this;
         }
@@ -648,67 +606,51 @@ public final class ImageLoaderConfiguration
          * {@link com.rincliu.library.common.persistence.image.utils.L#disableLogging()}
          * to disable ImageLoader logging completely (even error logs)
          */
-        public Builder writeDebugLogs()
-        {
+        public Builder writeDebugLogs() {
             this.writeLogs = true;
             return this;
         }
 
         /** Builds configured {@link ImageLoaderConfiguration} object */
-        public ImageLoaderConfiguration build()
-        {
+        public ImageLoaderConfiguration build() {
             initEmptyFieldsWithDefaultValues();
             return new ImageLoaderConfiguration(this);
         }
 
-        private void initEmptyFieldsWithDefaultValues()
-        {
-            if (taskExecutor == null)
-            {
+        private void initEmptyFieldsWithDefaultValues() {
+            if (taskExecutor == null) {
                 taskExecutor = DefaultConfigurationFactory.createExecutor(threadPoolSize, threadPriority,
                         tasksProcessingType);
-            }
-            else
-            {
+            } else {
                 customExecutor = true;
             }
-            if (taskExecutorForCachedImages == null)
-            {
+            if (taskExecutorForCachedImages == null) {
                 taskExecutorForCachedImages = DefaultConfigurationFactory.createExecutor(threadPoolSize,
                         threadPriority, tasksProcessingType);
-            }
-            else
-            {
+            } else {
                 customExecutorForCachedImages = true;
             }
-            if (discCache == null)
-            {
-                if (discCacheFileNameGenerator == null)
-                {
+            if (discCache == null) {
+                if (discCacheFileNameGenerator == null) {
                     discCacheFileNameGenerator = DefaultConfigurationFactory.createFileNameGenerator();
                 }
                 discCache = DefaultConfigurationFactory.createDiscCache(context, discCacheFileNameGenerator,
                         discCacheSize, discCacheFileCount);
             }
-            if (memoryCache == null)
-            {
+            if (memoryCache == null) {
                 memoryCache = DefaultConfigurationFactory.createMemoryCache(memoryCacheSize);
             }
-            if (denyCacheImageMultipleSizesInMemory)
-            {
+            if (denyCacheImageMultipleSizesInMemory) {
                 memoryCache = new FuzzyKeyMemoryCache<String, Bitmap>(memoryCache,
                         MemoryCacheUtil.createFuzzyKeyComparator());
             }
-            if (downloader == null)
-            {
+            if (downloader == null) {
                 downloader = DefaultConfigurationFactory.createImageDownloader(context);
             }
-            if (decoder == null)
-            {
+            if (decoder == null) {
                 decoder = DefaultConfigurationFactory.createImageDecoder(writeLogs);
             }
-            if (defaultDisplayImageOptions == null)
-            {
+            if (defaultDisplayImageOptions == null) {
                 defaultDisplayImageOptions = DisplayImageOptions.createSimple();
             }
         }

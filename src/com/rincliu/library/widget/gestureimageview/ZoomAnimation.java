@@ -20,8 +20,7 @@ import android.graphics.PointF;
 /**
  * @author Jason Polites
  */
-public class ZoomAnimation implements Animation
-{
+public class ZoomAnimation implements Animation {
 
     private boolean firstFrame = true;
 
@@ -56,10 +55,8 @@ public class ZoomAnimation implements Animation
      * , long)
      */
     @Override
-    public boolean update(GestureImageView view, long time)
-    {
-        if (firstFrame)
-        {
+    public boolean update(GestureImageView view, long time) {
+        if (firstFrame) {
             firstFrame = false;
 
             startX = view.getImageX();
@@ -67,8 +64,7 @@ public class ZoomAnimation implements Animation
             startScale = view.getScale();
             scaleDiff = (zoom * startScale) - startScale;
 
-            if (scaleDiff > 0)
-            {
+            if (scaleDiff > 0) {
                 // Calculate destination for midpoint
                 VectorF vector = new VectorF();
 
@@ -90,9 +86,7 @@ public class ZoomAnimation implements Animation
 
                 xDiff = vector.end.x - startX;
                 yDiff = vector.end.y - startY;
-            }
-            else
-            {
+            } else {
                 // Zoom out to center
                 xDiff = view.getCenterX() - startX;
                 yDiff = view.getCenterY() - startY;
@@ -103,33 +97,27 @@ public class ZoomAnimation implements Animation
 
         float ratio = (float) totalTime / (float) animationLengthMS;
 
-        if (ratio < 1)
-        {
+        if (ratio < 1) {
 
-            if (ratio > 0)
-            {
+            if (ratio > 0) {
                 // we still have time left
                 float newScale = (ratio * scaleDiff) + startScale;
                 float newX = (ratio * xDiff) + startX;
                 float newY = (ratio * yDiff) + startY;
 
-                if (zoomAnimationListener != null)
-                {
+                if (zoomAnimationListener != null) {
                     zoomAnimationListener.onZoom(newScale, newX, newY);
                 }
             }
 
             return true;
-        }
-        else
-        {
+        } else {
 
             float newScale = scaleDiff + startScale;
             float newX = xDiff + startX;
             float newY = yDiff + startY;
 
-            if (zoomAnimationListener != null)
-            {
+            if (zoomAnimationListener != null) {
                 zoomAnimationListener.onZoom(newScale, newX, newY);
                 zoomAnimationListener.onComplete();
             }
@@ -138,59 +126,48 @@ public class ZoomAnimation implements Animation
         }
     }
 
-    public void reset()
-    {
+    public void reset() {
         firstFrame = true;
         totalTime = 0;
     }
 
-    public float getZoom()
-    {
+    public float getZoom() {
         return zoom;
     }
 
-    public void setZoom(float zoom)
-    {
+    public void setZoom(float zoom) {
         this.zoom = zoom;
     }
 
-    public float getTouchX()
-    {
+    public float getTouchX() {
         return touchX;
     }
 
-    public void setTouchX(float touchX)
-    {
+    public void setTouchX(float touchX) {
         this.touchX = touchX;
     }
 
-    public float getTouchY()
-    {
+    public float getTouchY() {
         return touchY;
     }
 
-    public void setTouchY(float touchY)
-    {
+    public void setTouchY(float touchY) {
         this.touchY = touchY;
     }
 
-    public long getAnimationLengthMS()
-    {
+    public long getAnimationLengthMS() {
         return animationLengthMS;
     }
 
-    public void setAnimationLengthMS(long animationLengthMS)
-    {
+    public void setAnimationLengthMS(long animationLengthMS) {
         this.animationLengthMS = animationLengthMS;
     }
 
-    public ZoomAnimationListener getZoomAnimationListener()
-    {
+    public ZoomAnimationListener getZoomAnimationListener() {
         return zoomAnimationListener;
     }
 
-    public void setZoomAnimationListener(ZoomAnimationListener zoomAnimationListener)
-    {
+    public void setZoomAnimationListener(ZoomAnimationListener zoomAnimationListener) {
         this.zoomAnimationListener = zoomAnimationListener;
     }
 }

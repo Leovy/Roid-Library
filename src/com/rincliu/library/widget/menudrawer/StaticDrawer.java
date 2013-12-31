@@ -5,34 +5,28 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
-public abstract class StaticDrawer extends MenuDrawer
-{
+public abstract class StaticDrawer extends MenuDrawer {
 
     protected Position mPosition;
 
-    StaticDrawer(Activity activity, int dragMode)
-    {
+    StaticDrawer(Activity activity, int dragMode) {
         super(activity, dragMode);
     }
 
-    public StaticDrawer(Context context)
-    {
+    public StaticDrawer(Context context) {
         super(context);
     }
 
-    public StaticDrawer(Context context, AttributeSet attrs)
-    {
+    public StaticDrawer(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public StaticDrawer(Context context, AttributeSet attrs, int defStyle)
-    {
+    public StaticDrawer(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
     @Override
-    protected void dispatchDraw(Canvas canvas)
-    {
+    protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         if (mDropShadowEnabled)
             drawDropShadow(canvas);
@@ -40,15 +34,13 @@ public abstract class StaticDrawer extends MenuDrawer
             drawIndicator(canvas);
     }
 
-    private void drawDropShadow(Canvas canvas)
-    {
+    private void drawDropShadow(Canvas canvas) {
         final int width = getWidth();
         final int height = getHeight();
         final int menuSize = mMenuSize;
         final int dropShadowSize = mDropShadowSize;
 
-        switch (mPosition)
-        {
+        switch (mPosition) {
             case LEFT:
                 mDropShadowDrawable.setBounds(menuSize - dropShadowSize, 0, menuSize, height);
                 break;
@@ -64,13 +56,11 @@ public abstract class StaticDrawer extends MenuDrawer
     protected abstract void drawIndicator(Canvas canvas);
 
     @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b)
-    {
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
         final int width = r - l;
         final int height = b - t;
 
-        switch (mPosition)
-        {
+        switch (mPosition) {
             case LEFT:
                 mMenuContainer.layout(0, 0, mMenuSize, height);
                 mContentContainer.layout(mMenuSize, 0, width, height);
@@ -84,13 +74,11 @@ public abstract class StaticDrawer extends MenuDrawer
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
-        if (widthMode != MeasureSpec.EXACTLY || heightMode != MeasureSpec.EXACTLY)
-        {
+        if (widthMode != MeasureSpec.EXACTLY || heightMode != MeasureSpec.EXACTLY) {
             throw new IllegalStateException("Must measure with an exact size");
         }
 
@@ -100,11 +88,9 @@ public abstract class StaticDrawer extends MenuDrawer
         if (!mMenuSizeSet)
             mMenuSize = (int) (height * 0.25f);
 
-        switch (mPosition)
-        {
+        switch (mPosition) {
             case LEFT:
-            case RIGHT:
-            {
+            case RIGHT: {
                 final int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
 
                 final int menuWidth = mMenuSize;
@@ -123,29 +109,21 @@ public abstract class StaticDrawer extends MenuDrawer
     }
 
     @Override
-    public void toggleMenu(boolean animate)
-    {
-    }
+    public void toggleMenu(boolean animate) {}
 
     @Override
-    public void openMenu(boolean animate)
-    {
-    }
+    public void openMenu(boolean animate) {}
 
     @Override
-    public void closeMenu(boolean animate)
-    {
-    }
+    public void closeMenu(boolean animate) {}
 
     @Override
-    public boolean isMenuVisible()
-    {
+    public boolean isMenuVisible() {
         return true;
     }
 
     @Override
-    public void setMenuSize(int size)
-    {
+    public void setMenuSize(int size) {
         mMenuSize = size;
         mMenuSizeSet = true;
         requestLayout();
@@ -153,55 +131,38 @@ public abstract class StaticDrawer extends MenuDrawer
     }
 
     @Override
-    public void setOffsetMenuEnabled(boolean offsetMenu)
-    {
-    }
+    public void setOffsetMenuEnabled(boolean offsetMenu) {}
 
     @Override
-    public boolean getOffsetMenuEnabled()
-    {
+    public boolean getOffsetMenuEnabled() {
         return false;
     }
 
     @Override
-    public void peekDrawer()
-    {
-    }
+    public void peekDrawer() {}
 
     @Override
-    public void peekDrawer(long delay)
-    {
-    }
+    public void peekDrawer(long delay) {}
 
     @Override
-    public void peekDrawer(long startDelay, long delay)
-    {
-    }
+    public void peekDrawer(long startDelay, long delay) {}
 
     @Override
-    public void setHardwareLayerEnabled(boolean enabled)
-    {
-    }
+    public void setHardwareLayerEnabled(boolean enabled) {}
 
     @Override
-    public int getTouchMode()
-    {
+    public int getTouchMode() {
         return TOUCH_MODE_NONE;
     }
 
     @Override
-    public void setTouchMode(int mode)
-    {
-    }
+    public void setTouchMode(int mode) {}
 
     @Override
-    public void setTouchBezelSize(int size)
-    {
-    }
+    public void setTouchBezelSize(int size) {}
 
     @Override
-    public int getTouchBezelSize()
-    {
+    public int getTouchBezelSize() {
         return 0;
     }
 }

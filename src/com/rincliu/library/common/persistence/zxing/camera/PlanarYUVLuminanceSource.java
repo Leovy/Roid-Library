@@ -30,8 +30,7 @@ import android.graphics.Bitmap;
  * 
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class PlanarYUVLuminanceSource extends LuminanceSource
-{
+public final class PlanarYUVLuminanceSource extends LuminanceSource {
     private final byte[] yuvData;
 
     private final int dataWidth;
@@ -43,12 +42,10 @@ public final class PlanarYUVLuminanceSource extends LuminanceSource
     private final int top;
 
     public PlanarYUVLuminanceSource(byte[] yuvData, int dataWidth, int dataHeight, int left, int top, int width,
-            int height)
-    {
+            int height) {
         super(width, height);
 
-        if (left + width > dataWidth || top + height > dataHeight)
-        {
+        if (left + width > dataWidth || top + height > dataHeight) {
             throw new IllegalArgumentException("Crop rectangle does not fit within image data.");
         }
 
@@ -60,15 +57,12 @@ public final class PlanarYUVLuminanceSource extends LuminanceSource
     }
 
     @Override
-    public byte[] getRow(int y, byte[] row)
-    {
-        if (y < 0 || y >= getHeight())
-        {
+    public byte[] getRow(int y, byte[] row) {
+        if (y < 0 || y >= getHeight()) {
             throw new IllegalArgumentException("Requested row is outside the image: " + y);
         }
         int width = getWidth();
-        if (row == null || row.length < width)
-        {
+        if (row == null || row.length < width) {
             row = new byte[width];
         }
         int offset = (y + top) * dataWidth + left;
@@ -77,8 +71,7 @@ public final class PlanarYUVLuminanceSource extends LuminanceSource
     }
 
     @Override
-    public byte[] getMatrix()
-    {
+    public byte[] getMatrix() {
         int width = getWidth();
         int height = getHeight();
 
@@ -86,8 +79,7 @@ public final class PlanarYUVLuminanceSource extends LuminanceSource
         // and give them the
         // original data. The docs specifically warn that result.length must
         // be ignored.
-        if (width == dataWidth && height == dataHeight)
-        {
+        if (width == dataWidth && height == dataHeight) {
             return yuvData;
         }
 
@@ -97,16 +89,14 @@ public final class PlanarYUVLuminanceSource extends LuminanceSource
 
         // If the width matches the full width of the underlying data, perform
         // a single copy.
-        if (width == dataWidth)
-        {
+        if (width == dataWidth) {
             System.arraycopy(yuvData, inputOffset, matrix, 0, area);
             return matrix;
         }
 
         // Otherwise copy one cropped row at a time.
         byte[] yuv = yuvData;
-        for (int y = 0; y < height; y++)
-        {
+        for (int y = 0; y < height; y++) {
             int outputOffset = y * width;
             System.arraycopy(yuv, inputOffset, matrix, outputOffset, width);
             inputOffset += dataWidth;
@@ -115,34 +105,28 @@ public final class PlanarYUVLuminanceSource extends LuminanceSource
     }
 
     @Override
-    public boolean isCropSupported()
-    {
+    public boolean isCropSupported() {
         return true;
     }
 
-    public int getDataWidth()
-    {
+    public int getDataWidth() {
         return dataWidth;
     }
 
-    public int getDataHeight()
-    {
+    public int getDataHeight() {
         return dataHeight;
     }
 
-    public Bitmap renderCroppedGreyscaleBitmap()
-    {
+    public Bitmap renderCroppedGreyscaleBitmap() {
         int width = getWidth();
         int height = getHeight();
         int[] pixels = new int[width * height];
         byte[] yuv = yuvData;
         int inputOffset = top * dataWidth + left;
 
-        for (int y = 0; y < height; y++)
-        {
+        for (int y = 0; y < height; y++) {
             int outputOffset = y * width;
-            for (int x = 0; x < width; x++)
-            {
+            for (int x = 0; x < width; x++) {
                 int grey = yuv[inputOffset + x] & 0xff;
                 pixels[outputOffset + x] = 0xFF000000 | (grey * 0x00010101);
             }

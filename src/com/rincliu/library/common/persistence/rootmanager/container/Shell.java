@@ -11,8 +11,7 @@ import java.util.concurrent.TimeoutException;
 import com.rincliu.library.common.persistence.rootmanager.exception.PermissionException;
 import com.rincliu.library.common.persistence.rootmanager.utils.RootUtils;
 
-public class Shell
-{
+public class Shell {
 
     private final static String TAG = Shell.class.getSimpleName();
 
@@ -36,8 +35,7 @@ public class Shell
 
     private static Shell customShell = null;
 
-    private Shell(String cmd) throws IOException, TimeoutException, PermissionException
-    {
+    private Shell(String cmd) throws IOException, TimeoutException, PermissionException {
 
         RootUtils.Log(TAG, "Starting shell: " + cmd);
 
@@ -48,224 +46,163 @@ public class Shell
         Worker worker = new Worker(proc, in, out);
         worker.start();
 
-        try
-        {
+        try {
             worker.join(shellTimeout);
 
-            if (worker.exit == -911)
-            {
+            if (worker.exit == -911) {
                 proc.destroy();
 
                 throw new TimeoutException(error);
             }
-            if (worker.exit == -42)
-            {
+            if (worker.exit == -42) {
                 proc.destroy();
                 throw new PermissionException("Root Access Denied");
-            }
-            else
-            {
+            } else {
                 new Thread(input, "Shell Input").start();
                 new Thread(output, "Shell Output").start();
             }
-        }
-        catch (InterruptedException ex)
-        {
+        } catch (InterruptedException ex) {
             worker.interrupt();
             Thread.currentThread().interrupt();
             throw new TimeoutException();
         }
     }
 
-    public static Shell getOpenShell()
-    {
-        if (rootShell != null)
-        {
+    public static Shell getOpenShell() {
+        if (rootShell != null) {
             return rootShell;
-        }
-        else if (customShell != null)
-        {
+        } else if (customShell != null) {
             return customShell;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
-    public static Shell startRootShell() throws IOException, TimeoutException, PermissionException
-    {
+    public static Shell startRootShell() throws IOException, TimeoutException, PermissionException {
         return Shell.startRootShell(shellTimeout);
     }
 
-    public static Shell startRootShell(int timeout) throws IOException, TimeoutException, PermissionException
-    {
+    public static Shell startRootShell(int timeout) throws IOException, TimeoutException, PermissionException {
         Shell.shellTimeout = timeout;
 
-        if (rootShell == null)
-        {
+        if (rootShell == null) {
             RootUtils.Log("Starting Root Shell!");
             String cmd = "su";
 
             int retries = 0;
-            while (rootShell == null)
-            {
-                try
-                {
+            while (rootShell == null) {
+                try {
                     rootShell = new Shell(cmd);
-                }
-                catch (IOException e)
-                {
-                    if (retries++ >= 5)
-                    {
+                } catch (IOException e) {
+                    if (retries++ >= 5) {
                         RootUtils.Log("Could not start shell");
                         throw e;
                     }
                 }
             }
-        }
-        else
-        {
+        } else {
             RootUtils.Log("Using Existing Root Shell!");
         }
 
         return rootShell;
     }
 
-    public static Shell startCustomShell(String shellPath) throws IOException, TimeoutException, PermissionException
-    {
+    public static Shell startCustomShell(String shellPath) throws IOException, TimeoutException, PermissionException {
         return Shell.startCustomShell(shellPath, shellTimeout);
     }
 
     public static Shell startCustomShell(String shellPath, int timeout) throws IOException, TimeoutException,
-            PermissionException
-    {
+            PermissionException {
         Shell.shellTimeout = timeout;
 
-        if (customShell == null)
-        {
+        if (customShell == null) {
             RootUtils.Log("Starting Custom Shell!");
             customShell = new Shell(shellPath);
-        }
-        else
-        {
+        } else {
             RootUtils.Log("Using Existing Custom Shell!");
         }
 
         return customShell;
     }
 
-    public static void runRootCommand(Command command) throws IOException, TimeoutException, PermissionException
-    {
+    public static void runRootCommand(Command command) throws IOException, TimeoutException, PermissionException {
         startRootShell().add(command);
     }
 
-    public static void closeCustomShell() throws IOException
-    {
-        if (customShell == null)
-        {
+    public static void closeCustomShell() throws IOException {
+        if (customShell == null) {
             return;
         }
         customShell.close();
     }
 
-    public static void closeRootShell() throws IOException
-    {
-        if (rootShell == null)
-        {
+    public static void closeRootShell() throws IOException {
+        if (rootShell == null) {
             return;
         }
         rootShell.close();
     }
 
-    public static void closeAll() throws IOException
-    {
+    public static void closeAll() throws IOException {
         closeRootShell();
         closeCustomShell();
     }
 
-    public static boolean isCustomShellOpen()
-    {
-        if (customShell == null)
-        {
+    public static boolean isCustomShellOpen() {
+        if (customShell == null) {
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
 
-    public static boolean isRootShellOpen()
-    {
-        if (rootShell == null)
-        {
+    public static boolean isRootShellOpen() {
+        if (rootShell == null) {
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
 
-    public static boolean isAnyShellOpen()
-    {
-        if (rootShell != null)
-        {
+    public static boolean isAnyShellOpen() {
+        if (rootShell != null) {
             return true;
-        }
-        else if (customShell != null)
-        {
+        } else if (customShell != null) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
-    private Runnable input = new Runnable()
-    {
-        public void run()
-        {
-            try
-            {
+    private Runnable input = new Runnable() {
+        public void run() {
+            try {
                 writeCommands();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 RootUtils.Log(e.getMessage());
             }
         }
     };
 
-    private void writeCommands() throws IOException
-    {
-        try
-        {
+    private void writeCommands() throws IOException {
+        try {
             int write = 0;
-            while (true)
-            {
+            while (true) {
                 DataOutputStream out;
-                synchronized (commands)
-                {
-                    while (!close && write >= commands.size())
-                    {
+                synchronized (commands) {
+                    while (!close && write >= commands.size()) {
                         commands.wait();
                     }
                     out = this.out;
                 }
-                if (write < commands.size())
-                {
+                if (write < commands.size()) {
                     Command next = commands.get(write);
                     next.writeCommand(out);
                     String line = "\necho " + token + " " + write + " $?\n";
                     out.write(line.getBytes());
                     out.flush();
                     write++;
-                }
-                else if (close)
-                {
+                } else if (close) {
                     out.write("\nexit 0\n".getBytes());
                     out.flush();
                     out.close();
@@ -273,49 +210,34 @@ public class Shell
                     return;
                 }
             }
-        }
-        catch (InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    private Runnable output = new Runnable()
-    {
-        public void run()
-        {
-            try
-            {
+    private Runnable output = new Runnable() {
+        public void run() {
+            try {
                 readOutput();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
-            }
-            catch (InterruptedException e)
-            {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     };
 
-    private void readOutput() throws IOException, InterruptedException
-    {
+    private void readOutput() throws IOException, InterruptedException {
         Command command = null;
         int read = 0;
-        while (true)
-        {
+        while (true) {
             String line = in.readLine();
-            if (line == null)
-            {
+            if (line == null) {
                 break;
             }
-            if (command == null)
-            {
-                if (read >= commands.size())
-                {
-                    if (close)
-                    {
+            if (command == null) {
+                if (read >= commands.size()) {
+                    if (close) {
                         break;
                     }
                     continue;
@@ -324,34 +246,22 @@ public class Shell
             }
 
             int pos = line.indexOf(token);
-            if (pos > 0)
-            {
+            if (pos > 0) {
                 command.onUpdate(command.getID(), line.substring(0, pos));
             }
-            if (pos >= 0)
-            {
+            if (pos >= 0) {
                 line = line.substring(pos);
                 String fields[] = line.split(" ");
-                if (fields.length >= 2 && fields[1] != null)
-                {
+                if (fields.length >= 2 && fields[1] != null) {
                     int id = 0;
-                    try
-                    {
+                    try {
                         id = Integer.parseInt(fields[1]);
-                    }
-                    catch (NumberFormatException e)
-                    {
-                    }
+                    } catch (NumberFormatException e) {}
                     int exitCode = -1;
-                    try
-                    {
+                    try {
                         exitCode = Integer.parseInt(fields[2]);
-                    }
-                    catch (NumberFormatException e)
-                    {
-                    }
-                    if (id == read)
-                    {
+                    } catch (NumberFormatException e) {}
+                    if (id == read) {
                         command.setExitCode(exitCode);
                         read++;
                         command = null;
@@ -366,10 +276,8 @@ public class Shell
         proc.destroy();
         RootUtils.Log("Shell destroyed");
 
-        while (read < commands.size())
-        {
-            if (command == null)
-            {
+        while (read < commands.size()) {
+            if (command == null) {
                 command = commands.get(read);
             }
             command.terminate("Unexpected Termination.");
@@ -378,12 +286,10 @@ public class Shell
         }
     }
 
-    public Command add(Command command) throws IOException
-    {
+    public Command add(Command command) throws IOException {
         if (close)
             throw new IllegalStateException("Unable to add commands to a closed shell");
-        synchronized (commands)
-        {
+        synchronized (commands) {
             commands.add(command);
             commands.notifyAll();
         }
@@ -391,40 +297,32 @@ public class Shell
         return command;
     }
 
-    public void close() throws IOException
-    {
-        if (this == rootShell)
-        {
+    public void close() throws IOException {
+        if (this == rootShell) {
             rootShell = null;
         }
-        if (this == customShell)
-        {
+        if (this == customShell) {
             customShell = null;
         }
-        synchronized (commands)
-        {
+        synchronized (commands) {
             this.close = true;
             commands.notifyAll();
         }
     }
 
-    public int countCommands()
-    {
+    public int countCommands() {
         return commands.size();
     }
 
-    public void waitFor() throws IOException, InterruptedException
-    {
+    public void waitFor() throws IOException, InterruptedException {
         close();
-        if (commands.size() > 0)
-        {
+        if (commands.size() > 0) {
             Command command = commands.get(commands.size() - 1);
             command.waitForFinish();
         }
     }
 
-    protected static class Worker extends Thread
-    {
+    protected static class Worker extends Thread {
         public int exit = -911;
 
         public Process proc;
@@ -433,49 +331,37 @@ public class Shell
 
         public DataOutputStream out;
 
-        private Worker(Process proc, DataInputStream in, DataOutputStream out)
-        {
+        private Worker(Process proc, DataInputStream in, DataOutputStream out) {
             this.proc = proc;
             this.in = in;
             this.out = out;
         }
 
-        public void run()
-        {
+        public void run() {
 
-            try
-            {
+            try {
                 out.write("echo Started\n".getBytes());
                 out.flush();
 
-                while (true)
-                {
+                while (true) {
                     String line = in.readLine();
-                    if (line == null)
-                    {
+                    if (line == null) {
                         throw new EOFException();
                     }
-                    if ("".equals(line))
-                    {
+                    if ("".equals(line)) {
                         continue;
                     }
-                    if ("Started".equals(line))
-                    {
+                    if ("Started".equals(line)) {
                         this.exit = 1;
                         break;
                     }
                     Shell.error = "unkown error occured.";
                 }
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 exit = -42;
-                if (e.getMessage() != null)
-                {
+                if (e.getMessage() != null) {
                     Shell.error = e.getMessage();
-                }
-                else
-                {
+                } else {
                     Shell.error = "RootAccess denied?.";
                 }
             }

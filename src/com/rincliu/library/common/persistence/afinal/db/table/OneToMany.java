@@ -15,18 +15,15 @@
  */
 package com.rincliu.library.common.persistence.afinal.db.table;
 
-public class OneToMany extends Property
-{
+public class OneToMany extends Property {
 
     private Class<?> oneClass;
 
-    public Class<?> getOneClass()
-    {
+    public Class<?> getOneClass() {
         return oneClass;
     }
 
-    public void setOneClass(Class<?> oneClass)
-    {
+    public void setOneClass(Class<?> oneClass) {
         this.oneClass = oneClass;
     }
 }

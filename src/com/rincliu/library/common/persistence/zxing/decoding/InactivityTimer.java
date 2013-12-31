@@ -27,8 +27,7 @@ import android.app.Activity;
 /**
  * Finishes an activity after a period of inactivity.
  */
-public final class InactivityTimer
-{
+public final class InactivityTimer {
 
     private static final int INACTIVITY_DELAY_SECONDS = 5 * 60;
 
@@ -38,38 +37,31 @@ public final class InactivityTimer
 
     private ScheduledFuture<?> inactivityFuture = null;
 
-    public InactivityTimer(Activity activity)
-    {
+    public InactivityTimer(Activity activity) {
         this.activity = activity;
         onActivity();
     }
 
-    public void onActivity()
-    {
+    public void onActivity() {
         cancel();
         inactivityFuture = inactivityTimer.schedule(new FinishListener(activity), INACTIVITY_DELAY_SECONDS,
                 TimeUnit.SECONDS);
     }
 
-    private void cancel()
-    {
-        if (inactivityFuture != null)
-        {
+    private void cancel() {
+        if (inactivityFuture != null) {
             inactivityFuture.cancel(true);
             inactivityFuture = null;
         }
     }
 
-    public void shutdown()
-    {
+    public void shutdown() {
         cancel();
         inactivityTimer.shutdown();
     }
 
-    private static final class DaemonThreadFactory implements ThreadFactory
-    {
-        public Thread newThread(Runnable runnable)
-        {
+    private static final class DaemonThreadFactory implements ThreadFactory {
+        public Thread newThread(Runnable runnable) {
             Thread thread = new Thread(runnable);
             thread.setDaemon(true);
             return thread;

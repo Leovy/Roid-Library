@@ -22,8 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class RLAlertDialog extends RLDialog
-{
+public class RLAlertDialog extends RLDialog {
     private Listener listener;
 
     private String title, msg;
@@ -47,8 +46,7 @@ public class RLAlertDialog extends RLDialog
      * @param listener
      */
     public RLAlertDialog(Context context, String title, String msg, String leftBtnStr, String rightBtnStr,
-            Listener listener)
-    {
+            Listener listener) {
         super(context);
         this.title = title;
         this.msg = msg;
@@ -70,8 +68,7 @@ public class RLAlertDialog extends RLDialog
      * @param listener
      */
     public RLAlertDialog(Context context, String title, String msg, int msgLinkify, String leftBtnStr,
-            String rightBtnStr, Listener listener)
-    {
+            String rightBtnStr, Listener listener) {
         super(context);
         this.title = title;
         this.msg = msg;
@@ -85,8 +82,7 @@ public class RLAlertDialog extends RLDialog
     }
 
     @Override
-    protected View getView()
-    {
+    protected View getView() {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_alert, null);
         TextView tv_title = (TextView) view.findViewById(R.id.tv_title);
         tv_title.setText(title);
@@ -97,18 +93,14 @@ public class RLAlertDialog extends RLDialog
         btn_left.setText(leftBtnStr);
         btn_right = (Button) view.findViewById(R.id.btn_right);
         btn_right.setText(rightBtnStr);
-        btn_left.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
+        btn_left.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 dismiss();
                 listener.onLeftClick();
             }
         });
-        btn_right.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
+        btn_right.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 dismiss();
                 listener.onRightClick();
             }
@@ -119,8 +111,7 @@ public class RLAlertDialog extends RLDialog
     /**
 	 * 
 	 */
-    public interface Listener
-    {
+    public interface Listener {
         public void onLeftClick();
 
         public void onRightClick();

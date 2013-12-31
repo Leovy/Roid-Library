@@ -11,8 +11,7 @@ import android.widget.FrameLayout;
  * If it's not posted twice the layer either wont be built on start, or it'll
  * be built twice.
  */
-public class BuildLayerFrameLayout extends FrameLayout
-{
+public class BuildLayerFrameLayout extends FrameLayout {
 
     private boolean mChanged;
 
@@ -22,64 +21,51 @@ public class BuildLayerFrameLayout extends FrameLayout
 
     private boolean mFirst = true;
 
-    public BuildLayerFrameLayout(Context context)
-    {
+    public BuildLayerFrameLayout(Context context) {
         super(context);
-        if (MenuDrawer.USE_TRANSLATIONS)
-        {
+        if (MenuDrawer.USE_TRANSLATIONS) {
             setLayerType(LAYER_TYPE_HARDWARE, null);
         }
     }
 
-    public BuildLayerFrameLayout(Context context, AttributeSet attrs)
-    {
+    public BuildLayerFrameLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        if (MenuDrawer.USE_TRANSLATIONS)
-        {
+        if (MenuDrawer.USE_TRANSLATIONS) {
             setLayerType(LAYER_TYPE_HARDWARE, null);
         }
     }
 
-    public BuildLayerFrameLayout(Context context, AttributeSet attrs, int defStyle)
-    {
+    public BuildLayerFrameLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        if (MenuDrawer.USE_TRANSLATIONS)
-        {
+        if (MenuDrawer.USE_TRANSLATIONS) {
             setLayerType(LAYER_TYPE_HARDWARE, null);
         }
     }
 
-    void setHardwareLayersEnabled(boolean enabled)
-    {
+    void setHardwareLayersEnabled(boolean enabled) {
         mHardwareLayersEnabled = enabled;
     }
 
     @Override
-    protected void onAttachedToWindow()
-    {
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         mAttached = true;
     }
 
     @Override
-    protected void onDetachedFromWindow()
-    {
+    protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mAttached = false;
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh)
-    {
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        if (MenuDrawer.USE_TRANSLATIONS && mHardwareLayersEnabled)
-        {
-            post(new Runnable()
-            {
+        if (MenuDrawer.USE_TRANSLATIONS && mHardwareLayersEnabled) {
+            post(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     mChanged = true;
                     invalidate();
                 }
@@ -88,24 +74,18 @@ public class BuildLayerFrameLayout extends FrameLayout
     }
 
     @Override
-    protected void dispatchDraw(Canvas canvas)
-    {
+    protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
 
-        if (mChanged && MenuDrawer.USE_TRANSLATIONS)
-        {
-            post(new Runnable()
-            {
+        if (mChanged && MenuDrawer.USE_TRANSLATIONS) {
+            post(new Runnable() {
                 @Override
-                public void run()
-                {
-                    if (mAttached)
-                    {
+                public void run() {
+                    if (mAttached) {
                         final int layerType = getLayerType();
                         // If it's already a hardware layer, it'll be built
                         // anyway.
-                        if (layerType != LAYER_TYPE_HARDWARE || mFirst)
-                        {
+                        if (layerType != LAYER_TYPE_HARDWARE || mFirst) {
                             mFirst = false;
                             setLayerType(LAYER_TYPE_HARDWARE, null);
                             buildLayer();

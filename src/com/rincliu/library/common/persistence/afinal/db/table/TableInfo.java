@@ -23,8 +23,7 @@ import com.rincliu.library.common.persistence.afinal.exception.DbException;
 import com.rincliu.library.common.persistence.afinal.reflect.ClassUtils;
 import com.rincliu.library.common.persistence.afinal.reflect.FieldUtils;
 
-public class TableInfo
-{
+public class TableInfo {
 
     private String className;
 
@@ -42,27 +41,22 @@ public class TableInfo
 
     private static final HashMap<String, TableInfo> tableInfoMap = new HashMap<String, TableInfo>();
 
-    private TableInfo()
-    {
-    }
+    private TableInfo() {}
 
     @SuppressWarnings("unused")
-    public static TableInfo get(Class<?> clazz)
-    {
+    public static TableInfo get(Class<?> clazz) {
         if (clazz == null)
             throw new DbException("table info get error,because the clazz is null");
 
         TableInfo tableInfo = tableInfoMap.get(clazz.getName());
-        if (tableInfo == null)
-        {
+        if (tableInfo == null) {
             tableInfo = new TableInfo();
 
             tableInfo.setTableName(ClassUtils.getTableName(clazz));
             tableInfo.setClassName(clazz.getName());
 
             Field idField = ClassUtils.getPrimaryKeyField(clazz);
-            if (idField != null)
-            {
+            if (idField != null) {
                 Id id = new Id();
                 id.setColumn(FieldUtils.getColumnByField(idField));
                 id.setFieldName(idField.getName());
@@ -71,37 +65,29 @@ public class TableInfo
                 id.setDataType(idField.getType());
 
                 tableInfo.setId(id);
-            }
-            else
-            {
+            } else {
                 throw new DbException("the class[" + clazz + "]'s idField is null");
             }
 
             List<Property> pList = ClassUtils.getPropertyList(clazz);
-            if (pList != null)
-            {
-                for (Property p : pList)
-                {
+            if (pList != null) {
+                for (Property p : pList) {
                     if (p != null)
                         tableInfo.propertyMap.put(p.getColumn(), p);
                 }
             }
 
             List<ManyToOne> mList = ClassUtils.getManyToOneList(clazz);
-            if (mList != null)
-            {
-                for (ManyToOne m : mList)
-                {
+            if (mList != null) {
+                for (ManyToOne m : mList) {
                     if (m != null)
                         tableInfo.manyToOneMap.put(m.getColumn(), m);
                 }
             }
 
             List<OneToMany> oList = ClassUtils.getOneToManyList(clazz);
-            if (oList != null)
-            {
-                for (OneToMany o : oList)
-                {
+            if (oList != null) {
+                for (OneToMany o : oList) {
                     if (o != null)
                         tableInfo.oneToManyMap.put(o.getColumn(), o);
                 }
@@ -116,56 +102,44 @@ public class TableInfo
         return tableInfo;
     }
 
-    public static TableInfo get(String className)
-    {
-        try
-        {
+    public static TableInfo get(String className) {
+        try {
             return get(Class.forName(className));
-        }
-        catch (ClassNotFoundException e)
-        {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public String getClassName()
-    {
+    public String getClassName() {
         return className;
     }
 
-    public void setClassName(String className)
-    {
+    public void setClassName(String className) {
         this.className = className;
     }
 
-    public String getTableName()
-    {
+    public String getTableName() {
         return tableName;
     }
 
-    public void setTableName(String tableName)
-    {
+    public void setTableName(String tableName) {
         this.tableName = tableName;
     }
 
-    public Id getId()
-    {
+    public Id getId() {
         return id;
     }
 
-    public void setId(Id id)
-    {
+    public void setId(Id id) {
         this.id = id;
     }
 
-    public boolean isCheckDatabese()
-    {
+    public boolean isCheckDatabese() {
         return checkDatabese;
     }
 
-    public void setCheckDatabese(boolean checkDatabese)
-    {
+    public void setCheckDatabese(boolean checkDatabese) {
         this.checkDatabese = checkDatabese;
     }
 

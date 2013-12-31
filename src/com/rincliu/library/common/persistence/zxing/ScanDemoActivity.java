@@ -25,40 +25,30 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.util.Linkify;
 
-public class ScanDemoActivity extends RLActivity
-{
+public class ScanDemoActivity extends RLActivity {
     private static final int MSG_SCAN = 888;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         startActivityForResult(new Intent(ScanDemoActivity.this, ZxingScanActivity.class), MSG_SCAN);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if (resultCode == RESULT_OK && requestCode == 888)
-        {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == 888) {
             String result = data.getExtras().getString("result");
-            if (TextUtils.isEmpty(result))
-            {
+            if (TextUtils.isEmpty(result)) {
                 RLUiUtil.toast(this, R.string.scan_retry);
                 return;
             }
             RLAlertDialog dialog = new RLAlertDialog(this, getString(R.string.scan_result), result, Linkify.ALL,
-                    getString(android.R.string.yes), getString(android.R.string.cancel), new RLAlertDialog.Listener()
-                    {
+                    getString(android.R.string.yes), getString(android.R.string.cancel), new RLAlertDialog.Listener() {
                         @Override
-                        public void onLeftClick()
-                        {
-                        }
+                        public void onLeftClick() {}
 
                         @Override
-                        public void onRightClick()
-                        {
-                        }
+                        public void onRightClick() {}
                     });
             dialog.show();
         }

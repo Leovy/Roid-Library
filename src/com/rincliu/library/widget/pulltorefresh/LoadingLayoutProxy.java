@@ -7,32 +7,26 @@ import android.graphics.drawable.Drawable;
 
 import com.rincliu.library.widget.pulltorefresh.LoadingLayout;
 
-public class LoadingLayoutProxy implements ILoadingLayout
-{
+public class LoadingLayoutProxy implements ILoadingLayout {
 
     private final PullToRefreshBase<?> mPullToRefreshView;
 
     private final HashSet<LoadingLayout> mLoadingLayouts;
 
-    LoadingLayoutProxy(PullToRefreshBase<?> pullToRefreshView)
-    {
+    LoadingLayoutProxy(PullToRefreshBase<?> pullToRefreshView) {
         mPullToRefreshView = pullToRefreshView;
         mLoadingLayouts = new HashSet<LoadingLayout>();
     }
 
-    void addLayout(LoadingLayout layout)
-    {
-        if (null != layout)
-        {
+    void addLayout(LoadingLayout layout) {
+        if (null != layout) {
             mLoadingLayouts.add(layout);
         }
     }
 
     @Override
-    public void setLastUpdatedLabel(CharSequence label)
-    {
-        for (LoadingLayout layout : mLoadingLayouts)
-        {
+    public void setLastUpdatedLabel(CharSequence label) {
+        for (LoadingLayout layout : mLoadingLayouts) {
             layout.setLastUpdatedLabel(label);
         }
 
@@ -40,10 +34,8 @@ public class LoadingLayoutProxy implements ILoadingLayout
     }
 
     @Override
-    public void setLoadingDrawable(Drawable drawable)
-    {
-        for (LoadingLayout layout : mLoadingLayouts)
-        {
+    public void setLoadingDrawable(Drawable drawable) {
+        for (LoadingLayout layout : mLoadingLayouts) {
             layout.setLoadingDrawable(drawable);
         }
 
@@ -51,36 +43,28 @@ public class LoadingLayoutProxy implements ILoadingLayout
     }
 
     @Override
-    public void setRefreshingLabel(CharSequence refreshingLabel)
-    {
-        for (LoadingLayout layout : mLoadingLayouts)
-        {
+    public void setRefreshingLabel(CharSequence refreshingLabel) {
+        for (LoadingLayout layout : mLoadingLayouts) {
             layout.setRefreshingLabel(refreshingLabel);
         }
     }
 
     @Override
-    public void setPullLabel(CharSequence label)
-    {
-        for (LoadingLayout layout : mLoadingLayouts)
-        {
+    public void setPullLabel(CharSequence label) {
+        for (LoadingLayout layout : mLoadingLayouts) {
             layout.setPullLabel(label);
         }
     }
 
     @Override
-    public void setReleaseLabel(CharSequence label)
-    {
-        for (LoadingLayout layout : mLoadingLayouts)
-        {
+    public void setReleaseLabel(CharSequence label) {
+        for (LoadingLayout layout : mLoadingLayouts) {
             layout.setRefreshingLabel(label);
         }
     }
 
-    public void setTextTypeface(Typeface tf)
-    {
-        for (LoadingLayout layout : mLoadingLayouts)
-        {
+    public void setTextTypeface(Typeface tf) {
+        for (LoadingLayout layout : mLoadingLayouts) {
             layout.setTextTypeface(tf);
         }
 

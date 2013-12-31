@@ -32,19 +32,16 @@ import com.rincliu.library.common.persistence.image.utils.L;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.5.6
  */
-public class RoundedBitmapDisplayer implements BitmapDisplayer
-{
+public class RoundedBitmapDisplayer implements BitmapDisplayer {
 
     private final int roundPixels;
 
-    public RoundedBitmapDisplayer(int roundPixels)
-    {
+    public RoundedBitmapDisplayer(int roundPixels) {
         this.roundPixels = roundPixels;
     }
 
     @Override
-    public Bitmap display(Bitmap bitmap, ImageView imageView, LoadedFrom loadedFrom)
-    {
+    public Bitmap display(Bitmap bitmap, ImageView imageView, LoadedFrom loadedFrom) {
         Bitmap roundedBitmap = roundCorners(bitmap, imageView, roundPixels);
         imageView.setImageBitmap(roundedBitmap);
         return roundedBitmap;
@@ -60,8 +57,7 @@ public class RoundedBitmapDisplayer implements BitmapDisplayer
      * @param roundPixels
      * @return Result bitmap with rounded corners
      */
-    public static Bitmap roundCorners(Bitmap bitmap, ImageView imageView, int roundPixels)
-    {
+    public static Bitmap roundCorners(Bitmap bitmap, ImageView imageView, int roundPixels) {
         Bitmap roundBitmap;
 
         int bw = bitmap.getWidth();
@@ -76,20 +72,16 @@ public class RoundedBitmapDisplayer implements BitmapDisplayer
         int width, height;
         Rect srcRect;
         Rect destRect;
-        switch (imageView.getScaleType())
-        {
+        switch (imageView.getScaleType()) {
             case CENTER_INSIDE:
                 float vRation = (float) vw / vh;
                 float bRation = (float) bw / bh;
                 int destWidth;
                 int destHeight;
-                if (vRation > bRation)
-                {
+                if (vRation > bRation) {
                     destHeight = Math.min(vh, bh);
                     destWidth = (int) (bw / ((float) bh / destHeight));
-                }
-                else
-                {
+                } else {
                     destWidth = Math.min(vw, bw);
                     destHeight = (int) (bh / ((float) bw / destWidth));
                 }
@@ -106,13 +98,10 @@ public class RoundedBitmapDisplayer implements BitmapDisplayer
             default:
                 vRation = (float) vw / vh;
                 bRation = (float) bw / bh;
-                if (vRation > bRation)
-                {
+                if (vRation > bRation) {
                     width = (int) (bw / ((float) bh / vh));
                     height = vh;
-                }
-                else
-                {
+                } else {
                     width = vw;
                     height = (int) (bh / ((float) bw / vw));
                 }
@@ -124,15 +113,12 @@ public class RoundedBitmapDisplayer implements BitmapDisplayer
                 bRation = (float) bw / bh;
                 int srcWidth;
                 int srcHeight;
-                if (vRation > bRation)
-                {
+                if (vRation > bRation) {
                     srcWidth = bw;
                     srcHeight = (int) (vh * ((float) bw / vw));
                     x = 0;
                     y = (bh - srcHeight) / 2;
-                }
-                else
-                {
+                } else {
                     srcWidth = (int) (vw * ((float) bh / vh));
                     srcHeight = bh;
                     x = (bw - srcWidth) / 2;
@@ -160,12 +146,9 @@ public class RoundedBitmapDisplayer implements BitmapDisplayer
                 break;
         }
 
-        try
-        {
+        try {
             roundBitmap = getRoundedCornerBitmap(bitmap, roundPixels, srcRect, destRect, width, height);
-        }
-        catch (OutOfMemoryError e)
-        {
+        } catch (OutOfMemoryError e) {
             L.e(e, "Can't create bitmap with rounded corners. Not enough memory.");
             roundBitmap = bitmap;
         }
@@ -174,8 +157,7 @@ public class RoundedBitmapDisplayer implements BitmapDisplayer
     }
 
     private static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int roundPixels, Rect srcRect, Rect destRect,
-            int width, int height)
-    {
+            int width, int height) {
         Bitmap output = Bitmap.createBitmap(width, height, Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
 

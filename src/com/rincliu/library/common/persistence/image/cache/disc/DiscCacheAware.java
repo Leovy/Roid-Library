@@ -23,8 +23,7 @@ import java.io.File;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.0.0
  */
-public interface DiscCacheAware
-{
+public interface DiscCacheAware {
     /**
      * This method must not to save file on file system in fact. It is called
      * after image was cached in cache directory and it was decoded to bitmap

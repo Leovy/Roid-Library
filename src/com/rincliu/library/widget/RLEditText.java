@@ -23,8 +23,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
-public class RLEditText extends EditText
-{
+public class RLEditText extends EditText {
     private Paint paint;
 
     private Context context;
@@ -33,8 +32,7 @@ public class RLEditText extends EditText
 
     private int multiple = 1;
 
-    public RLEditText(Context context)
-    {
+    public RLEditText(Context context) {
         super(context);
         this.context = context;
         paint = new Paint();
@@ -42,8 +40,7 @@ public class RLEditText extends EditText
         paint.setStyle(Paint.Style.STROKE);
     }
 
-    public RLEditText(Context context, AttributeSet attrs)
-    {
+    public RLEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
         paint = new Paint();
@@ -51,8 +48,7 @@ public class RLEditText extends EditText
         paint.setStyle(Paint.Style.STROKE);
     }
 
-    public RLEditText(Context context, AttributeSet attrs, int defStyle)
-    {
+    public RLEditText(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         this.context = context;
         paint = new Paint();
@@ -61,18 +57,14 @@ public class RLEditText extends EditText
     }
 
     @Override
-    protected void onDraw(Canvas canvas)
-    {
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (this.hasFocus())
-        {
+        if (this.hasFocus()) {
             paint.setColor(0xFF0099cc);
             paintWidth = 1;
             multiple = 1;
             paint.setStrokeWidth(RLSysUtil.dip2px(context, paintWidth));
-        }
-        else
-        {
+        } else {
             paint.setColor(0xFFa9a9a9);
             paintWidth = 1;
             multiple = 2;
@@ -81,20 +73,17 @@ public class RLEditText extends EditText
         int w = getWidth();
         int h = getHeight();
         int x = this.getScrollX();
-        if (x > 0)
-        {
+        if (x > 0) {
             w = w + x;
         }
         int y = this.getScrollY();
-        if (y > 0)
-        {
+        if (y > 0) {
             h = h + y;
         }
         double d = RLSysUtil.dip2px(context, paintWidth) / 2.0;
         int len = (int) Math.ceil(((Math.ceil(d)) / multiple));
         canvas.drawLine(0, h - len, w, h - len, paint);
-        if (h >= 10)
-        {
+        if (h >= 10) {
             canvas.drawLine(w - len, h - 10, w - len, h, paint);
             canvas.drawLine(0, h - 10, 0, h, paint);
         }

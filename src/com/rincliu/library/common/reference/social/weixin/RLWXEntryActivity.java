@@ -27,31 +27,26 @@ import com.rincliu.library.R;
 import com.rincliu.library.activity.RLActivity;
 import com.rincliu.library.util.RLUiUtil;
 
-public class RLWXEntryActivity extends RLActivity implements IWXAPIEventHandler
-{
+public class RLWXEntryActivity extends RLActivity implements IWXAPIEventHandler {
     private RLWeixinHelper helper;
 
     @Override
-    protected void onCreate(Bundle b)
-    {
+    protected void onCreate(Bundle b) {
         super.onCreate(b);
         helper = RLWeixinHelper.getInstance(this);
         helper.handleIntent(getIntent(), this);
     }
 
     @Override
-    protected void onNewIntent(Intent intent)
-    {
+    protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
         helper.handleIntent(intent, this);
     }
 
     @Override
-    public void onReq(BaseReq req)
-    {
-        switch (req.getType())
-        {
+    public void onReq(BaseReq req) {
+        switch (req.getType()) {
             case ConstantsAPI.COMMAND_GETMESSAGE_FROM_WX:
                 // TODO;
                 break;
@@ -64,11 +59,9 @@ public class RLWXEntryActivity extends RLActivity implements IWXAPIEventHandler
     }
 
     @Override
-    public void onResp(BaseResp resp)
-    {
+    public void onResp(BaseResp resp) {
         int result = 0;
-        switch (resp.errCode)
-        {
+        switch (resp.errCode) {
             case BaseResp.ErrCode.ERR_OK:
                 result = R.string.weixin_send_success;
                 break;

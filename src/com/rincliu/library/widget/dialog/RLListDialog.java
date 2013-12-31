@@ -31,8 +31,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class RLListDialog extends RLDialog
-{
+public class RLListDialog extends RLDialog {
     private Context context;
 
     private String title;
@@ -49,8 +48,7 @@ public class RLListDialog extends RLDialog
      * @param items
      * @param listener
      */
-    public RLListDialog(Context context, String title, String[] items, Listener listener)
-    {
+    public RLListDialog(Context context, String title, String[] items, Listener listener) {
         super(context);
         this.title = title;
         this.items = items;
@@ -70,8 +68,7 @@ public class RLListDialog extends RLDialog
      * @param items
      * @param listener
      */
-    public RLListDialog(Context context, String title, int[] icons, String[] items, Listener listener)
-    {
+    public RLListDialog(Context context, String title, int[] icons, String[] items, Listener listener) {
         super(context);
         this.title = title;
         this.icons = icons;
@@ -85,8 +82,7 @@ public class RLListDialog extends RLDialog
     }
 
     @Override
-    protected View getView()
-    {
+    protected View getView() {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_list, null);
         Button bt_cancel = (Button) view.findViewById(R.id.bt_cancel);
         TextView tv_title = (TextView) view.findViewById(R.id.tv_title);
@@ -94,18 +90,14 @@ public class RLListDialog extends RLDialog
         ListView lv = (ListView) view.findViewById(R.id.lv_menu);
         lv.setAdapter(new LVAdapter());
         lv.getLayoutParams().width = LayoutParams.MATCH_PARENT;
-        lv.setOnItemClickListener(new OnItemClickListener()
-        {
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
-            {
+        lv.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 dismiss();
                 listener.onItemClick(arg2);
             }
         });
-        bt_cancel.setOnClickListener(new RLOnClickListener()
-        {
-            public void onClickX(View view)
-            {
+        bt_cancel.setOnClickListener(new RLOnClickListener() {
+            public void onClickX(View view) {
                 dismiss();
                 listener.onCancel();
             }
@@ -116,46 +108,36 @@ public class RLListDialog extends RLDialog
     /**
 	 * 
 	 */
-    public interface Listener
-    {
+    public interface Listener {
         public void onItemClick(int position);
 
         public void onCancel();
     }
 
-    private class LVAdapter extends BaseAdapter
-    {
+    private class LVAdapter extends BaseAdapter {
         @Override
-        public int getCount()
-        {
+        public int getCount() {
             return items.length;
         }
 
         @Override
-        public Object getItem(int position)
-        {
+        public Object getItem(int position) {
             return null;
         }
 
         @Override
-        public long getItemId(int position)
-        {
+        public long getItemId(int position) {
             return position;
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
-            if (icons != null)
-            {
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (icons != null) {
                 convertView = LayoutInflater.from(context).inflate(R.layout.dialog_list_item1, null);
-            }
-            else
-            {
+            } else {
                 convertView = LayoutInflater.from(context).inflate(R.layout.dialog_list_item2, null);
             }
-            if (icons != null)
-            {
+            if (icons != null) {
                 ImageView iv_icon = (ImageView) convertView.findViewById(R.id.iv_icon);
                 iv_icon.setImageResource(icons[position]);
             }

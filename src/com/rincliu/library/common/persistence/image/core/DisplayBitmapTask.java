@@ -33,8 +33,7 @@ import java.lang.ref.Reference;
  * @see BitmapDisplayer
  * @since 1.3.1
  */
-final class DisplayBitmapTask implements Runnable
-{
+final class DisplayBitmapTask implements Runnable {
 
     private static final String LOG_DISPLAY_IMAGE_IN_IMAGEVIEW = "Display image in ImageView (loaded from %1$s) [%2$s]";
 
@@ -61,8 +60,7 @@ final class DisplayBitmapTask implements Runnable
     private boolean loggingEnabled;
 
     public DisplayBitmapTask(Bitmap bitmap, ImageLoadingInfo imageLoadingInfo, ImageLoaderEngine engine,
-            LoadedFrom loadedFrom)
-    {
+            LoadedFrom loadedFrom) {
         this.bitmap = bitmap;
         imageUri = imageLoadingInfo.uri;
         imageViewRef = imageLoadingInfo.imageViewRef;
@@ -73,23 +71,17 @@ final class DisplayBitmapTask implements Runnable
         this.loadedFrom = loadedFrom;
     }
 
-    public void run()
-    {
+    public void run() {
         ImageView imageView = imageViewRef.get();
-        if (imageView == null)
-        {
+        if (imageView == null) {
             if (loggingEnabled)
                 L.d(LOG_TASK_CANCELLED_IMAGEVIEW_LOST, memoryCacheKey);
             listener.onLoadingCancelled(imageUri, imageView);
-        }
-        else if (isViewWasReused(imageView))
-        {
+        } else if (isViewWasReused(imageView)) {
             if (loggingEnabled)
                 L.d(LOG_TASK_CANCELLED_IMAGEVIEW_REUSED, memoryCacheKey);
             listener.onLoadingCancelled(imageUri, imageView);
-        }
-        else
-        {
+        } else {
             if (loggingEnabled)
                 L.d(LOG_DISPLAY_IMAGE_IN_IMAGEVIEW, loadedFrom, memoryCacheKey);
             Bitmap displayedBitmap = displayer.display(bitmap, imageView, loadedFrom);
@@ -102,14 +94,12 @@ final class DisplayBitmapTask implements Runnable
      * Checks whether memory cache key (image URI) for current ImageView is
      * actual
      */
-    private boolean isViewWasReused(ImageView imageView)
-    {
+    private boolean isViewWasReused(ImageView imageView) {
         String currentCacheKey = engine.getLoadingUriForView(imageView);
         return !memoryCacheKey.equals(currentCacheKey);
     }
 
-    void setLoggingEnabled(boolean loggingEnabled)
-    {
+    void setLoggingEnabled(boolean loggingEnabled) {
         this.loggingEnabled = loggingEnabled;
     }
 }

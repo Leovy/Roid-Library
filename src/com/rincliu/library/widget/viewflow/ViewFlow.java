@@ -41,8 +41,7 @@ import android.widget.AdapterView;
 import android.widget.Scroller;
 
 @SuppressLint("HandlerLeak")
-public class ViewFlow extends AdapterView<Adapter>
-{
+public class ViewFlow extends AdapterView<Adapter> {
     private static final int SNAP_VELOCITY = 100;
 
     private static final int INVALID_SCREEN = -1;
@@ -101,8 +100,7 @@ public class ViewFlow extends AdapterView<Adapter>
      * @param context
      * @param attrs
      */
-    public ViewFlow(Context context, AttributeSet attrs)
-    {
+    public ViewFlow(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ViewFlow);
         setAutoScrollDuration(typedArray.getInt(R.styleable.ViewFlow_autoScrollDuration, 1000));
@@ -118,38 +116,27 @@ public class ViewFlow extends AdapterView<Adapter>
         runTask();
     }
 
-    private OnGlobalLayoutListener orientationChangeListener = new OnGlobalLayoutListener()
-    {
+    private OnGlobalLayoutListener orientationChangeListener = new OnGlobalLayoutListener() {
         @Override
-        public void onGlobalLayout()
-        {
+        public void onGlobalLayout() {
             RLAPICompat.removeGlobalLayoutListener(getViewTreeObserver(), orientationChangeListener);
             setSelection(mCurrentAdapterIndex);
         }
     };
 
-    private void runTask()
-    {
-        if (!isTaskRunning)
-        {
-            new Thread()
-            {
+    private void runTask() {
+        if (!isTaskRunning) {
+            new Thread() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     isTaskRunning = true;
-                    while (true)
-                    {
-                        try
-                        {
+                    while (true) {
+                        try {
                             Thread.sleep(mAutoScrollDuration);
-                        }
-                        catch (InterruptedException e)
-                        {
+                        } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        if (mAdapter != null && mAdapter.getCount() > 0 && scrollMode != ScrollMode.MANUAL)
-                        {
+                        if (mAdapter != null && mAdapter.getCount() > 0 && scrollMode != ScrollMode.MANUAL) {
                             handler.sendEmptyMessage(scrollMode == ScrollMode.AUTO_PREVIOUS ? MSG_AUTO_PREVIOUS
                                     : MSG_AUTO_NEXT);
                         }
@@ -163,13 +150,10 @@ public class ViewFlow extends AdapterView<Adapter>
 
     private static final int MSG_AUTO_NEXT = 0x2222;
 
-    private Handler handler = new Handler()
-    {
+    private Handler handler = new Handler() {
         @Override
-        public void handleMessage(Message msg)
-        {
-            switch (msg.what)
-            {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
                 case MSG_AUTO_PREVIOUS:
                     previous();
                     break;
@@ -183,8 +167,7 @@ public class ViewFlow extends AdapterView<Adapter>
     /**
 	 * 
 	 */
-    public static interface ViewSwitchListener
-    {
+    public static interface ViewSwitchListener {
         /**
          * @param view
          */
@@ -207,16 +190,14 @@ public class ViewFlow extends AdapterView<Adapter>
 
     /**
 	 */
-    public static interface ViewLazyInitializeListener
-    {
+    public static interface ViewLazyInitializeListener {
         void onViewLazyInitialize(View view, int position);
     }
 
     /**
 	 * 
 	 */
-    private enum LazyInit
-    {
+    private enum LazyInit {
         LEFT, RIGHT
     }
 
@@ -227,10 +208,8 @@ public class ViewFlow extends AdapterView<Adapter>
      * )
      */
     @Override
-    public void onConfigurationChanged(Configuration newConfig)
-    {
-        if (newConfig.orientation != mLastOrientation)
-        {
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (newConfig.orientation != mLastOrientation) {
             mLastOrientation = newConfig.orientation;
             getViewTreeObserver().addOnGlobalLayoutListener(orientationChangeListener);
         }
@@ -239,8 +218,7 @@ public class ViewFlow extends AdapterView<Adapter>
     /**
      * @return
      */
-    public int getViewsCount()
-    {
+    public int getViewsCount() {
         return mAdapter == null ? 0 : mAdapter.getCount();
     }
 
@@ -249,27 +227,22 @@ public class ViewFlow extends AdapterView<Adapter>
      * @see android.view.View#onMeasure(int,int)
      */
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         final int width = MeasureSpec.getSize(widthMeasureSpec);
         final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        if (widthMode != MeasureSpec.EXACTLY && !isInEditMode())
-        {
+        if (widthMode != MeasureSpec.EXACTLY && !isInEditMode()) {
             throw new IllegalStateException("ViewFlow can only be used in EXACTLY mode.");
         }
         final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        if (heightMode != MeasureSpec.EXACTLY && !isInEditMode())
-        {
+        if (heightMode != MeasureSpec.EXACTLY && !isInEditMode()) {
             throw new IllegalStateException("ViewFlow can only be used in EXACTLY mode.");
         }
         final int count = getChildCount();
-        for (int i = 0; i < count; i++)
-        {
+        for (int i = 0; i < count; i++) {
             getChildAt(i).measure(widthMeasureSpec, heightMeasureSpec);
         }
-        if (mFirstLayout)
-        {
+        if (mFirstLayout) {
             mScroller.startScroll(0, 0, mCurrentScreen * width, 0, 0);
             mFirstLayout = false;
         }
@@ -280,15 +253,12 @@ public class ViewFlow extends AdapterView<Adapter>
      * @see android.widget.AdapterView#onLayout(boolean,int,int,int,int)
      */
     @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b)
-    {
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int childLeft = 0;
         final int count = getChildCount();
-        for (int i = 0; i < count; i++)
-        {
+        for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
-            if (child.getVisibility() != View.GONE)
-            {
+            if (child.getVisibility() != View.GONE) {
                 final int childWidth = child.getMeasuredWidth();
                 child.layout(childLeft, 0, childLeft + childWidth, child.getMeasuredHeight());
                 childLeft += childWidth;
@@ -302,8 +272,7 @@ public class ViewFlow extends AdapterView<Adapter>
      * android.view.ViewGroup#onInterceptTouchEvent(android.view.MotionEvent)
      */
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent event)
-    {
+    public boolean onInterceptTouchEvent(MotionEvent event) {
         return handleTouchEvent(event, true);
     }
 
@@ -312,29 +281,23 @@ public class ViewFlow extends AdapterView<Adapter>
      * @see android.view.View#onTouchEvent(android.view.MotionEvent)
      */
     @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
+    public boolean onTouchEvent(MotionEvent event) {
         return handleTouchEvent(event, false);
     }
 
-    private boolean handleTouchEvent(MotionEvent event, boolean isIntercept)
-    {
-        if (getChildCount() == 0)
-        {
+    private boolean handleTouchEvent(MotionEvent event, boolean isIntercept) {
+        if (getChildCount() == 0) {
             return false;
         }
-        if (mVelocityTracker == null)
-        {
+        if (mVelocityTracker == null) {
             mVelocityTracker = VelocityTracker.obtain();
         }
         mVelocityTracker.addMovement(event);
         final int action = event.getAction();
         final float x = event.getX();
-        switch (action)
-        {
+        switch (action) {
             case MotionEvent.ACTION_DOWN:
-                if (!mScroller.isFinished())
-                {
+                if (!mScroller.isFinished()) {
                     mScroller.abortAnimation();
                 }
                 mLastMotionX = x;
@@ -343,30 +306,22 @@ public class ViewFlow extends AdapterView<Adapter>
             case MotionEvent.ACTION_MOVE:
                 final int deltaX = (int) (mLastMotionX - x);
                 boolean xMoved = Math.abs(deltaX) > TOUCH_SLOP;
-                if (xMoved)
-                {
+                if (xMoved) {
                     mTouchState = TOUCH_STATE_SCROLLING;
                 }
-                if (mTouchState == TOUCH_STATE_SCROLLING)
-                {
-                    if (getParent() != null)
-                    {
+                if (mTouchState == TOUCH_STATE_SCROLLING) {
+                    if (getParent() != null) {
                         getParent().requestDisallowInterceptTouchEvent(true);
                     }
                     mLastMotionX = x;
                     final int scrollX = getScrollX();
-                    if (deltaX < 0)
-                    {
-                        if (scrollX > 0)
-                        {
+                    if (deltaX < 0) {
+                        if (scrollX > 0) {
                             scrollBy(Math.max(-scrollX, deltaX), 0);
                         }
-                    }
-                    else if (deltaX > 0)
-                    {
+                    } else if (deltaX > 0) {
                         final int availableToScroll = getChildAt(getChildCount() - 1).getRight() - scrollX - getWidth();
-                        if (availableToScroll > 0)
-                        {
+                        if (availableToScroll > 0) {
                             scrollBy(Math.min(availableToScroll, deltaX), 0);
                         }
                     }
@@ -374,43 +329,33 @@ public class ViewFlow extends AdapterView<Adapter>
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                if (mTouchState == TOUCH_STATE_SCROLLING)
-                {
+                if (mTouchState == TOUCH_STATE_SCROLLING) {
                     final VelocityTracker velocityTracker = mVelocityTracker;
                     velocityTracker.computeCurrentVelocity(1000, MAX_VELOCITY);
                     int velocityX = (int) velocityTracker.getXVelocity();
-                    if (velocityX > SNAP_VELOCITY)
-                    {
+                    if (velocityX > SNAP_VELOCITY) {
                         previous();
-                    }
-                    else if (velocityX < -SNAP_VELOCITY)
-                    {
+                    } else if (velocityX < -SNAP_VELOCITY) {
                         next();
-                    }
-                    else
-                    {
+                    } else {
                         snapToDestination();
                     }
-                    if (mVelocityTracker != null)
-                    {
+                    if (mVelocityTracker != null) {
                         mVelocityTracker.recycle();
                         mVelocityTracker = null;
                     }
                 }
                 mTouchState = TOUCH_STATE_REST;
-                if (getParent() != null)
-                {
+                if (getParent() != null) {
                     getParent().requestDisallowInterceptTouchEvent(false);
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:
                 mTouchState = TOUCH_STATE_REST;
-                if (getParent() != null)
-                {
+                if (getParent() != null) {
                     getParent().requestDisallowInterceptTouchEvent(false);
                 }
-                if (!isIntercept)
-                {
+                if (!isIntercept) {
                     snapToDestination();
                 }
                 break;
@@ -421,14 +366,10 @@ public class ViewFlow extends AdapterView<Adapter>
     /**
 	 * 
 	 */
-    public void next()
-    {
-        if (mCurrentScreen < getChildCount() - 1)
-        {
+    public void next() {
+        if (mCurrentScreen < getChildCount() - 1) {
             snapToScreen(mCurrentScreen + 1);
-        }
-        else
-        {
+        } else {
             setSelection(0);
         }
     }
@@ -436,14 +377,10 @@ public class ViewFlow extends AdapterView<Adapter>
     /**
 	 * 
 	 */
-    public void previous()
-    {
-        if (mCurrentScreen > 0)
-        {
+    public void previous() {
+        if (mCurrentScreen > 0) {
             snapToScreen(mCurrentScreen - 1);
-        }
-        else
-        {
+        } else {
             setSelection(mAdapter.getCount() - 1);
         }
     }
@@ -451,18 +388,15 @@ public class ViewFlow extends AdapterView<Adapter>
     /**
      * @return
      */
-    public int getCurrentIndex()
-    {
+    public int getCurrentIndex() {
         return mCurrentScreen;
     }
 
     /**
      * @param duration
      */
-    public void setAutoScrollDuration(int duration)
-    {
-        if (duration < 1000)
-        {
+    public void setAutoScrollDuration(int duration) {
+        if (duration < 1000) {
             throw new IllegalArgumentException("AutoScrollDuration should be larger than 1000.");
         }
         mAutoScrollDuration = duration;
@@ -471,10 +405,8 @@ public class ViewFlow extends AdapterView<Adapter>
     /**
      * @param count
      */
-    public void setBufferedItemCount(int count)
-    {
-        if (count < 0)
-        {
+    public void setBufferedItemCount(int count) {
+        if (count < 0) {
             throw new IllegalArgumentException("BufferedItemCount should be larger than 0.");
         }
         mBufferedItemCount = count;
@@ -483,24 +415,21 @@ public class ViewFlow extends AdapterView<Adapter>
     /**
 	 * 
 	 */
-    public enum ScrollMode
-    {
+    public enum ScrollMode {
         MANUAL, AUTO_PREVIOUS, AUTO_NEXT;
     }
 
     /**
      * @param scrollMode
      */
-    public void setScrollMode(ScrollMode scrollMode)
-    {
+    public void setScrollMode(ScrollMode scrollMode) {
         this.scrollMode = scrollMode;
     }
 
     /**
      * @return
      */
-    public ScrollMode getScrollMode()
-    {
+    public ScrollMode getScrollMode() {
         return scrollMode;
     }
 
@@ -509,28 +438,23 @@ public class ViewFlow extends AdapterView<Adapter>
      * @see android.view.View#onScrollChanged(int,int,int,int)
      */
     @Override
-    protected void onScrollChanged(int h, int v, int oldh, int oldv)
-    {
+    protected void onScrollChanged(int h, int v, int oldh, int oldv) {
         super.onScrollChanged(h, v, oldh, oldv);
-        if (viewSwitchListener != null)
-        {
+        if (viewSwitchListener != null) {
             int hPerceived = h + (mCurrentAdapterIndex - mCurrentBufferIndex) * getWidth();
             viewSwitchListener.onScrolled(hPerceived, v, oldh, oldv);
         }
     }
 
-    private void snapToDestination()
-    {
+    private void snapToDestination() {
         final int screenWidth = getWidth();
         final int whichScreen = (getScrollX() + (screenWidth / 2)) / screenWidth;
         snapToScreen(whichScreen);
     }
 
-    private void snapToScreen(int whichScreen)
-    {
+    private void snapToScreen(int whichScreen) {
         mLastScrollDirection = whichScreen - mCurrentScreen;
-        if (mScroller.isFinished())
-        {
+        if (mScroller.isFinished()) {
             whichScreen = Math.max(0, Math.min(whichScreen, getChildCount() - 1));
             mNextScreen = whichScreen;
             final int newX = whichScreen * getWidth();
@@ -545,37 +469,28 @@ public class ViewFlow extends AdapterView<Adapter>
      * @see android.view.View#computeScroll()
      */
     @Override
-    public void computeScroll()
-    {
-        if (mScroller.computeScrollOffset())
-        {
+    public void computeScroll() {
+        if (mScroller.computeScrollOffset()) {
             scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
             postInvalidate();
-        }
-        else if (mNextScreen != INVALID_SCREEN)
-        {
+        } else if (mNextScreen != INVALID_SCREEN) {
             mCurrentScreen = Math.max(0, Math.min(mNextScreen, getChildCount() - 1));
             mNextScreen = INVALID_SCREEN;
             postViewSwitched(mLastScrollDirection);
         }
     }
 
-    private void setVisibleView(int indexInBuffer, boolean uiThread)
-    {
+    private void setVisibleView(int indexInBuffer, boolean uiThread) {
         mCurrentScreen = Math.max(0, Math.min(indexInBuffer, getChildCount() - 1));
         int dx = (mCurrentScreen * getWidth()) - mScroller.getCurrX();
         mScroller.startScroll(mScroller.getCurrX(), mScroller.getCurrY(), dx, 0, 0);
-        if (dx == 0)
-        {
+        if (dx == 0) {
             onScrollChanged(mScroller.getCurrX() + dx, mScroller.getCurrY(), mScroller.getCurrX() + dx,
                     mScroller.getCurrY());
         }
-        if (uiThread)
-        {
+        if (uiThread) {
             invalidate();
-        }
-        else
-        {
+        } else {
             postInvalidate();
         }
     }
@@ -585,8 +500,7 @@ public class ViewFlow extends AdapterView<Adapter>
      * @see android.widget.AdapterView#getAdapter()
      */
     @Override
-    public Adapter getAdapter()
-    {
+    public Adapter getAdapter() {
         return mAdapter;
     }
 
@@ -595,20 +509,16 @@ public class ViewFlow extends AdapterView<Adapter>
      * @see android.widget.AdapterView#setAdapter(android.widget.Adapter)
      */
     @Override
-    public void setAdapter(Adapter adapter)
-    {
-        if (mAdapter != null)
-        {
+    public void setAdapter(Adapter adapter) {
+        if (mAdapter != null) {
             mAdapter.unregisterDataSetObserver(mDataSetObserver);
         }
         mAdapter = adapter;
-        if (mAdapter != null)
-        {
+        if (mAdapter != null) {
             mDataSetObserver = new AdapterDataSetObserver();
             mAdapter.registerDataSetObserver(mDataSetObserver);
         }
-        if (mAdapter != null && mAdapter.getCount() > 0)
-        {
+        if (mAdapter != null && mAdapter.getCount() > 0) {
             setSelection(0);
         }
     }
@@ -618,8 +528,7 @@ public class ViewFlow extends AdapterView<Adapter>
      * @see android.widget.AdapterView#getSelectedView()
      */
     @Override
-    public View getSelectedView()
-    {
+    public View getSelectedView() {
         return (mCurrentBufferIndex < mLoadedViews.size() ? mLoadedViews.get(mCurrentBufferIndex) : null);
     }
 
@@ -628,8 +537,7 @@ public class ViewFlow extends AdapterView<Adapter>
      * @see android.widget.AdapterView#getSelectedItemPosition()
      */
     @Override
-    public int getSelectedItemPosition()
-    {
+    public int getSelectedItemPosition() {
         return mCurrentAdapterIndex;
     }
 
@@ -638,8 +546,7 @@ public class ViewFlow extends AdapterView<Adapter>
      * 
      * @param flowIndicator
      */
-    public void setIndicator(ViewSwitchListener indicator)
-    {
+    public void setIndicator(ViewSwitchListener indicator) {
         viewSwitchListener = indicator;
         viewSwitchListener.setViewFlow(this);
     }
@@ -647,10 +554,8 @@ public class ViewFlow extends AdapterView<Adapter>
     /**
 	 * 
 	 */
-    protected void recycleViews()
-    {
-        while (!mLoadedViews.isEmpty())
-        {
+    protected void recycleViews() {
+        while (!mLoadedViews.isEmpty()) {
             recycleView(mLoadedViews.remove());
         }
     }
@@ -658,10 +563,8 @@ public class ViewFlow extends AdapterView<Adapter>
     /**
      * @param view
      */
-    protected void recycleView(View view)
-    {
-        if (view != null)
-        {
+    protected void recycleView(View view) {
+        if (view != null) {
             mRecycledViews.add(view);
             detachViewFromParent(view);
         }
@@ -670,8 +573,7 @@ public class ViewFlow extends AdapterView<Adapter>
     /**
      * @return
      */
-    protected View getRecycledView()
-    {
+    protected View getRecycledView() {
         return (mRecycledViews.isEmpty() ? null : mRecycledViews.remove(0));
     }
 
@@ -680,27 +582,22 @@ public class ViewFlow extends AdapterView<Adapter>
      * @see android.widget.AdapterView#setSelection(int)
      */
     @Override
-    public void setSelection(int position)
-    {
+    public void setSelection(int position) {
         mNextScreen = INVALID_SCREEN;
         mScroller.forceFinished(true);
-        if (mAdapter != null)
-        {
+        if (mAdapter != null) {
             position = Math.max(position, 0);
             position = Math.min(position, mAdapter.getCount() - 1);
             recycleViews();
             View currentView = makeAndAddView(position, true);
             mLoadedViews.addLast(currentView);
-            for (int offset = 1; mBufferedItemCount - offset >= 0; offset++)
-            {
+            for (int offset = 1; mBufferedItemCount - offset >= 0; offset++) {
                 int leftIndex = position - offset;
                 int rightIndex = position + offset;
-                if (leftIndex >= 0)
-                {
+                if (leftIndex >= 0) {
                     mLoadedViews.addFirst(makeAndAddView(leftIndex, false));
                 }
-                if (rightIndex < mAdapter.getCount())
-                {
+                if (rightIndex < mAdapter.getCount()) {
                     mLoadedViews.addLast(makeAndAddView(rightIndex, true));
                 }
             }
@@ -708,95 +605,76 @@ public class ViewFlow extends AdapterView<Adapter>
             mCurrentAdapterIndex = position;
             requestLayout();
             setVisibleView(mCurrentBufferIndex, false);
-            if (viewSwitchListener != null)
-            {
+            if (viewSwitchListener != null) {
                 viewSwitchListener.onSwitched(currentView, mCurrentAdapterIndex);
             }
         }
     }
 
-    private void resetFocus()
-    {
+    private void resetFocus() {
         recycleViews();
         removeAllViewsInLayout();
         mLazyInit.addAll(EnumSet.allOf(LazyInit.class));
         for (int i = Math.max(0, mCurrentAdapterIndex - mBufferedItemCount); i < Math.min(mAdapter.getCount(),
-                mCurrentAdapterIndex + mBufferedItemCount + 1); i++)
-        {
+                mCurrentAdapterIndex + mBufferedItemCount + 1); i++) {
             mLoadedViews.addLast(makeAndAddView(i, true));
-            if (i == mCurrentAdapterIndex)
-            {
+            if (i == mCurrentAdapterIndex) {
                 mCurrentBufferIndex = mLoadedViews.size() - 1;
             }
         }
         requestLayout();
     }
 
-    private void postViewSwitched(int direction)
-    {
-        if (direction != 0)
-        {
-            if (direction > 0)
-            {
+    private void postViewSwitched(int direction) {
+        if (direction != 0) {
+            if (direction > 0) {
                 mCurrentAdapterIndex++;
                 mCurrentBufferIndex++;
                 mLazyInit.remove(LazyInit.LEFT);
                 mLazyInit.add(LazyInit.RIGHT);
-                if (mCurrentAdapterIndex > mBufferedItemCount)
-                {
+                if (mCurrentAdapterIndex > mBufferedItemCount) {
                     recycleView(mLoadedViews.removeFirst());
                     mCurrentBufferIndex--;
                 }
                 int newBufferIndex = mCurrentAdapterIndex + mBufferedItemCount;
                 if (newBufferIndex < mAdapter.getCount())
                     mLoadedViews.addLast(makeAndAddView(newBufferIndex, true));
-            }
-            else
-            {
+            } else {
                 mCurrentAdapterIndex--;
                 mCurrentBufferIndex--;
                 mLazyInit.add(LazyInit.LEFT);
                 mLazyInit.remove(LazyInit.RIGHT);
-                if (mAdapter.getCount() - 1 - mCurrentAdapterIndex > mBufferedItemCount)
-                {
+                if (mAdapter.getCount() - 1 - mCurrentAdapterIndex > mBufferedItemCount) {
                     recycleView(mLoadedViews.removeLast());
                 }
                 int newBufferIndex = mCurrentAdapterIndex - mBufferedItemCount;
-                if (newBufferIndex > -1)
-                {
+                if (newBufferIndex > -1) {
                     mLoadedViews.addFirst(makeAndAddView(newBufferIndex, false));
                     mCurrentBufferIndex++;
                 }
             }
             requestLayout();
             setVisibleView(mCurrentBufferIndex, true);
-            if (viewSwitchListener != null)
-            {
+            if (viewSwitchListener != null) {
                 viewSwitchListener.onSwitched(mLoadedViews.get(mCurrentBufferIndex), mCurrentAdapterIndex);
             }
         }
     }
 
-    private View makeAndAddView(int position, boolean addToEnd)
-    {
+    private View makeAndAddView(int position, boolean addToEnd) {
         View convertView = getRecycledView();
         View view = mAdapter.getView(position, convertView, this);
-        if (view != convertView)
-        {
+        if (view != convertView) {
             mRecycledViews.add(convertView);
         }
         ViewGroup.LayoutParams p = view.getLayoutParams();
-        if (p == null)
-        {
+        if (p == null) {
             p = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT,
                     0);
         }
-        if (view == convertView)
-        {
+        if (view == convertView) {
             attachViewToParent(view, (addToEnd ? -1 : 0), p);
-        }
-        else
-        {
+        } else {
             addViewInLayout(view, (addToEnd ? -1 : 0), p, true);
         }
         return view;
@@ -805,18 +683,13 @@ public class ViewFlow extends AdapterView<Adapter>
     /**
 	 * 
 	 */
-    private class AdapterDataSetObserver extends DataSetObserver
-    {
+    private class AdapterDataSetObserver extends DataSetObserver {
         @Override
-        public void onChanged()
-        {
+        public void onChanged() {
             View v = getChildAt(mCurrentBufferIndex);
-            if (v != null)
-            {
-                for (int index = 0; index < mAdapter.getCount(); index++)
-                {
-                    if (v.equals(mAdapter.getItem(index)))
-                    {
+            if (v != null) {
+                for (int index = 0; index < mAdapter.getCount(); index++) {
+                    if (v.equals(mAdapter.getItem(index))) {
                         mCurrentAdapterIndex = index;
                         break;
                     }
@@ -826,8 +699,6 @@ public class ViewFlow extends AdapterView<Adapter>
         }
 
         @Override
-        public void onInvalidated()
-        {
-        }
+        public void onInvalidated() {}
     }
 }

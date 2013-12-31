@@ -25,49 +25,41 @@ import java.util.*;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.0.0
  */
-public abstract class BaseMemoryCache<K, V> implements MemoryCacheAware<K, V>
-{
+public abstract class BaseMemoryCache<K, V> implements MemoryCacheAware<K, V> {
 
     /** Stores not strong references to objects */
     private final Map<K, Reference<V>> softMap = Collections.synchronizedMap(new HashMap<K, Reference<V>>());
 
     @Override
-    public V get(K key)
-    {
+    public V get(K key) {
         V result = null;
         Reference<V> reference = softMap.get(key);
-        if (reference != null)
-        {
+        if (reference != null) {
             result = reference.get();
         }
         return result;
     }
 
     @Override
-    public boolean put(K key, V value)
-    {
+    public boolean put(K key, V value) {
         softMap.put(key, createReference(value));
         return true;
     }
 
     @Override
-    public void remove(K key)
-    {
+    public void remove(K key) {
         softMap.remove(key);
     }
 
     @Override
-    public Collection<K> keys()
-    {
-        synchronized (softMap)
-        {
+    public Collection<K> keys() {
+        synchronized (softMap) {
             return new HashSet<K>(softMap.keySet());
         }
     }
 
     @Override
-    public void clear()
-    {
+    public void clear() {
         softMap.clear();
     }
 

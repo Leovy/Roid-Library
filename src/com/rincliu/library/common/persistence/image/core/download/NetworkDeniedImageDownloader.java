@@ -26,21 +26,17 @@ import java.io.InputStream;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.8.0
  */
-public class NetworkDeniedImageDownloader implements ImageDownloader
-{
+public class NetworkDeniedImageDownloader implements ImageDownloader {
 
     private final ImageDownloader wrappedDownloader;
 
-    public NetworkDeniedImageDownloader(ImageDownloader wrappedDownloader)
-    {
+    public NetworkDeniedImageDownloader(ImageDownloader wrappedDownloader) {
         this.wrappedDownloader = wrappedDownloader;
     }
 
     @Override
-    public InputStream getStream(String imageUri, Object extra) throws IOException
-    {
-        switch (Scheme.ofUri(imageUri))
-        {
+    public InputStream getStream(String imageUri, Object extra) throws IOException {
+        switch (Scheme.ofUri(imageUri)) {
             case HTTP:
             case HTTPS:
                 throw new IllegalStateException();

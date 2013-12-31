@@ -27,14 +27,12 @@ import com.umeng.fb.NotificationType;
 import com.umeng.fb.UMFeedbackService;
 import com.umeng.fb.util.FeedBackListener;
 
-public class RLFeedbackHelper
-{
+public class RLFeedbackHelper {
     /**
      * @param context
      * @param isDebug
      */
-    public static void init(Context context, boolean isDebug)
-    {
+    public static void init(Context context, boolean isDebug) {
         com.umeng.common.Log.LOG = isDebug;
         UMFeedbackService.enableNewReplyNotification(context, NotificationType.AlertDialog);
         UMFeedbackService.setGoBackButtonVisible();
@@ -43,13 +41,10 @@ public class RLFeedbackHelper
     /**
      * @param context
      */
-    public static void gotoFeedback(Context context)
-    {
-        UMFeedbackService.setFeedBackListener(new FeedBackListener()
-        {
+    public static void gotoFeedback(Context context) {
+        UMFeedbackService.setFeedBackListener(new FeedBackListener() {
             @Override
-            public void onSubmitFB(Activity activity)
-            {
+            public void onSubmitFB(Activity activity) {
                 // EditText phoneText = (EditText) activity
                 // .findViewById(R.id.feedback_phone);
                 // EditText qqText = (EditText) activity
@@ -76,8 +71,7 @@ public class RLFeedbackHelper
             }
 
             @Override
-            public void onResetFB(Activity activity, Map<String, String> contactMap, Map<String, String> remarkMap)
-            {
+            public void onResetFB(Activity activity, Map<String, String> contactMap, Map<String, String> remarkMap) {
                 // EditText phoneText = (EditText) activity
                 // .findViewById(R.id.feedback_phone);
                 // EditText qqText = (EditText) activity

@@ -26,8 +26,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class RLLocationHelper
-{
+public class RLLocationHelper {
 
     private static RLLocationHelper helper;
 
@@ -45,23 +44,18 @@ public class RLLocationHelper
      * @param context
      * @return
      */
-    public static RLLocationHelper getInstance(Context context)
-    {
+    public static RLLocationHelper getInstance(Context context) {
         mContext = context;
-        if (helper == null)
-        {
+        if (helper == null) {
             helper = new RLLocationHelper(context);
         }
         return helper;
     }
 
-    private RLLocationHelper(Context context)
-    {
-        if (client == null)
-        {
+    private RLLocationHelper(Context context) {
+        if (client == null) {
             client = new LocationClient(context.getApplicationContext());
-            if (option == null)
-            {
+            if (option == null) {
                 option = new LocationClientOption();
                 option.setOpenGps(true);
                 option.setCoorType("bd09ll");// TODO
@@ -84,8 +78,7 @@ public class RLLocationHelper
      * @param timeOut
      * @return
      */
-    public RLLocationHelper setOptions(boolean isOpenGps, boolean isNetworkFirst, boolean isCache, int timeOut)
-    {
+    public RLLocationHelper setOptions(boolean isOpenGps, boolean isNetworkFirst, boolean isCache, int timeOut) {
         option.setOpenGps(isOpenGps);
         option.setPriority((isNetworkFirst || !isOpenGps) ? LocationClientOption.NetWorkFirst
                 : LocationClientOption.GpsFirst);
@@ -98,8 +91,7 @@ public class RLLocationHelper
     /**
 	 * 
 	 */
-    public interface Listener
-    {
+    public interface Listener {
         public void onReceive(RLLocationInfo locInfo);
 
         public void onFailed(String error);
@@ -108,19 +100,14 @@ public class RLLocationHelper
     /**
      * @param listener
      */
-    public void locate(final Listener listener)
-    {
-        if (!isRun)
-        {
-            new AsyncTask<Object, Object, RLLocationInfo>()
-            {
+    public void locate(final Listener listener) {
+        if (!isRun) {
+            new AsyncTask<Object, Object, RLLocationInfo>() {
                 @Override
-                protected void onPreExecute()
-                {
+                protected void onPreExecute() {
                     location = null;
                     client.registerLocationListener(bdlocListener);
-                    if (!client.isStarted())
-                    {
+                    if (!client.isStarted()) {
                         client.start();
                     }
                     isSuccess = false;
@@ -128,28 +115,21 @@ public class RLLocationHelper
                 }
 
                 @Override
-                protected RLLocationInfo doInBackground(Object... arg0)
-                {
-                    do
-                    {
+                protected RLLocationInfo doInBackground(Object... arg0) {
+                    do {
                         client.requestLocation();
-                    }
-                    while (location == null);
+                    } while (location == null);
                     return location;
                 }
 
                 @Override
-                protected void onPostExecute(RLLocationInfo result)
-                {
+                protected void onPostExecute(RLLocationInfo result) {
                     client.unRegisterLocationListener(bdlocListener);
                     client.stop();
                     isRun = false;
-                    if (isSuccess)
-                    {
+                    if (isSuccess) {
                         listener.onReceive(result);
-                    }
-                    else
-                    {
+                    } else {
                         listener.onFailed(error);
                     }
                 }
@@ -158,29 +138,22 @@ public class RLLocationHelper
 
                 private String error;
 
-                private BDLocationListener bdlocListener = new BDLocationListener()
-                {
+                private BDLocationListener bdlocListener = new BDLocationListener() {
                     @Override
-                    public void onReceiveLocation(BDLocation bdloc)
-                    {
+                    public void onReceiveLocation(BDLocation bdloc) {
                         location = new RLLocationInfo();
                         BDLocation loc = null;
-                        if (bdloc == null || bdloc.getAddrStr() == null)
-                        {
+                        if (bdloc == null || bdloc.getAddrStr() == null) {
                             loc = client.getLastKnownLocation();
-                            if (loc == null)
-                            {
+                            if (loc == null) {
                                 error = mContext.getString(R.string.bdloc_error_first);
                                 return;
                             }
-                        }
-                        else
-                        {
+                        } else {
                             loc = bdloc;
                         }
                         int code = loc.getLocType();
-                        switch (code)
-                        {
+                        switch (code) {
                             case 61:
                                 isSuccess = true;
                                 Log.d(">>>>>>>>>>", "Located with GPS...");
@@ -232,8 +205,7 @@ public class RLLocationHelper
                     }
 
                     @Override
-                    public void onReceivePoi(BDLocation bdLoc)
-                    {
+                    public void onReceivePoi(BDLocation bdLoc) {
                         // TODO Auto-generated method stub
                     }
                 };

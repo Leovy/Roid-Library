@@ -28,8 +28,7 @@ import com.rincliu.library.common.persistence.image.core.assist.LoadedFrom;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.5.6
  */
-public interface BitmapDisplayer
-{
+public interface BitmapDisplayer {
     /**
      * Display bitmap in {@link ImageView}. Displayed bitmap should be
      * returned.<br />

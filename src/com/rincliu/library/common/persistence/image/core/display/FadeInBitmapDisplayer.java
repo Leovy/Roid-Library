@@ -28,19 +28,16 @@ import com.rincliu.library.common.persistence.image.core.assist.LoadedFrom;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.6.4
  */
-public class FadeInBitmapDisplayer implements BitmapDisplayer
-{
+public class FadeInBitmapDisplayer implements BitmapDisplayer {
 
     private final int durationMillis;
 
-    public FadeInBitmapDisplayer(int durationMillis)
-    {
+    public FadeInBitmapDisplayer(int durationMillis) {
         this.durationMillis = durationMillis;
     }
 
     @Override
-    public Bitmap display(Bitmap bitmap, ImageView imageView, LoadedFrom loadedFrom)
-    {
+    public Bitmap display(Bitmap bitmap, ImageView imageView, LoadedFrom loadedFrom) {
         imageView.setImageBitmap(bitmap);
 
         animate(imageView, durationMillis);
@@ -54,8 +51,7 @@ public class FadeInBitmapDisplayer implements BitmapDisplayer
      * @param imageView {@link ImageView} which display image in
      * @param durationMillis The length of the animation in milliseconds
      */
-    public static void animate(ImageView imageView, int durationMillis)
-    {
+    public static void animate(ImageView imageView, int durationMillis) {
         AlphaAnimation fadeImage = new AlphaAnimation(0, 1);
         fadeImage.setDuration(durationMillis);
         fadeImage.setInterpolator(new DecelerateInterpolator());

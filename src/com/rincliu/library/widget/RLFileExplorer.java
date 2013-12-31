@@ -32,8 +32,7 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
-public class RLFileExplorer extends ViewGroup implements OnItemClickListener
-{
+public class RLFileExplorer extends ViewGroup implements OnItemClickListener {
     private ListView lv = null;
 
     private String currentPath;
@@ -51,8 +50,7 @@ public class RLFileExplorer extends ViewGroup implements OnItemClickListener
     /**
      * @param context
      */
-    public RLFileExplorer(Context context)
-    {
+    public RLFileExplorer(Context context) {
         super(context);
         init(context, null);
     }
@@ -61,62 +59,51 @@ public class RLFileExplorer extends ViewGroup implements OnItemClickListener
      * @param context
      * @param attrs
      */
-    public RLFileExplorer(Context context, AttributeSet attrs)
-    {
+    public RLFileExplorer(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
     @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b)
-    {
-        for (int i = 0; i < getChildCount(); i++)
-        {
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        for (int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
             child.layout(0, 0, child.getMeasuredWidth(), child.getMeasuredHeight());
         }
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++)
-        {
+        for (int i = 0; i < childCount; i++) {
             View child = getChildAt(i);
             child.measure(widthMeasureSpec, heightMeasureSpec);
         }
     }
 
-    private void init(final Context context, AttributeSet attrs)
-    {
+    private void init(final Context context, AttributeSet attrs) {
         this.context = context;
         View rootView = LayoutInflater.from(context).inflate(R.layout.file_explorer, null);
         lv = (ListView) rootView.findViewById(R.id.lv);
-        lv.setAdapter(new BaseAdapter()
-        {
+        lv.setAdapter(new BaseAdapter() {
             @Override
-            public int getCount()
-            {
+            public int getCount() {
                 return list.size();
             }
 
             @Override
-            public Object getItem(int position)
-            {
+            public Object getItem(int position) {
                 return list.get(position);
             }
 
             @Override
-            public long getItemId(int position)
-            {
+            public long getItemId(int position) {
                 return position;
             }
 
             @Override
-            public View getView(int position, View convertView, ViewGroup parent)
-            {
+            public View getView(int position, View convertView, ViewGroup parent) {
                 convertView = LayoutInflater.from(context).inflate(R.layout.file_explorer_item, null);
                 Item item = list.get(position);
                 ImageView iv = (ImageView) convertView.findViewById(R.id.iv);
@@ -131,31 +118,25 @@ public class RLFileExplorer extends ViewGroup implements OnItemClickListener
         this.addView(rootView);
     }
 
-    private void refresh(String path)
-    {
+    private void refresh(String path) {
         File[] files = new File(path).listFiles();
         ArrayList<Item> tempList = new ArrayList<Item>(files.length);
         Item parent = new Item();
         parent.setIcon(R.drawable.icon_explorer_folder);
         parent.setName("..");
         tempList.add(parent);
-        for (File file : files)
-        {
+        for (File file : files) {
             Item item = new Item();
-            if (file.isDirectory())
-            {
+            if (file.isDirectory()) {
                 item.setIcon(R.drawable.icon_explorer_folder);
-            }
-            else
-            {
+            } else {
                 item.setIcon(R.drawable.icon_explorer_file);
             }
             item.setName(file.getName());
             item.setPath(file.getPath());
             tempList.add(item);
         }
-        if (!list.isEmpty())
-        {
+        if (!list.isEmpty()) {
             list.clear();
         }
         list.addAll(tempList);
@@ -163,46 +144,32 @@ public class RLFileExplorer extends ViewGroup implements OnItemClickListener
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View v, int position, long id)
-    {
-        if (position == 0)
-        {
+    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+        if (position == 0) {
             File fileParent = new File(currentPath).getParentFile();
-            if (!currentPath.equals(homePath))
-            {
+            if (!currentPath.equals(homePath)) {
                 currentPath = fileParent.getAbsolutePath();
-                if (listener != null)
-                {
+                if (listener != null) {
                     listener.onPathChanged(currentPath);
                 }
                 refresh(currentPath);
             }
-        }
-        else
-        {
+        } else {
             String pathx = list.get(position).getPath();
             File file = new File(pathx);
-            if (file.canRead())
-            {
-                if (file.isDirectory())
-                {
+            if (file.canRead()) {
+                if (file.isDirectory()) {
                     currentPath = pathx;
-                    if (listener != null)
-                    {
+                    if (listener != null) {
                         listener.onPathChanged(currentPath);
                     }
                     refresh(currentPath);
-                }
-                else
-                {
-                    if (listener != null)
-                    {
+                } else {
+                    if (listener != null) {
                         listener.onFileSelected(pathx);
                     }
                 }
-            }
-            else
-            {
+            } else {
                 RLUiUtil.toast(context, R.string.cannot_access_file);
             }
         }
@@ -211,8 +178,7 @@ public class RLFileExplorer extends ViewGroup implements OnItemClickListener
     /**
 	 *
 	 */
-    public interface Listener
-    {
+    public interface Listener {
         public void onPathChanged(String path);
 
         public void onFileSelected(String file);
@@ -221,61 +187,51 @@ public class RLFileExplorer extends ViewGroup implements OnItemClickListener
     /**
      * @param listener
      */
-    public void setListener(Listener listener)
-    {
+    public void setListener(Listener listener) {
         this.listener = listener;
     }
 
     /**
      * @param color
      */
-    public void setTextColor(int color)
-    {
+    public void setTextColor(int color) {
         this.textColor = color;
     }
 
-    public void openPath(String path)
-    {
+    public void openPath(String path) {
         homePath = path;
         currentPath = path;
         refresh(currentPath);
     }
 
-    private class Item
-    {
+    private class Item {
         private int icon;
 
         private String name;
 
         private String path;
 
-        public int getIcon()
-        {
+        public int getIcon() {
             return icon;
         }
 
-        public void setIcon(int icon)
-        {
+        public void setIcon(int icon) {
             this.icon = icon;
         }
 
-        public String getName()
-        {
+        public String getName() {
             return name;
         }
 
-        public void setName(String name)
-        {
+        public void setName(String name) {
             this.name = name;
         }
 
-        public String getPath()
-        {
+        public String getPath() {
             return path;
         }
 
-        public void setPath(String path)
-        {
+        public void setPath(String path) {
             this.path = path;
         }
     }

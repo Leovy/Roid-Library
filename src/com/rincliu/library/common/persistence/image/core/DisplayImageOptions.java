@@ -65,8 +65,7 @@ import com.rincliu.library.common.persistence.image.core.process.BitmapProcessor
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.0.0
  */
-public final class DisplayImageOptions
-{
+public final class DisplayImageOptions {
 
     private final int imageResOnLoading;
 
@@ -102,8 +101,7 @@ public final class DisplayImageOptions
 
     private final Handler handler;
 
-    private DisplayImageOptions(Builder builder)
-    {
+    private DisplayImageOptions(Builder builder) {
         imageResOnLoading = builder.imageResOnLoading;
         imageResForEmptyUri = builder.imageResForEmptyUri;
         imageResOnFail = builder.imageResOnFail;
@@ -123,133 +121,107 @@ public final class DisplayImageOptions
         handler = builder.handler;
     }
 
-    public boolean shouldShowImageResOnLoading()
-    {
+    public boolean shouldShowImageResOnLoading() {
         return imageResOnLoading != 0;
     }
 
-    public boolean shouldShowImageOnLoading()
-    {
+    public boolean shouldShowImageOnLoading() {
         return imageOnLoading != null;
     }
 
-    public boolean shouldShowImageResForEmptyUri()
-    {
+    public boolean shouldShowImageResForEmptyUri() {
         return imageResForEmptyUri != 0;
     }
 
-    public boolean shouldShowImageForEmptyUri()
-    {
+    public boolean shouldShowImageForEmptyUri() {
         return imageForEmptyUri != null;
     }
 
-    public boolean shouldShowImageResOnFail()
-    {
+    public boolean shouldShowImageResOnFail() {
         return imageResOnFail != 0;
     }
 
-    public boolean shouldShowImageOnFail()
-    {
+    public boolean shouldShowImageOnFail() {
         return imageOnFail != null;
     }
 
-    public boolean shouldPreProcess()
-    {
+    public boolean shouldPreProcess() {
         return preProcessor != null;
     }
 
-    public boolean shouldPostProcess()
-    {
+    public boolean shouldPostProcess() {
         return postProcessor != null;
     }
 
-    public boolean shouldDelayBeforeLoading()
-    {
+    public boolean shouldDelayBeforeLoading() {
         return delayBeforeLoading > 0;
     }
 
-    public int getImageResOnLoading()
-    {
+    public int getImageResOnLoading() {
         return imageResOnLoading;
     }
 
-    public Drawable getImageOnLoading()
-    {
+    public Drawable getImageOnLoading() {
         return imageOnLoading;
     }
 
-    public int getImageResForEmptyUri()
-    {
+    public int getImageResForEmptyUri() {
         return imageResForEmptyUri;
     }
 
-    public Drawable getImageForEmptyUri()
-    {
+    public Drawable getImageForEmptyUri() {
         return imageForEmptyUri;
     }
 
-    public int getImageResOnFail()
-    {
+    public int getImageResOnFail() {
         return imageResOnFail;
     }
 
-    public Drawable getImageOnFail()
-    {
+    public Drawable getImageOnFail() {
         return imageOnFail;
     }
 
-    public boolean isResetViewBeforeLoading()
-    {
+    public boolean isResetViewBeforeLoading() {
         return resetViewBeforeLoading;
     }
 
-    public boolean isCacheInMemory()
-    {
+    public boolean isCacheInMemory() {
         return cacheInMemory;
     }
 
-    public boolean isCacheOnDisc()
-    {
+    public boolean isCacheOnDisc() {
         return cacheOnDisc;
     }
 
-    public ImageScaleType getImageScaleType()
-    {
+    public ImageScaleType getImageScaleType() {
         return imageScaleType;
     }
 
-    public Options getDecodingOptions()
-    {
+    public Options getDecodingOptions() {
         return decodingOptions;
     }
 
-    public int getDelayBeforeLoading()
-    {
+    public int getDelayBeforeLoading() {
         return delayBeforeLoading;
     }
 
-    public Object getExtraForDownloader()
-    {
+    public Object getExtraForDownloader() {
         return extraForDownloader;
     }
 
-    public BitmapProcessor getPreProcessor()
-    {
+    public BitmapProcessor getPreProcessor() {
         return preProcessor;
     }
 
-    public BitmapProcessor getPostProcessor()
-    {
+    public BitmapProcessor getPostProcessor() {
         return postProcessor;
     }
 
-    public BitmapDisplayer getDisplayer()
-    {
+    public BitmapDisplayer getDisplayer() {
         return displayer;
     }
 
-    public Handler getHandler()
-    {
+    public Handler getHandler() {
         return (handler == null ? new Handler() : handler);
     }
 
@@ -258,8 +230,7 @@ public final class DisplayImageOptions
      * 
      * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
      */
-    public static class Builder
-    {
+    public static class Builder {
         private int imageResOnLoading = 0;
 
         private int imageResForEmptyUri = 0;
@@ -294,8 +265,7 @@ public final class DisplayImageOptions
 
         private Handler handler = null;
 
-        public Builder()
-        {
+        public Builder() {
             decodingOptions.inPurgeable = true;
             decodingOptions.inInputShareable = true;
         }
@@ -308,8 +278,7 @@ public final class DisplayImageOptions
          * @deprecated Use {@link #showImageOnLoading(int)} instead
          */
         @Deprecated
-        public Builder showStubImage(int imageRes)
-        {
+        public Builder showStubImage(int imageRes) {
             imageResOnLoading = imageRes;
             return this;
         }
@@ -320,8 +289,7 @@ public final class DisplayImageOptions
          * 
          * @param imageRes Image resource
          */
-        public Builder showImageOnLoading(int imageRes)
-        {
+        public Builder showImageOnLoading(int imageRes) {
             imageResOnLoading = imageRes;
             return this;
         }
@@ -332,8 +300,7 @@ public final class DisplayImageOptions
          * This option will be ignored if
          * {@link DisplayImageOptions.Builder#showImageOnLoading(int)} is set.
          */
-        public Builder showImageOnLoading(Drawable drawable)
-        {
+        public Builder showImageOnLoading(Drawable drawable) {
             imageOnLoading = drawable;
             return this;
         }
@@ -346,8 +313,7 @@ public final class DisplayImageOptions
          * 
          * @param imageRes Image resource
          */
-        public Builder showImageForEmptyUri(int imageRes)
-        {
+        public Builder showImageForEmptyUri(int imageRes) {
             imageResForEmptyUri = imageRes;
             return this;
         }
@@ -361,8 +327,7 @@ public final class DisplayImageOptions
          * {@link DisplayImageOptions.Builder#showImageForEmptyUri(int)} is
          * set.
          */
-        public Builder showImageForEmptyUri(Drawable drawable)
-        {
+        public Builder showImageForEmptyUri(Drawable drawable) {
             imageForEmptyUri = drawable;
             return this;
         }
@@ -374,8 +339,7 @@ public final class DisplayImageOptions
          * 
          * @param imageRes Image resource
          */
-        public Builder showImageOnFail(int imageRes)
-        {
+        public Builder showImageOnFail(int imageRes) {
             imageResOnFail = imageRes;
             return this;
         }
@@ -387,8 +351,7 @@ public final class DisplayImageOptions
          * ignored if {@link DisplayImageOptions.Builder#showImageOnFail(int)}
          * is set.
          */
-        public Builder showImageOnFail(Drawable drawable)
-        {
+        public Builder showImageOnFail(Drawable drawable) {
             imageOnFail = drawable;
             return this;
         }
@@ -400,8 +363,7 @@ public final class DisplayImageOptions
          * @deprecated Use {@link #resetViewBeforeLoading(boolean)
          *             resetViewBeforeLoading(true)} instead
          */
-        public Builder resetViewBeforeLoading()
-        {
+        public Builder resetViewBeforeLoading() {
             resetViewBeforeLoading = true;
             return this;
         }
@@ -410,8 +372,7 @@ public final class DisplayImageOptions
          * Sets whether {@link android.widget.ImageView ImageView} will be
          * reset (set <b>null</b>) before image loading start
          */
-        public Builder resetViewBeforeLoading(boolean resetViewBeforeLoading)
-        {
+        public Builder resetViewBeforeLoading(boolean resetViewBeforeLoading) {
             this.resetViewBeforeLoading = resetViewBeforeLoading;
             return this;
         }
@@ -422,15 +383,13 @@ public final class DisplayImageOptions
          * @deprecated Use {@link #cacheInMemory(boolean) cacheInMemory(true)}
          *             instead
          */
-        public Builder cacheInMemory()
-        {
+        public Builder cacheInMemory() {
             cacheInMemory = true;
             return this;
         }
 
         /** Sets whether loaded image will be cached in memory */
-        public Builder cacheInMemory(boolean cacheInMemory)
-        {
+        public Builder cacheInMemory(boolean cacheInMemory) {
             this.cacheInMemory = cacheInMemory;
             return this;
         }
@@ -441,15 +400,13 @@ public final class DisplayImageOptions
          * @deprecated Use {@link #cacheOnDisc(boolean) cacheOnDisc(true)}
          *             instead
          */
-        public Builder cacheOnDisc()
-        {
+        public Builder cacheOnDisc() {
             cacheOnDisc = true;
             return this;
         }
 
         /** Sets whether loaded image will be cached on disc */
-        public Builder cacheOnDisc(boolean cacheOnDisc)
-        {
+        public Builder cacheOnDisc(boolean cacheOnDisc) {
             this.cacheOnDisc = cacheOnDisc;
             return this;
         }
@@ -460,8 +417,7 @@ public final class DisplayImageOptions
          * to Bitmap. Default value -
          * {@link ImageScaleType#IN_SAMPLE_POWER_OF_2}
          */
-        public Builder imageScaleType(ImageScaleType imageScaleType)
-        {
+        public Builder imageScaleType(ImageScaleType imageScaleType) {
             this.imageScaleType = imageScaleType;
             return this;
         }
@@ -470,8 +426,7 @@ public final class DisplayImageOptions
          * Sets {@link Bitmap.Config bitmap config} for image decoding.
          * Default value - {@link Bitmap.Config#ARGB_8888}
          */
-        public Builder bitmapConfig(Bitmap.Config bitmapConfig)
-        {
+        public Builder bitmapConfig(Bitmap.Config bitmapConfig) {
             if (bitmapConfig == null)
                 throw new IllegalArgumentException("bitmapConfig can't be null");
             decodingOptions.inPreferredConfig = bitmapConfig;
@@ -488,8 +443,7 @@ public final class DisplayImageOptions
          * {@link #bitmapConfig(android.graphics.Bitmap.Config)
          * bitmapConfig()} option.
          */
-        public Builder decodingOptions(Options decodingOptions)
-        {
+        public Builder decodingOptions(Options decodingOptions) {
             if (decodingOptions == null)
                 throw new IllegalArgumentException("decodingOptions can't be null");
             this.decodingOptions = decodingOptions;
@@ -497,8 +451,7 @@ public final class DisplayImageOptions
         }
 
         /** Sets delay time before starting loading task. Default - no delay. */
-        public Builder delayBeforeLoading(int delayInMillis)
-        {
+        public Builder delayBeforeLoading(int delayInMillis) {
             this.delayBeforeLoading = delayInMillis;
             return this;
         }
@@ -507,8 +460,7 @@ public final class DisplayImageOptions
          * Sets auxiliary object which will be passed to
          * {@link ImageDownloader#getStream(String, Object)}
          */
-        public Builder extraForDownloader(Object extra)
-        {
+        public Builder extraForDownloader(Object extra) {
             this.extraForDownloader = extra;
             return this;
         }
@@ -519,8 +471,7 @@ public final class DisplayImageOptions
          * processed by incoming preProcessor.<br />
          * Image will be pre-processed even if caching in memory is disabled.
          */
-        public Builder preProcessor(BitmapProcessor preProcessor)
-        {
+        public Builder preProcessor(BitmapProcessor preProcessor) {
             this.preProcessor = preProcessor;
             return this;
         }
@@ -530,8 +481,7 @@ public final class DisplayImageOptions
          * will be displayed in {@link ImageView} but after they'll have been
          * saved in memory cache.
          */
-        public Builder postProcessor(BitmapProcessor postProcessor)
-        {
+        public Builder postProcessor(BitmapProcessor postProcessor) {
             this.postProcessor = postProcessor;
             return this;
         }
@@ -541,8 +491,7 @@ public final class DisplayImageOptions
          * task. Default value -
          * {@link DefaultConfigurationFactory#createBitmapDisplayer()}
          */
-        public Builder displayer(BitmapDisplayer displayer)
-        {
+        public Builder displayer(BitmapDisplayer displayer) {
             if (displayer == null)
                 throw new IllegalArgumentException("displayer can't be null");
             this.displayer = displayer;
@@ -553,15 +502,13 @@ public final class DisplayImageOptions
          * Sets custom {@linkplain Handler handler} for displaying images and
          * firing {@linkplain ImageLoadingListener listener} events.
          */
-        public Builder handler(Handler handler)
-        {
+        public Builder handler(Handler handler) {
             this.handler = handler;
             return this;
         }
 
         /** Sets all options equal to incoming options */
-        public Builder cloneFrom(DisplayImageOptions options)
-        {
+        public Builder cloneFrom(DisplayImageOptions options) {
             imageResOnLoading = options.imageResOnLoading;
             imageResForEmptyUri = options.imageResForEmptyUri;
             imageResOnFail = options.imageResOnFail;
@@ -583,8 +530,7 @@ public final class DisplayImageOptions
         }
 
         /** Builds configured {@link DisplayImageOptions} object */
-        public DisplayImageOptions build()
-        {
+        public DisplayImageOptions build() {
             return new DisplayImageOptions(this);
         }
     }
@@ -605,8 +551,7 @@ public final class DisplayImageOptions
      * These option are appropriate for simple single-use image (from
      * drawables or from Internet) displaying.
      */
-    public static DisplayImageOptions createSimple()
-    {
+    public static DisplayImageOptions createSimple() {
         return new Builder().build();
     }
 }

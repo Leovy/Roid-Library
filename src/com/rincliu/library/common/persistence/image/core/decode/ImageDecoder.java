@@ -26,8 +26,7 @@ import java.io.IOException;
  * @see ImageDecodingInfo
  * @since 1.8.3
  */
-public interface ImageDecoder
-{
+public interface ImageDecoder {
 
     /**
      * Decodes image to {@link Bitmap} according target size and other

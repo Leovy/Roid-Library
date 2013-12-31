@@ -31,34 +31,27 @@ import java.util.List;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.6.3
  */
-public final class MemoryCacheUtil
-{
+public final class MemoryCacheUtil {
 
     private static final String URI_AND_SIZE_SEPARATOR = "_";
 
     private static final String WIDTH_AND_HEIGHT_SEPARATOR = "x";
 
-    private MemoryCacheUtil()
-    {
-    }
+    private MemoryCacheUtil() {}
 
     /**
      * Generates key for memory cache for incoming image (URI + size).<br />
      * Pattern for cache key - <b>[imageUri]_[width]x[height]</b>.
      */
-    public static String generateKey(String imageUri, ImageSize targetSize)
-    {
+    public static String generateKey(String imageUri, ImageSize targetSize) {
         return new StringBuilder(imageUri).append(URI_AND_SIZE_SEPARATOR).append(targetSize.getWidth()).append(
                 WIDTH_AND_HEIGHT_SEPARATOR).append(targetSize.getHeight()).toString();
     }
 
-    public static Comparator<String> createFuzzyKeyComparator()
-    {
-        return new Comparator<String>()
-        {
+    public static Comparator<String> createFuzzyKeyComparator() {
+        return new Comparator<String>() {
             @Override
-            public int compare(String key1, String key2)
-            {
+            public int compare(String key1, String key2) {
                 String imageUri1 = key1.substring(0, key1.lastIndexOf(URI_AND_SIZE_SEPARATOR));
                 String imageUri2 = key2.substring(0, key2.lastIndexOf(URI_AND_SIZE_SEPARATOR));
                 return imageUri1.compareTo(imageUri2);
@@ -76,13 +69,10 @@ public final class MemoryCacheUtil
      * {@linkplain ImageLoaderConfiguration configuration}
      */
     public static List<Bitmap> findCachedBitmapsForImageUri(String imageUri,
-            MemoryCacheAware<String, Bitmap> memoryCache)
-    {
+            MemoryCacheAware<String, Bitmap> memoryCache) {
         List<Bitmap> values = new ArrayList<Bitmap>();
-        for (String key : memoryCache.keys())
-        {
-            if (key.startsWith(imageUri))
-            {
+        for (String key : memoryCache.keys()) {
+            if (key.startsWith(imageUri)) {
                 values.add(memoryCache.get(key));
             }
         }
@@ -98,13 +88,10 @@ public final class MemoryCacheUtil
      * denyCacheImageMultipleSizesInMemory()} option in
      * {@linkplain ImageLoaderConfiguration configuration}
      */
-    public static List<String> findCacheKeysForImageUri(String imageUri, MemoryCacheAware<String, Bitmap> memoryCache)
-    {
+    public static List<String> findCacheKeysForImageUri(String imageUri, MemoryCacheAware<String, Bitmap> memoryCache) {
         List<String> values = new ArrayList<String>();
-        for (String key : memoryCache.keys())
-        {
-            if (key.startsWith(imageUri))
-            {
+        for (String key : memoryCache.keys()) {
+            if (key.startsWith(imageUri)) {
                 values.add(key);
             }
         }
@@ -119,18 +106,14 @@ public final class MemoryCacheUtil
      * denyCacheImageMultipleSizesInMemory()} option in
      * {@linkplain ImageLoaderConfiguration configuration}
      */
-    public static void removeFromCache(String imageUri, MemoryCacheAware<String, Bitmap> memoryCache)
-    {
+    public static void removeFromCache(String imageUri, MemoryCacheAware<String, Bitmap> memoryCache) {
         List<String> keysToRemove = new ArrayList<String>();
-        for (String key : memoryCache.keys())
-        {
-            if (key.startsWith(imageUri))
-            {
+        for (String key : memoryCache.keys()) {
+            if (key.startsWith(imageUri)) {
                 keysToRemove.add(key);
             }
         }
-        for (String keyToRemove : keysToRemove)
-        {
+        for (String keyToRemove : keysToRemove) {
             memoryCache.remove(keyToRemove);
         }
     }

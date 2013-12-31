@@ -28,8 +28,7 @@ import com.rincliu.library.common.persistence.afinal.db.table.Property;
 import com.rincliu.library.common.persistence.afinal.db.table.TableInfo;
 import com.rincliu.library.common.persistence.afinal.exception.DbException;
 
-public class SqlBuilder
-{
+public class SqlBuilder {
 
     /**
      * 获取插入的sql语句
@@ -37,23 +36,20 @@ public class SqlBuilder
      * @param tableInfo
      * @return
      */
-    public static SqlInfo buildInsertSql(Object entity)
-    {
+    public static SqlInfo buildInsertSql(Object entity) {
 
         List<KeyValue> keyValueList = getSaveKeyValueListByEntity(entity);
 
         StringBuffer strSQL = new StringBuffer();
         SqlInfo sqlInfo = null;
-        if (keyValueList != null && keyValueList.size() > 0)
-        {
+        if (keyValueList != null && keyValueList.size() > 0) {
 
             sqlInfo = new SqlInfo();
 
             strSQL.append("INSERT INTO ");
             strSQL.append(TableInfo.get(entity.getClass()).getTableName());
             strSQL.append(" (");
-            for (KeyValue kv : keyValueList)
-            {
+            for (KeyValue kv : keyValueList) {
                 strSQL.append(kv.getKey()).append(",");
                 sqlInfo.addValue(kv.getValue());
             }
@@ -61,8 +57,7 @@ public class SqlBuilder
             strSQL.append(") VALUES ( ");
 
             int length = keyValueList.size();
-            for (int i = 0; i < length; i++)
-            {
+            for (int i = 0; i < length; i++) {
                 strSQL.append("?,");
             }
             strSQL.deleteCharAt(strSQL.length() - 1);
@@ -74,18 +69,15 @@ public class SqlBuilder
         return sqlInfo;
     }
 
-    public static List<KeyValue> getSaveKeyValueListByEntity(Object entity)
-    {
+    public static List<KeyValue> getSaveKeyValueListByEntity(Object entity) {
 
         List<KeyValue> keyValueList = new ArrayList<KeyValue>();
 
         TableInfo table = TableInfo.get(entity.getClass());
         Object idvalue = table.getId().getValue(entity);
 
-        if (!(idvalue instanceof Integer))
-        { // 用了非自增长,添加id , 采用自增长就不需要添加id了
-            if (idvalue instanceof String && idvalue != null)
-            {
+        if (!(idvalue instanceof Integer)) { // 用了非自增长,添加id , 采用自增长就不需要添加id了
+            if (idvalue instanceof String && idvalue != null) {
                 KeyValue kv = new KeyValue(table.getId().getColumn(), idvalue);
                 keyValueList.add(kv);
             }
@@ -93,8 +85,7 @@ public class SqlBuilder
 
         // 添加属性
         Collection<Property> propertys = table.propertyMap.values();
-        for (Property property : propertys)
-        {
+        for (Property property : propertys) {
             KeyValue kv = property2KeyValue(property, entity);
             if (kv != null)
                 keyValueList.add(kv);
@@ -102,8 +93,7 @@ public class SqlBuilder
 
         // 添加外键（多对一）
         Collection<ManyToOne> manyToOnes = table.manyToOneMap.values();
-        for (ManyToOne many : manyToOnes)
-        {
+        for (ManyToOne many : manyToOnes) {
             KeyValue kv = manyToOne2KeyValue(many, entity);
             if (kv != null)
                 keyValueList.add(kv);
@@ -112,20 +102,17 @@ public class SqlBuilder
         return keyValueList;
     }
 
-    private static String getDeleteSqlBytableName(String tableName)
-    {
+    private static String getDeleteSqlBytableName(String tableName) {
         return "DELETE FROM " + tableName;
     }
 
-    public static SqlInfo buildDeleteSql(Object entity)
-    {
+    public static SqlInfo buildDeleteSql(Object entity) {
         TableInfo table = TableInfo.get(entity.getClass());
 
         Id id = table.getId();
         Object idvalue = id.getValue(entity);
 
-        if (idvalue == null)
-        {
+        if (idvalue == null) {
             throw new DbException("getDeleteSQL:" + entity.getClass() + " id value is null");
         }
         StringBuffer strSQL = new StringBuffer(getDeleteSqlBytableName(table.getTableName()));
@@ -138,13 +125,11 @@ public class SqlBuilder
         return sqlInfo;
     }
 
-    public static SqlInfo buildDeleteSql(Class<?> clazz, Object idValue)
-    {
+    public static SqlInfo buildDeleteSql(Class<?> clazz, Object idValue) {
         TableInfo table = TableInfo.get(clazz);
         Id id = table.getId();
 
-        if (null == idValue)
-        {
+        if (null == idValue) {
             throw new DbException("getDeleteSQL:idValue is null");
         }
 
@@ -165,13 +150,11 @@ public class SqlBuilder
      * @param strWhere
      * @return
      */
-    public static String buildDeleteSql(Class<?> clazz, String strWhere)
-    {
+    public static String buildDeleteSql(Class<?> clazz, String strWhere) {
         TableInfo table = TableInfo.get(clazz);
         StringBuffer strSQL = new StringBuffer(getDeleteSqlBytableName(table.getTableName()));
 
-        if (!TextUtils.isEmpty(strWhere))
-        {
+        if (!TextUtils.isEmpty(strWhere)) {
             strSQL.append(" WHERE ");
             strSQL.append(strWhere);
         }
@@ -182,13 +165,11 @@ public class SqlBuilder
     // //////////////////////////select sql
     // start///////////////////////////////////////
 
-    private static String getSelectSqlByTableName(String tableName)
-    {
+    private static String getSelectSqlByTableName(String tableName) {
         return new StringBuffer("SELECT * FROM ").append(tableName).toString();
     }
 
-    public static String getSelectSQL(Class<?> clazz, Object idValue)
-    {
+    public static String getSelectSQL(Class<?> clazz, Object idValue) {
         TableInfo table = TableInfo.get(clazz);
 
         StringBuffer strSQL = new StringBuffer(getSelectSqlByTableName(table.getTableName()));
@@ -198,8 +179,7 @@ public class SqlBuilder
         return strSQL.toString();
     }
 
-    public static SqlInfo getSelectSqlAsSqlInfo(Class<?> clazz, Object idValue)
-    {
+    public static SqlInfo getSelectSqlAsSqlInfo(Class<?> clazz, Object idValue) {
         TableInfo table = TableInfo.get(clazz);
 
         StringBuffer strSQL = new StringBuffer(getSelectSqlByTableName(table.getTableName()));
@@ -212,19 +192,16 @@ public class SqlBuilder
         return sqlInfo;
     }
 
-    public static String getSelectSQL(Class<?> clazz)
-    {
+    public static String getSelectSQL(Class<?> clazz) {
         return getSelectSqlByTableName(TableInfo.get(clazz).getTableName());
     }
 
-    public static String getSelectSQLByWhere(Class<?> clazz, String strWhere)
-    {
+    public static String getSelectSQLByWhere(Class<?> clazz, String strWhere) {
         TableInfo table = TableInfo.get(clazz);
 
         StringBuffer strSQL = new StringBuffer(getSelectSqlByTableName(table.getTableName()));
 
-        if (!TextUtils.isEmpty(strWhere))
-        {
+        if (!TextUtils.isEmpty(strWhere)) {
             strSQL.append(" WHERE ").append(strWhere);
         }
 
@@ -234,22 +211,19 @@ public class SqlBuilder
     // ////////////////////////////update sql
     // start/////////////////////////////////////////////
 
-    public static SqlInfo getUpdateSqlAsSqlInfo(Object entity)
-    {
+    public static SqlInfo getUpdateSqlAsSqlInfo(Object entity) {
 
         TableInfo table = TableInfo.get(entity.getClass());
         Object idvalue = table.getId().getValue(entity);
 
-        if (null == idvalue)
-        {// 主键值不能为null，否则不能更新
+        if (null == idvalue) {// 主键值不能为null，否则不能更新
             throw new DbException("this entity[" + entity.getClass() + "]'s id value is null");
         }
 
         List<KeyValue> keyValueList = new ArrayList<KeyValue>();
         // 添加属性
         Collection<Property> propertys = table.propertyMap.values();
-        for (Property property : propertys)
-        {
+        for (Property property : propertys) {
             KeyValue kv = property2KeyValue(property, entity);
             if (kv != null)
                 keyValueList.add(kv);
@@ -257,8 +231,7 @@ public class SqlBuilder
 
         // 添加外键（多对一）
         Collection<ManyToOne> manyToOnes = table.manyToOneMap.values();
-        for (ManyToOne many : manyToOnes)
-        {
+        for (ManyToOne many : manyToOnes) {
             KeyValue kv = manyToOne2KeyValue(many, entity);
             if (kv != null)
                 keyValueList.add(kv);
@@ -271,8 +244,7 @@ public class SqlBuilder
         StringBuffer strSQL = new StringBuffer("UPDATE ");
         strSQL.append(table.getTableName());
         strSQL.append(" SET ");
-        for (KeyValue kv : keyValueList)
-        {
+        for (KeyValue kv : keyValueList) {
             strSQL.append(kv.getKey()).append("=?,");
             sqlInfo.addValue(kv.getValue());
         }
@@ -283,8 +255,7 @@ public class SqlBuilder
         return sqlInfo;
     }
 
-    public static SqlInfo getUpdateSqlAsSqlInfo(Object entity, String strWhere)
-    {
+    public static SqlInfo getUpdateSqlAsSqlInfo(Object entity, String strWhere) {
 
         TableInfo table = TableInfo.get(entity.getClass());
 
@@ -292,8 +263,7 @@ public class SqlBuilder
 
         // 添加属性
         Collection<Property> propertys = table.propertyMap.values();
-        for (Property property : propertys)
-        {
+        for (Property property : propertys) {
             KeyValue kv = property2KeyValue(property, entity);
             if (kv != null)
                 keyValueList.add(kv);
@@ -301,15 +271,13 @@ public class SqlBuilder
 
         // 添加外键（多对一）
         Collection<ManyToOne> manyToOnes = table.manyToOneMap.values();
-        for (ManyToOne many : manyToOnes)
-        {
+        for (ManyToOne many : manyToOnes) {
             KeyValue kv = manyToOne2KeyValue(many, entity);
             if (kv != null)
                 keyValueList.add(kv);
         }
 
-        if (keyValueList == null || keyValueList.size() == 0)
-        {
+        if (keyValueList == null || keyValueList.size() == 0) {
             throw new DbException("this entity[" + entity.getClass() + "] has no property");
         }
 
@@ -317,22 +285,19 @@ public class SqlBuilder
         StringBuffer strSQL = new StringBuffer("UPDATE ");
         strSQL.append(table.getTableName());
         strSQL.append(" SET ");
-        for (KeyValue kv : keyValueList)
-        {
+        for (KeyValue kv : keyValueList) {
             strSQL.append(kv.getKey()).append("=?,");
             sqlInfo.addValue(kv.getValue());
         }
         strSQL.deleteCharAt(strSQL.length() - 1);
-        if (!TextUtils.isEmpty(strWhere))
-        {
+        if (!TextUtils.isEmpty(strWhere)) {
             strSQL.append(" WHERE ").append(strWhere);
         }
         sqlInfo.setSql(strSQL.toString());
         return sqlInfo;
     }
 
-    public static String getCreatTableSQL(Class<?> clazz)
-    {
+    public static String getCreatTableSQL(Class<?> clazz) {
         TableInfo table = TableInfo.get(clazz);
 
         Id id = table.getId();
@@ -348,15 +313,13 @@ public class SqlBuilder
             strSQL.append("\"").append(id.getColumn()).append("\"    ").append("TEXT PRIMARY KEY,");
 
         Collection<Property> propertys = table.propertyMap.values();
-        for (Property property : propertys)
-        {
+        for (Property property : propertys) {
             strSQL.append("\"").append(property.getColumn());
             strSQL.append("\",");
         }
 
         Collection<ManyToOne> manyToOnes = table.manyToOneMap.values();
-        for (ManyToOne manyToOne : manyToOnes)
-        {
+        for (ManyToOne manyToOne : manyToOnes) {
             strSQL.append("\"").append(manyToOne.getColumn()).append("\",");
         }
         strSQL.deleteCharAt(strSQL.length() - 1);
@@ -369,47 +332,36 @@ public class SqlBuilder
      * @param value
      * @return eg1: name='afinal' eg2: id=100
      */
-    private static String getPropertyStrSql(String key, Object value)
-    {
+    private static String getPropertyStrSql(String key, Object value) {
         StringBuffer sbSQL = new StringBuffer(key).append("=");
-        if (value instanceof String || value instanceof java.util.Date || value instanceof java.sql.Date)
-        {
+        if (value instanceof String || value instanceof java.util.Date || value instanceof java.sql.Date) {
             sbSQL.append("'").append(value).append("'");
-        }
-        else
-        {
+        } else {
             sbSQL.append(value);
         }
         return sbSQL.toString();
     }
 
-    private static KeyValue property2KeyValue(Property property, Object entity)
-    {
+    private static KeyValue property2KeyValue(Property property, Object entity) {
         KeyValue kv = null;
         String pcolumn = property.getColumn();
         Object value = property.getValue(entity);
-        if (value != null)
-        {
+        if (value != null) {
             kv = new KeyValue(pcolumn, value);
-        }
-        else
-        {
+        } else {
             if (property.getDefaultValue() != null && property.getDefaultValue().trim().length() != 0)
                 kv = new KeyValue(pcolumn, property.getDefaultValue());
         }
         return kv;
     }
 
-    private static KeyValue manyToOne2KeyValue(ManyToOne many, Object entity)
-    {
+    private static KeyValue manyToOne2KeyValue(ManyToOne many, Object entity) {
         KeyValue kv = null;
         String manycolumn = many.getColumn();
         Object manyobject = many.getValue(entity);
-        if (manyobject != null)
-        {
+        if (manyobject != null) {
             Object manyvalue = TableInfo.get(manyobject.getClass()).getId().getValue(manyobject);
-            if (manycolumn != null && manyvalue != null)
-            {
+            if (manycolumn != null && manyvalue != null) {
                 kv = new KeyValue(manycolumn, manyvalue);
             }
         }

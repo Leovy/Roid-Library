@@ -25,8 +25,7 @@ import android.widget.ImageView.ScaleType;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.6.1
  */
-public enum ViewScaleType
-{
+public enum ViewScaleType {
     /**
      * Scale the image uniformly (maintain the image's aspect ratio) so that
      * both dimensions (width and height) of the image will be equal to or
@@ -59,10 +58,8 @@ public enum ViewScaleType
      *         <li>{@link ScaleType#MATRIX}</li>
      *         </ul>
      */
-    public static ViewScaleType fromImageView(ImageView imageView)
-    {
-        switch (imageView.getScaleType())
-        {
+    public static ViewScaleType fromImageView(ImageView imageView) {
+        switch (imageView.getScaleType()) {
             case FIT_CENTER:
             case FIT_XY:
             case FIT_START:

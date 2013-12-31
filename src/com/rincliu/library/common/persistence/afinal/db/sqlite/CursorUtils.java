@@ -23,34 +23,24 @@ import android.database.Cursor;
 import com.rincliu.library.common.persistence.afinal.db.table.Property;
 import com.rincliu.library.common.persistence.afinal.db.table.TableInfo;
 
-public class CursorUtils
-{
+public class CursorUtils {
 
-    public static <T> T getEntity(Cursor cursor, Class<T> clazz)
-    {
-        try
-        {
-            if (cursor != null)
-            {
+    public static <T> T getEntity(Cursor cursor, Class<T> clazz) {
+        try {
+            if (cursor != null) {
                 TableInfo table = TableInfo.get(clazz);
                 int columnCount = cursor.getColumnCount();
-                if (columnCount > 0)
-                {
+                if (columnCount > 0) {
                     T entity = clazz.newInstance();
-                    for (int i = 0; i < columnCount; i++)
-                    {
+                    for (int i = 0; i < columnCount; i++) {
 
                         String column = cursor.getColumnName(i);
 
                         Property property = table.propertyMap.get(column);
-                        if (property != null)
-                        {
+                        if (property != null) {
                             property.setValue(entity, cursor.getString(i));
-                        }
-                        else
-                        {
-                            if (table.getId().getColumn().equals(column))
-                            {
+                        } else {
+                            if (table.getId().getColumn().equals(column)) {
                                 table.getId().setValue(entity, cursor.getString(i));
                             }
                         }
@@ -59,23 +49,18 @@ public class CursorUtils
                     return entity;
                 }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return null;
     }
 
-    public static DbModel getDbModel(Cursor cursor)
-    {
-        if (cursor != null && cursor.getColumnCount() > 0)
-        {
+    public static DbModel getDbModel(Cursor cursor) {
+        if (cursor != null && cursor.getColumnCount() > 0) {
             DbModel model = new DbModel();
             int columnCount = cursor.getColumnCount();
-            for (int i = 0; i < columnCount; i++)
-            {
+            for (int i = 0; i < columnCount; i++) {
                 model.set(cursor.getColumnName(i), cursor.getString(i));
             }
             return model;
@@ -83,28 +68,20 @@ public class CursorUtils
         return null;
     }
 
-    public static <T> T dbModel2Entity(DbModel dbModel, Class<?> clazz)
-    {
-        if (dbModel != null)
-        {
+    public static <T> T dbModel2Entity(DbModel dbModel, Class<?> clazz) {
+        if (dbModel != null) {
             HashMap<String, Object> dataMap = dbModel.getDataMap();
-            try
-            {
+            try {
                 @SuppressWarnings("unchecked")
                 T entity = (T) clazz.newInstance();
-                for (Entry<String, Object> entry : dataMap.entrySet())
-                {
+                for (Entry<String, Object> entry : dataMap.entrySet()) {
                     String column = entry.getKey();
                     TableInfo table = TableInfo.get(clazz);
                     Property property = table.propertyMap.get(column);
-                    if (property != null)
-                    {
+                    if (property != null) {
                         property.setValue(entity, entry.getValue() == null ? null : entry.getValue().toString());
-                    }
-                    else
-                    {
-                        if (table.getId().getColumn().equals(column))
-                        {
+                    } else {
+                        if (table.getId().getColumn().equals(column)) {
                             table.getId().setValue(entity,
                                     entry.getValue() == null ? null : entry.getValue().toString());
                         }
@@ -112,9 +89,7 @@ public class CursorUtils
 
                 }
                 return entity;
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

@@ -2,47 +2,38 @@ package com.rincliu.library.common.persistence.afinal.db.sqlite;
 
 import java.util.LinkedList;
 
-public class SqlInfo
-{
+public class SqlInfo {
 
     private String sql;
 
     private LinkedList<Object> bindArgs;
 
-    public String getSql()
-    {
+    public String getSql() {
         return sql;
     }
 
-    public void setSql(String sql)
-    {
+    public void setSql(String sql) {
         this.sql = sql;
     }
 
-    public LinkedList<Object> getBindArgs()
-    {
+    public LinkedList<Object> getBindArgs() {
         return bindArgs;
     }
 
-    public void setBindArgs(LinkedList<Object> bindArgs)
-    {
+    public void setBindArgs(LinkedList<Object> bindArgs) {
         this.bindArgs = bindArgs;
     }
 
-    public Object[] getBindArgsAsArray()
-    {
+    public Object[] getBindArgsAsArray() {
         if (bindArgs != null)
             return bindArgs.toArray();
         return null;
     }
 
-    public String[] getBindArgsAsStringArray()
-    {
-        if (bindArgs != null)
-        {
+    public String[] getBindArgsAsStringArray() {
+        if (bindArgs != null) {
             String[] strings = new String[bindArgs.size()];
-            for (int i = 0; i < bindArgs.size(); i++)
-            {
+            for (int i = 0; i < bindArgs.size(); i++) {
                 strings[i] = bindArgs.get(i).toString();
             }
             return strings;
@@ -50,8 +41,7 @@ public class SqlInfo
         return null;
     }
 
-    public void addValue(Object obj)
-    {
+    public void addValue(Object obj) {
         if (bindArgs == null)
             bindArgs = new LinkedList<Object>();
 

@@ -21,8 +21,7 @@ package com.rincliu.library.common.persistence.image.cache.disc.naming;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.3.1
  */
-public interface FileNameGenerator
-{
+public interface FileNameGenerator {
 
     /** Generates unique file name for image defined by URI */
     public abstract String generate(String imageUri);

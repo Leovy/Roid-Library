@@ -26,29 +26,24 @@ import android.view.View;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.4.0
  */
-public class SimpleImageLoadingListener implements ImageLoadingListener
-{
+public class SimpleImageLoadingListener implements ImageLoadingListener {
     @Override
-    public void onLoadingStarted(String imageUri, View view)
-    {
+    public void onLoadingStarted(String imageUri, View view) {
         // Empty implementation
     }
 
     @Override
-    public void onLoadingFailed(String imageUri, View view, FailReason failReason)
-    {
+    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
         // Empty implementation
     }
 
     @Override
-    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage)
-    {
+    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
         // Empty implementation
     }
 
     @Override
-    public void onLoadingCancelled(String imageUri, View view)
-    {
+    public void onLoadingCancelled(String imageUri, View view) {
         // Empty implementation
     }
 }

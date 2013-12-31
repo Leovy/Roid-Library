@@ -8,8 +8,7 @@ import java.util.NoSuchElementException;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.6.3
  */
-public class LIFOLinkedBlockingDeque<T> extends LinkedBlockingDeque<T>
-{
+public class LIFOLinkedBlockingDeque<T> extends LinkedBlockingDeque<T> {
 
     private static final long serialVersionUID = -4114786347960826192L;
 
@@ -28,8 +27,7 @@ public class LIFOLinkedBlockingDeque<T> extends LinkedBlockingDeque<T>
      * @throws IllegalArgumentException {@inheritDoc}
      */
     @Override
-    public boolean offer(T e)
-    {
+    public boolean offer(T e) {
         return super.offerFirst(e);
     }
 
@@ -42,8 +40,7 @@ public class LIFOLinkedBlockingDeque<T> extends LinkedBlockingDeque<T>
      * @throws NoSuchElementException if this deque is empty
      */
     @Override
-    public T remove()
-    {
+    public T remove() {
         return super.removeFirst();
     }
 }

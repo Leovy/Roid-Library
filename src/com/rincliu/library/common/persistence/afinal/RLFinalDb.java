@@ -36,8 +36,7 @@ import com.rincliu.library.common.persistence.afinal.db.table.ManyToOne;
 import com.rincliu.library.common.persistence.afinal.db.table.OneToMany;
 import com.rincliu.library.common.persistence.afinal.db.table.TableInfo;
 
-public class RLFinalDb
-{
+public class RLFinalDb {
 
     private static final String TAG = "RLFinalDb";
 
@@ -47,8 +46,7 @@ public class RLFinalDb
 
     private final DaoConfig config;
 
-    private RLFinalDb(DaoConfig config)
-    {
+    private RLFinalDb(DaoConfig config) {
         if (config == null)
             throw new RuntimeException("daoConfig is null");
         if (config.getContext() == null)
@@ -58,11 +56,9 @@ public class RLFinalDb
         this.config = config;
     }
 
-    private synchronized static RLFinalDb getInstance(DaoConfig daoConfig)
-    {
+    private synchronized static RLFinalDb getInstance(DaoConfig daoConfig) {
         RLFinalDb dao = daoMap.get(daoConfig.getDbName());
-        if (dao == null)
-        {
+        if (dao == null) {
             dao = new RLFinalDb(daoConfig);
             daoMap.put(daoConfig.getDbName(), dao);
         }
@@ -74,8 +70,7 @@ public class RLFinalDb
      * 
      * @param context
      */
-    public static RLFinalDb create(Context context)
-    {
+    public static RLFinalDb create(Context context) {
         DaoConfig config = new DaoConfig();
         config.setContext(context);
 
@@ -89,8 +84,7 @@ public class RLFinalDb
      * @param context
      * @param isDebug 是否是debug模式（debug模式进行数据库操作的时候将会打印sql语句）
      */
-    public static RLFinalDb create(Context context, boolean isDebug)
-    {
+    public static RLFinalDb create(Context context, boolean isDebug) {
         DaoConfig config = new DaoConfig();
         config.setContext(context);
         config.setDebug(isDebug);
@@ -104,8 +98,7 @@ public class RLFinalDb
      * @param context
      * @param dbName 数据库名称
      */
-    public static RLFinalDb create(Context context, String dbName)
-    {
+    public static RLFinalDb create(Context context, String dbName) {
         DaoConfig config = new DaoConfig();
         config.setContext(context);
         config.setDbName(dbName);
@@ -120,8 +113,7 @@ public class RLFinalDb
      * @param dbName 数据库名称
      * @param isDebug 是否为debug模式（debug模式进行数据库操作的时候将会打印sql语句）
      */
-    public static RLFinalDb create(Context context, String dbName, boolean isDebug)
-    {
+    public static RLFinalDb create(Context context, String dbName, boolean isDebug) {
         DaoConfig config = new DaoConfig();
         config.setContext(context);
         config.setDbName(dbName);
@@ -140,8 +132,7 @@ public class RLFinalDb
      * @return
      */
     public static RLFinalDb create(Context context, String dbName, boolean isDebug, int dbVersion,
-            DbUpdateListener dbUpdateListener)
-    {
+            DbUpdateListener dbUpdateListener) {
         DaoConfig config = new DaoConfig();
         config.setContext(context);
         config.setDbName(dbName);
@@ -157,8 +148,7 @@ public class RLFinalDb
      * @param daoConfig
      * @return
      */
-    public static RLFinalDb create(DaoConfig daoConfig)
-    {
+    public static RLFinalDb create(DaoConfig daoConfig) {
         return getInstance(daoConfig);
     }
 
@@ -167,8 +157,7 @@ public class RLFinalDb
      * 
      * @param entity
      */
-    public void save(Object entity)
-    {
+    public void save(Object entity) {
         checkTableExist(entity.getClass());
         exeSqlInfo(SqlBuilder.buildInsertSql(entity));
     }
@@ -181,12 +170,10 @@ public class RLFinalDb
      * @param entity 要保存的数据
      * @return ture： 保存成功 false:保存失败
      */
-    public boolean saveBindId(Object entity)
-    {
+    public boolean saveBindId(Object entity) {
         checkTableExist(entity.getClass());
         List<KeyValue> entityKvList = SqlBuilder.getSaveKeyValueListByEntity(entity);
-        if (entityKvList != null && entityKvList.size() > 0)
-        {
+        if (entityKvList != null && entityKvList.size() > 0) {
             TableInfo tf = TableInfo.get(entity.getClass());
             ContentValues cv = new ContentValues();
             insertContentValues(entityKvList, cv);
@@ -205,17 +192,12 @@ public class RLFinalDb
      * @param list
      * @param cv
      */
-    private void insertContentValues(List<KeyValue> list, ContentValues cv)
-    {
-        if (list != null && cv != null)
-        {
-            for (KeyValue kv : list)
-            {
+    private void insertContentValues(List<KeyValue> list, ContentValues cv) {
+        if (list != null && cv != null) {
+            for (KeyValue kv : list) {
                 cv.put(kv.getKey(), kv.getValue().toString());
             }
-        }
-        else
-        {
+        } else {
             Log.w(TAG, "insertContentValues: List<KeyValue> is empty or ContentValues is empty!");
         }
     }
@@ -225,8 +207,7 @@ public class RLFinalDb
      * 
      * @param entity
      */
-    public void update(Object entity)
-    {
+    public void update(Object entity) {
         checkTableExist(entity.getClass());
         exeSqlInfo(SqlBuilder.getUpdateSqlAsSqlInfo(entity));
     }
@@ -237,8 +218,7 @@ public class RLFinalDb
      * @param entity
      * @param strWhere 条件为空的时候，将会更新所有的数据
      */
-    public void update(Object entity, String strWhere)
-    {
+    public void update(Object entity, String strWhere) {
         checkTableExist(entity.getClass());
         exeSqlInfo(SqlBuilder.getUpdateSqlAsSqlInfo(entity, strWhere));
     }
@@ -248,8 +228,7 @@ public class RLFinalDb
      * 
      * @param entity entity的主键不能为空
      */
-    public void delete(Object entity)
-    {
+    public void delete(Object entity) {
         checkTableExist(entity.getClass());
         exeSqlInfo(SqlBuilder.buildDeleteSql(entity));
     }
@@ -260,8 +239,7 @@ public class RLFinalDb
      * @param clazz 要删除的实体类
      * @param id 主键值
      */
-    public void deleteById(Class<?> clazz, Object id)
-    {
+    public void deleteById(Class<?> clazz, Object id) {
         checkTableExist(clazz);
         exeSqlInfo(SqlBuilder.buildDeleteSql(clazz, id));
     }
@@ -272,23 +250,18 @@ public class RLFinalDb
      * @param clazz
      * @param strWhere 条件为空的时候 将会删除所有的数据
      */
-    public void deleteByWhere(Class<?> clazz, String strWhere)
-    {
+    public void deleteByWhere(Class<?> clazz, String strWhere) {
         checkTableExist(clazz);
         String sql = SqlBuilder.buildDeleteSql(clazz, strWhere);
         debugSql(sql);
         db.execSQL(sql);
     }
 
-    private void exeSqlInfo(SqlInfo sqlInfo)
-    {
-        if (sqlInfo != null)
-        {
+    private void exeSqlInfo(SqlInfo sqlInfo) {
+        if (sqlInfo != null) {
             debugSql(sqlInfo.getSql());
             db.execSQL(sqlInfo.getSql(), sqlInfo.getBindArgsAsArray());
-        }
-        else
-        {
+        } else {
             Log.e(TAG, "sava error:sqlInfo is null");
         }
     }
@@ -299,27 +272,19 @@ public class RLFinalDb
      * @param id
      * @param clazz
      */
-    public <T> T findById(Object id, Class<T> clazz)
-    {
+    public <T> T findById(Object id, Class<T> clazz) {
         checkTableExist(clazz);
         SqlInfo sqlInfo = SqlBuilder.getSelectSqlAsSqlInfo(clazz, id);
-        if (sqlInfo != null)
-        {
+        if (sqlInfo != null) {
             debugSql(sqlInfo.getSql());
             Cursor cursor = db.rawQuery(sqlInfo.getSql(), sqlInfo.getBindArgsAsStringArray());
-            try
-            {
-                if (cursor.moveToNext())
-                {
+            try {
+                if (cursor.moveToNext()) {
                     return CursorUtils.getEntity(cursor, clazz);
                 }
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
-            }
-            finally
-            {
+            } finally {
                 cursor.close();
             }
         }
@@ -332,36 +297,27 @@ public class RLFinalDb
      * @param id
      * @param clazz
      */
-    public <T> T findWithManyToOneById(Object id, Class<T> clazz)
-    {
+    public <T> T findWithManyToOneById(Object id, Class<T> clazz) {
         checkTableExist(clazz);
         String sql = SqlBuilder.getSelectSQL(clazz, id);
         debugSql(sql);
         DbModel dbModel = findDbModelBySQL(sql);
-        if (dbModel != null)
-        {
+        if (dbModel != null) {
             T entity = CursorUtils.dbModel2Entity(dbModel, clazz);
-            if (entity != null)
-            {
-                try
-                {
+            if (entity != null) {
+                try {
                     Collection<ManyToOne> manys = TableInfo.get(clazz).manyToOneMap.values();
-                    for (ManyToOne many : manys)
-                    {
+                    for (ManyToOne many : manys) {
                         Object obj = dbModel.get(many.getColumn());
-                        if (obj != null)
-                        {
+                        if (obj != null) {
                             @SuppressWarnings("unchecked")
                             T manyEntity = (T) findById(Integer.valueOf(obj.toString()), many.getDataType());
-                            if (manyEntity != null)
-                            {
+                            if (manyEntity != null) {
                                 many.setValue(entity, manyEntity);
                             }
                         }
                     }
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -378,45 +334,34 @@ public class RLFinalDb
      * @param clazz
      * @param findClass 要查找的类
      */
-    public <T> T findWithManyToOneById(Object id, Class<T> clazz, Class<?>... findClass)
-    {
+    public <T> T findWithManyToOneById(Object id, Class<T> clazz, Class<?>... findClass) {
         checkTableExist(clazz);
         String sql = SqlBuilder.getSelectSQL(clazz, id);
         debugSql(sql);
         DbModel dbModel = findDbModelBySQL(sql);
-        if (dbModel != null)
-        {
+        if (dbModel != null) {
             T entity = CursorUtils.dbModel2Entity(dbModel, clazz);
-            if (entity != null)
-            {
-                try
-                {
+            if (entity != null) {
+                try {
                     Collection<ManyToOne> manys = TableInfo.get(clazz).manyToOneMap.values();
-                    for (ManyToOne many : manys)
-                    {
+                    for (ManyToOne many : manys) {
                         boolean isFind = false;
-                        for (Class<?> mClass : findClass)
-                        {
-                            if (many.getManyClass() == mClass)
-                            {
+                        for (Class<?> mClass : findClass) {
+                            if (many.getManyClass() == mClass) {
                                 isFind = true;
                                 break;
                             }
                         }
 
-                        if (isFind)
-                        {
+                        if (isFind) {
                             @SuppressWarnings("unchecked")
                             T manyEntity = (T) findById(dbModel.get(many.getColumn()), many.getDataType());
-                            if (manyEntity != null)
-                            {
+                            if (manyEntity != null) {
                                 many.setValue(entity, manyEntity);
                             }
                         }
                     }
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -431,31 +376,23 @@ public class RLFinalDb
      * @param id
      * @param clazz
      */
-    public <T> T findWithOneToManyById(Object id, Class<T> clazz)
-    {
+    public <T> T findWithOneToManyById(Object id, Class<T> clazz) {
         checkTableExist(clazz);
         String sql = SqlBuilder.getSelectSQL(clazz, id);
         debugSql(sql);
         DbModel dbModel = findDbModelBySQL(sql);
-        if (dbModel != null)
-        {
+        if (dbModel != null) {
             T entity = CursorUtils.dbModel2Entity(dbModel, clazz);
-            if (entity != null)
-            {
-                try
-                {
+            if (entity != null) {
+                try {
                     Collection<OneToMany> ones = TableInfo.get(clazz).oneToManyMap.values();
-                    for (OneToMany one : ones)
-                    {
+                    for (OneToMany one : ones) {
                         List<?> list = findAllByWhere(one.getOneClass(), one.getColumn() + "=" + id);
-                        if (list != null)
-                        {
+                        if (list != null) {
                             one.setValue(entity, list);
                         }
                     }
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -471,44 +408,33 @@ public class RLFinalDb
      * @param clazz
      * @param findClass
      */
-    public <T> T findWithOneToManyById(Object id, Class<T> clazz, Class<?>... findClass)
-    {
+    public <T> T findWithOneToManyById(Object id, Class<T> clazz, Class<?>... findClass) {
         checkTableExist(clazz);
         String sql = SqlBuilder.getSelectSQL(clazz, id);
         debugSql(sql);
         DbModel dbModel = findDbModelBySQL(sql);
-        if (dbModel != null)
-        {
+        if (dbModel != null) {
             T entity = CursorUtils.dbModel2Entity(dbModel, clazz);
-            if (entity != null)
-            {
-                try
-                {
+            if (entity != null) {
+                try {
                     Collection<OneToMany> ones = TableInfo.get(clazz).oneToManyMap.values();
-                    for (OneToMany one : ones)
-                    {
+                    for (OneToMany one : ones) {
                         boolean isFind = false;
-                        for (Class<?> mClass : findClass)
-                        {
-                            if (one.getOneClass().equals(mClass.getName()))
-                            {
+                        for (Class<?> mClass : findClass) {
+                            if (one.getOneClass().equals(mClass.getName())) {
                                 isFind = true;
                                 break;
                             }
                         }
 
-                        if (isFind)
-                        {
+                        if (isFind) {
                             List<?> list = findAllByWhere(one.getOneClass(), one.getColumn() + "=" + id);
-                            if (list != null)
-                            {
+                            if (list != null) {
                                 one.setValue(entity, list);
                             }
                         }
                     }
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -522,8 +448,7 @@ public class RLFinalDb
      * 
      * @param clazz
      */
-    public <T> List<T> findAll(Class<T> clazz)
-    {
+    public <T> List<T> findAll(Class<T> clazz) {
         checkTableExist(clazz);
         return findAllBySql(clazz, SqlBuilder.getSelectSQL(clazz));
     }
@@ -534,8 +459,7 @@ public class RLFinalDb
      * @param clazz
      * @param orderBy 排序的字段
      */
-    public <T> List<T> findAll(Class<T> clazz, String orderBy)
-    {
+    public <T> List<T> findAll(Class<T> clazz, String orderBy) {
         checkTableExist(clazz);
         return findAllBySql(clazz, SqlBuilder.getSelectSQL(clazz) + " ORDER BY " + orderBy + " DESC");
     }
@@ -546,8 +470,7 @@ public class RLFinalDb
      * @param clazz
      * @param strWhere 条件为空的时候查找所有数据
      */
-    public <T> List<T> findAllByWhere(Class<T> clazz, String strWhere)
-    {
+    public <T> List<T> findAllByWhere(Class<T> clazz, String strWhere) {
         checkTableExist(clazz);
         return findAllBySql(clazz, SqlBuilder.getSelectSQLByWhere(clazz, strWhere));
     }
@@ -559,8 +482,7 @@ public class RLFinalDb
      * @param strWhere 条件为空的时候查找所有数据
      * @param orderBy 排序字段
      */
-    public <T> List<T> findAllByWhere(Class<T> clazz, String strWhere, String orderBy)
-    {
+    public <T> List<T> findAllByWhere(Class<T> clazz, String strWhere, String orderBy) {
         checkTableExist(clazz);
         return findAllBySql(clazz, SqlBuilder.getSelectSQLByWhere(clazz, strWhere) + " ORDER BY '" + orderBy + "' DESC");
     }
@@ -571,27 +493,20 @@ public class RLFinalDb
      * @param clazz
      * @param strSQL
      */
-    private <T> List<T> findAllBySql(Class<T> clazz, String strSQL)
-    {
+    private <T> List<T> findAllBySql(Class<T> clazz, String strSQL) {
         checkTableExist(clazz);
         debugSql(strSQL);
         Cursor cursor = db.rawQuery(strSQL, null);
-        try
-        {
+        try {
             List<T> list = new ArrayList<T>();
-            while (cursor.moveToNext())
-            {
+            while (cursor.moveToNext()) {
                 T t = CursorUtils.getEntity(cursor, clazz);
                 list.add(t);
             }
             return list;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally
-        {
+        } finally {
             if (cursor != null)
                 cursor.close();
             cursor = null;
@@ -604,90 +519,66 @@ public class RLFinalDb
      * 
      * @param strSQL
      */
-    public DbModel findDbModelBySQL(String strSQL)
-    {
+    public DbModel findDbModelBySQL(String strSQL) {
         debugSql(strSQL);
         Cursor cursor = db.rawQuery(strSQL, null);
-        try
-        {
-            if (cursor.moveToNext())
-            {
+        try {
+            if (cursor.moveToNext()) {
                 return CursorUtils.getDbModel(cursor);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally
-        {
+        } finally {
             cursor.close();
         }
         return null;
     }
 
-    public List<DbModel> findDbModelListBySQL(String strSQL)
-    {
+    public List<DbModel> findDbModelListBySQL(String strSQL) {
         debugSql(strSQL);
         Cursor cursor = db.rawQuery(strSQL, null);
         List<DbModel> dbModelList = new ArrayList<DbModel>();
-        try
-        {
-            while (cursor.moveToNext())
-            {
+        try {
+            while (cursor.moveToNext()) {
                 dbModelList.add(CursorUtils.getDbModel(cursor));
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally
-        {
+        } finally {
             cursor.close();
         }
         return dbModelList;
     }
 
-    private void checkTableExist(Class<?> clazz)
-    {
-        if (!tableIsExist(TableInfo.get(clazz)))
-        {
+    private void checkTableExist(Class<?> clazz) {
+        if (!tableIsExist(TableInfo.get(clazz))) {
             String sql = SqlBuilder.getCreatTableSQL(clazz);
             debugSql(sql);
             db.execSQL(sql);
         }
     }
 
-    private boolean tableIsExist(TableInfo table)
-    {
+    private boolean tableIsExist(TableInfo table) {
         if (table.isCheckDatabese())
             return true;
 
         Cursor cursor = null;
-        try
-        {
+        try {
             String sql = "SELECT COUNT(*) AS c FROM sqlite_master WHERE type ='table' AND name ='"
                     + table.getTableName() + "' ";
             debugSql(sql);
             cursor = db.rawQuery(sql, null);
-            if (cursor != null && cursor.moveToNext())
-            {
+            if (cursor != null && cursor.moveToNext()) {
                 int count = cursor.getInt(0);
-                if (count > 0)
-                {
+                if (count > 0) {
                     table.setCheckDatabese(true);
                     return true;
                 }
             }
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally
-        {
+        } finally {
             if (cursor != null)
                 cursor.close();
             cursor = null;
@@ -696,14 +587,12 @@ public class RLFinalDb
         return false;
     }
 
-    private void debugSql(String sql)
-    {
+    private void debugSql(String sql) {
         if (config != null && config.isDebug())
             android.util.Log.d("Debug SQL", ">>>>>>  " + sql);
     }
 
-    public static class DaoConfig
-    {
+    public static class DaoConfig {
         private Context context = null;// android上下文
 
         private String dbName = "afinal.db";// 数据库名字
@@ -714,92 +603,71 @@ public class RLFinalDb
 
         private DbUpdateListener dbUpdateListener;
 
-        public Context getContext()
-        {
+        public Context getContext() {
             return context;
         }
 
-        public void setContext(Context context)
-        {
+        public void setContext(Context context) {
             this.context = context;
         }
 
-        public String getDbName()
-        {
+        public String getDbName() {
             return dbName;
         }
 
-        public void setDbName(String dbName)
-        {
+        public void setDbName(String dbName) {
             this.dbName = dbName;
         }
 
-        public int getDbVersion()
-        {
+        public int getDbVersion() {
             return dbVersion;
         }
 
-        public void setDbVersion(int dbVersion)
-        {
+        public void setDbVersion(int dbVersion) {
             this.dbVersion = dbVersion;
         }
 
-        public boolean isDebug()
-        {
+        public boolean isDebug() {
             return debug;
         }
 
-        public void setDebug(boolean debug)
-        {
+        public void setDebug(boolean debug) {
             this.debug = debug;
         }
 
-        public DbUpdateListener getDbUpdateListener()
-        {
+        public DbUpdateListener getDbUpdateListener() {
             return dbUpdateListener;
         }
 
-        public void setDbUpdateListener(DbUpdateListener dbUpdateListener)
-        {
+        public void setDbUpdateListener(DbUpdateListener dbUpdateListener) {
             this.dbUpdateListener = dbUpdateListener;
         }
     }
 
-    class SqliteDbHelper extends SQLiteOpenHelper
-    {
+    class SqliteDbHelper extends SQLiteOpenHelper {
 
         private final DbUpdateListener mDbUpdateListener;
 
-        public SqliteDbHelper(Context context, String name, int version, DbUpdateListener dbUpdateListener)
-        {
+        public SqliteDbHelper(Context context, String name, int version, DbUpdateListener dbUpdateListener) {
             super(context, name, null, version);
             this.mDbUpdateListener = dbUpdateListener;
         }
 
         @Override
-        public void onCreate(SQLiteDatabase db)
-        {
-        }
+        public void onCreate(SQLiteDatabase db) {}
 
         @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
-        {
-            if (mDbUpdateListener != null)
-            {
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            if (mDbUpdateListener != null) {
                 mDbUpdateListener.onUpgrade(db, oldVersion, newVersion);
-            }
-            else
-            { // 清空所有的数据信息
+            } else { // 清空所有的数据信息
                 Cursor cursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type ='table'", null);
-                if (cursor != null)
-                {
-                    while (cursor.moveToNext())
-                    {
+                if (cursor != null) {
+                    while (cursor.moveToNext()) {
                         db.execSQL("DROP TABLE " + cursor.getString(0));
                     }
                 }
-                if (cursor != null)
-                {
+                if (cursor != null) {
                     cursor.close();
                     cursor = null;
                 }
@@ -808,8 +676,7 @@ public class RLFinalDb
 
     }
 
-    public interface DbUpdateListener
-    {
+    public interface DbUpdateListener {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion);
     }
 }

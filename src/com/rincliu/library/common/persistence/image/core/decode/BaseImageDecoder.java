@@ -39,8 +39,7 @@ import java.io.InputStream;
  * @see ImageDecodingInfo
  * @since 1.8.3
  */
-public class BaseImageDecoder implements ImageDecoder
-{
+public class BaseImageDecoder implements ImageDecoder {
 
     protected static final String LOG_SABSAMPLE_IMAGE = "Subsample original image (%1$s) to %2$s (scale = %3$d) [%4$s]";
 
@@ -60,8 +59,7 @@ public class BaseImageDecoder implements ImageDecoder
      *            {@link com.rincliu.library.common.persistence.image.core.ImageLoaderConfiguration.Builder#writeDebugLogs()
      *            ImageLoaderConfiguration.writeDebugLogs()}
      */
-    public BaseImageDecoder(boolean loggingEnabled)
-    {
+    public BaseImageDecoder(boolean loggingEnabled) {
         this.loggingEnabled = loggingEnabled;
     }
 
@@ -76,61 +74,48 @@ public class BaseImageDecoder implements ImageDecoder
      * @throws UnsupportedOperationException if image URI has unsupported
      *             scheme(protocol)
      */
-    public Bitmap decode(ImageDecodingInfo decodingInfo) throws IOException
-    {
+    public Bitmap decode(ImageDecodingInfo decodingInfo) throws IOException {
         InputStream imageStream = getImageStream(decodingInfo);
         ImageFileInfo imageInfo = defineImageSizeAndRotation(imageStream, decodingInfo.getImageUri());
         Options decodingOptions = prepareDecodingOptions(imageInfo.imageSize, decodingInfo);
         Bitmap decodedBitmap = decodeStream(imageStream, decodingOptions);
-        if (decodedBitmap == null)
-        {
+        if (decodedBitmap == null) {
             L.e(ERROR_CANT_DECODE_IMAGE, decodingInfo.getImageKey());
-        }
-        else
-        {
+        } else {
             decodedBitmap = considerExactScaleAndOrientaiton(decodedBitmap, decodingInfo, imageInfo.exif.rotation,
                     imageInfo.exif.flipHorizontal);
         }
         return decodedBitmap;
     }
 
-    protected InputStream getImageStream(ImageDecodingInfo decodingInfo) throws IOException
-    {
+    protected InputStream getImageStream(ImageDecodingInfo decodingInfo) throws IOException {
         return decodingInfo.getDownloader().getStream(decodingInfo.getImageUri(), decodingInfo.getExtraForDownloader());
     }
 
-    protected ImageFileInfo defineImageSizeAndRotation(InputStream imageStream, String imageUri) throws IOException
-    {
+    protected ImageFileInfo defineImageSizeAndRotation(InputStream imageStream, String imageUri) throws IOException {
         Options options = new Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeStream(imageStream, null, options);
         imageStream.reset();
 
         ExifInfo exif;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
             exif = defineExifOrientation(imageUri, options.outMimeType);
-        }
-        else
-        {
+        } else {
             exif = new ExifInfo();
         }
         return new ImageFileInfo(new ImageSize(options.outWidth, options.outHeight, exif.rotation), exif);
     }
 
-    protected ExifInfo defineExifOrientation(String imageUri, String mimeType)
-    {
+    protected ExifInfo defineExifOrientation(String imageUri, String mimeType) {
         int rotation = 0;
         boolean flip = false;
-        if ("image/jpeg".equalsIgnoreCase(mimeType) && Scheme.ofUri(imageUri) == Scheme.FILE)
-        {
-            try
-            {
+        if ("image/jpeg".equalsIgnoreCase(mimeType) && Scheme.ofUri(imageUri) == Scheme.FILE) {
+            try {
                 ExifInterface exif = new ExifInterface(Scheme.FILE.crop(imageUri));
                 int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                         ExifInterface.ORIENTATION_NORMAL);
-                switch (exifOrientation)
-                {
+                switch (exifOrientation) {
                     case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
                         flip = true;
                     case ExifInterface.ORIENTATION_NORMAL:
@@ -152,22 +137,18 @@ public class BaseImageDecoder implements ImageDecoder
                         rotation = 270;
                         break;
                 }
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 L.w("Can't read EXIF tags from file [%s]", imageUri);
             }
         }
         return new ExifInfo(rotation, flip);
     }
 
-    protected Options prepareDecodingOptions(ImageSize imageSize, ImageDecodingInfo decodingInfo)
-    {
+    protected Options prepareDecodingOptions(ImageSize imageSize, ImageDecodingInfo decodingInfo) {
         ImageScaleType scaleType = decodingInfo.getImageScaleType();
         ImageSize targetSize = decodingInfo.getTargetSize();
         int scale = 1;
-        if (scaleType != ImageScaleType.NONE)
-        {
+        if (scaleType != ImageScaleType.NONE) {
             boolean powerOf2 = scaleType == ImageScaleType.IN_SAMPLE_POWER_OF_2;
             scale = ImageSizeUtils.computeImageSampleSize(imageSize, targetSize, decodingInfo.getViewScaleType(),
                     powerOf2);
@@ -180,31 +161,24 @@ public class BaseImageDecoder implements ImageDecoder
         return decodingOptions;
     }
 
-    protected Bitmap decodeStream(InputStream imageStream, Options decodingOptions) throws IOException
-    {
-        try
-        {
+    protected Bitmap decodeStream(InputStream imageStream, Options decodingOptions) throws IOException {
+        try {
             return BitmapFactory.decodeStream(imageStream, null, decodingOptions);
-        }
-        finally
-        {
+        } finally {
             IoUtils.closeSilently(imageStream);
         }
     }
 
     protected Bitmap considerExactScaleAndOrientaiton(Bitmap subsampledBitmap, ImageDecodingInfo decodingInfo,
-            int rotation, boolean flipHorizontal)
-    {
+            int rotation, boolean flipHorizontal) {
         Matrix m = new Matrix();
         // Scale to exact size if need
         ImageScaleType scaleType = decodingInfo.getImageScaleType();
-        if (scaleType == ImageScaleType.EXACTLY || scaleType == ImageScaleType.EXACTLY_STRETCHED)
-        {
+        if (scaleType == ImageScaleType.EXACTLY || scaleType == ImageScaleType.EXACTLY_STRETCHED) {
             ImageSize srcSize = new ImageSize(subsampledBitmap.getWidth(), subsampledBitmap.getHeight(), rotation);
             float scale = ImageSizeUtils.computeImageScale(srcSize, decodingInfo.getTargetSize(),
                     decodingInfo.getViewScaleType(), scaleType == ImageScaleType.EXACTLY_STRETCHED);
-            if (Float.compare(scale, 1f) != 0)
-            {
+            if (Float.compare(scale, 1f) != 0) {
                 m.setScale(scale, scale);
 
                 if (loggingEnabled)
@@ -212,16 +186,14 @@ public class BaseImageDecoder implements ImageDecoder
             }
         }
         // Flip bitmap if need
-        if (flipHorizontal)
-        {
+        if (flipHorizontal) {
             m.postScale(-1, 1);
 
             if (loggingEnabled)
                 L.d(LOG_FLIP_IMAGE, decodingInfo.getImageKey());
         }
         // Rotate bitmap if need
-        if (rotation != 0)
-        {
+        if (rotation != 0) {
             m.postRotate(rotation);
 
             if (loggingEnabled)
@@ -230,42 +202,36 @@ public class BaseImageDecoder implements ImageDecoder
 
         Bitmap finalBitmap = Bitmap.createBitmap(subsampledBitmap, 0, 0, subsampledBitmap.getWidth(),
                 subsampledBitmap.getHeight(), m, true);
-        if (finalBitmap != subsampledBitmap)
-        {
+        if (finalBitmap != subsampledBitmap) {
             subsampledBitmap.recycle();
         }
         return finalBitmap;
     }
 
-    protected static class ExifInfo
-    {
+    protected static class ExifInfo {
 
         public final int rotation;
 
         public final boolean flipHorizontal;
 
-        protected ExifInfo()
-        {
+        protected ExifInfo() {
             this.rotation = 0;
             this.flipHorizontal = false;
         }
 
-        protected ExifInfo(int rotation, boolean flipHorizontal)
-        {
+        protected ExifInfo(int rotation, boolean flipHorizontal) {
             this.rotation = rotation;
             this.flipHorizontal = flipHorizontal;
         }
     }
 
-    protected static class ImageFileInfo
-    {
+    protected static class ImageFileInfo {
 
         public final ImageSize imageSize;
 
         public final ExifInfo exif;
 
-        protected ImageFileInfo(ImageSize imageSize, ExifInfo exif)
-        {
+        protected ImageFileInfo(ImageSize imageSize, ExifInfo exif) {
             this.imageSize = imageSize;
             this.exif = exif;
         }

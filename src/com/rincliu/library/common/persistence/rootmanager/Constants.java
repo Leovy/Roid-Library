@@ -1,7 +1,6 @@
 package com.rincliu.library.common.persistence.rootmanager;
 
-public class Constants
-{
+public class Constants {
 
     /**
      * The set of SU location I know by now.

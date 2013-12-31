@@ -21,7 +21,6 @@ package com.rincliu.library.common.persistence.image.core.assist;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.6.3
  */
-public enum QueueProcessingType
-{
+public enum QueueProcessingType {
     FIFO, LIFO
 }

@@ -18,8 +18,7 @@ package com.rincliu.library.widget.gestureimageview;
 /**
  * @author Jason Polites
  */
-public class Animator extends Thread
-{
+public class Animator extends Thread {
 
     private GestureImageView view;
 
@@ -31,71 +30,53 @@ public class Animator extends Thread
 
     private long lastTime = -1L;
 
-    public Animator(GestureImageView view, String threadName)
-    {
+    public Animator(GestureImageView view, String threadName) {
         super(threadName);
         this.view = view;
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
 
         running = true;
 
-        while (running)
-        {
+        while (running) {
 
-            while (active && animation != null)
-            {
+            while (active && animation != null) {
                 long time = System.currentTimeMillis();
                 active = animation.update(view, time - lastTime);
                 view.redraw();
                 lastTime = time;
 
-                while (active)
-                {
-                    try
-                    {
-                        if (view.waitForDraw(32))
-                        { // 30Htz
+                while (active) {
+                    try {
+                        if (view.waitForDraw(32)) { // 30Htz
                             break;
                         }
-                    }
-                    catch (InterruptedException ignore)
-                    {
+                    } catch (InterruptedException ignore) {
                         active = false;
                     }
                 }
             }
 
-            synchronized (this)
-            {
-                if (running)
-                {
-                    try
-                    {
+            synchronized (this) {
+                if (running) {
+                    try {
                         wait();
-                    }
-                    catch (InterruptedException ignore)
-                    {
-                    }
+                    } catch (InterruptedException ignore) {}
                 }
             }
         }
     }
 
-    public synchronized void finish()
-    {
+    public synchronized void finish() {
         running = false;
         active = false;
         notifyAll();
     }
 
-    public void play(Animation transformer)
-    {
-        if (active)
-        {
+    public void play(Animation transformer) {
+        if (active) {
             cancel();
         }
         this.animation = transformer;
@@ -103,15 +84,13 @@ public class Animator extends Thread
         activate();
     }
 
-    public synchronized void activate()
-    {
+    public synchronized void activate() {
         lastTime = System.currentTimeMillis();
         active = true;
         notifyAll();
     }
 
-    public void cancel()
-    {
+    public void cancel() {
         active = false;
     }
 }

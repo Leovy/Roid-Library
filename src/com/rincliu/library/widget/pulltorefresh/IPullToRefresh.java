@@ -23,8 +23,7 @@ import com.rincliu.library.widget.pulltorefresh.PullToRefreshBase.OnPullEventLis
 import com.rincliu.library.widget.pulltorefresh.PullToRefreshBase.OnRefreshListener;
 import com.rincliu.library.widget.pulltorefresh.PullToRefreshBase.State;
 
-public interface IPullToRefresh<T extends View>
-{
+public interface IPullToRefresh<T extends View> {
 
     /**
      * Get the mode that this view is currently in. This is only really useful

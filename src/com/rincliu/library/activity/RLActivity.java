@@ -29,8 +29,7 @@ import com.rincliu.library.common.reference.analytics.RLAnalyticsHelper;
 import com.rincliu.library.common.reference.feedback.RLFeedbackHelper;
 import com.rincliu.library.util.RLSysUtil;
 
-public class RLActivity extends RLFinalActivity
-{
+public class RLActivity extends RLFinalActivity {
     private boolean isEnableCrashHandler = true;
 
     private boolean isEnableAnalytics = false;
@@ -40,181 +39,151 @@ public class RLActivity extends RLFinalActivity
     private int displayRotation = 0;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         displayRotation = getWindowManager().getDefaultDisplay().getRotation();
 
         String enableCrashHandler = RLSysUtil.getApplicationMetaData(this, "ENABLE_CRASH_HANDLER");
-        if (enableCrashHandler != null && enableCrashHandler.equals("false"))
-        {
+        if (enableCrashHandler != null && enableCrashHandler.equals("false")) {
             isEnableCrashHandler = false;
         }
         String enableAnalytics = RLSysUtil.getApplicationMetaData(this, "ENABLE_ANALYTICS");
-        if (enableAnalytics != null && enableAnalytics.equals("true"))
-        {
+        if (enableAnalytics != null && enableAnalytics.equals("true")) {
             isEnableAnalytics = true;
         }
         String enableFeedback = RLSysUtil.getApplicationMetaData(this, "ENABLE_FEEDBACK");
-        if (enableFeedback != null && enableFeedback.equals("true"))
-        {
+        if (enableFeedback != null && enableFeedback.equals("true")) {
             isEnableFeedback = true;
         }
 
-        if (isEnableCrashHandler)
-        {
+        if (isEnableCrashHandler) {
             RLCrashHandler.getInstance().init(this);
         }
-        if (isEnableAnalytics)
-        {
+        if (isEnableAnalytics) {
             RLAnalyticsHelper.init(this, BuildConfig.DEBUG);
         }
-        if (isEnableFeedback)
-        {
+        if (isEnableFeedback) {
             RLFeedbackHelper.init(this, BuildConfig.DEBUG);
         }
 
-        if (getApplication() instanceof RLApplication)
-        {
+        if (getApplication() instanceof RLApplication) {
             ((RLApplication) getApplication()).setDisplayInfo(RLSysUtil.getDisplayInfo(this));
         }
     }
 
     @Override
-    protected void onNewIntent(Intent intent)
-    {
+    protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         displayRotation = getWindowManager().getDefaultDisplay().getRotation();
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
     }
 
     @Override
-    protected void onRestart()
-    {
+    protected void onRestart() {
         super.onRestart();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        if (isEnableAnalytics)
-        {
+        if (isEnableAnalytics) {
             RLAnalyticsHelper.onResume(this);
         }
     }
 
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
-        if (isEnableAnalytics)
-        {
+        if (isEnableAnalytics) {
             RLAnalyticsHelper.onPause(this);
         }
     }
 
     @Override
-    protected void onStop()
-    {
+    protected void onStop() {
         super.onStop();
     }
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         super.onDestroy();
     }
 
     @Override
-    public void startActivity(Intent intent)
-    {
+    public void startActivity(Intent intent) {
         super.startActivity(intent);
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
     }
 
     @Override
-    public void startActivityForResult(Intent intent, int requestCode)
-    {
+    public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
     }
 
     @Override
-    public void startActivityFromChild(Activity child, Intent intent, int requestCode)
-    {
+    public void startActivityFromChild(Activity child, Intent intent, int requestCode) {
         super.startActivityFromChild(child, intent, requestCode);
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
     }
 
     @Override
-    public void finish()
-    {
+    public void finish() {
         super.finish();
         overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
     }
 
     @Override
-    public void finishActivity(int requestCode)
-    {
+    public void finishActivity(int requestCode) {
         super.finishActivity(requestCode);
         overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
     }
 
     @Override
-    public void finishFromChild(Activity child)
-    {
+    public void finishFromChild(Activity child) {
         super.finishFromChild(child);
         overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
     }
 
     @Override
-    public void finishActivityFromChild(Activity child, int requestCode)
-    {
+    public void finishActivityFromChild(Activity child, int requestCode) {
         super.finishActivityFromChild(child, requestCode);
         overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig)
-    {
+    public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (getApplication() instanceof RLApplication)
-        {
+        if (getApplication() instanceof RLApplication) {
             ((RLApplication) getApplication()).setDisplayInfo(RLSysUtil.getDisplayInfo(this));
         }
         displayRotation = getWindowManager().getDefaultDisplay().getRotation();
     }
 
     @Override
-    public void onLowMemory()
-    {
+    public void onLowMemory() {
         super.onLowMemory();
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState)
-    {
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
     }
 
     /**
      * @return
      */
-    public int getDisplayRotation()
-    {
+    public int getDisplayRotation() {
         return displayRotation;
     }
 }

@@ -20,15 +20,13 @@ import android.content.Context;
 
 import com.umeng.analytics.MobclickAgent;
 
-public class RLAnalyticsHelper
-{
+public class RLAnalyticsHelper {
 
     /**
      * @param context
      * @param isDebug
      */
-    public static void init(Context context, boolean isDebug)
-    {
+    public static void init(Context context, boolean isDebug) {
         com.umeng.common.Log.LOG = isDebug;
         MobclickAgent.setDebugMode(isDebug);
         MobclickAgent.setAutoLocation(true);
@@ -43,16 +41,14 @@ public class RLAnalyticsHelper
     /**
      * @param context
      */
-    public static void onPause(Context context)
-    {
+    public static void onPause(Context context) {
         MobclickAgent.onPause(context);
     }
 
     /**
      * @param context
      */
-    public static void onResume(Context context)
-    {
+    public static void onResume(Context context) {
         MobclickAgent.onResume(context);
     }
 
@@ -60,8 +56,7 @@ public class RLAnalyticsHelper
      * @param context
      * @param event
      */
-    public static void onEvent(Context context, String event)
-    {
+    public static void onEvent(Context context, String event) {
         MobclickAgent.onEvent(context, event);
     }
 
@@ -70,8 +65,7 @@ public class RLAnalyticsHelper
      * @param event
      * @param map
      */
-    public static void onEvent(Context context, String event, HashMap<String, String> map)
-    {
+    public static void onEvent(Context context, String event, HashMap<String, String> map) {
         MobclickAgent.onEvent(context, event, map);
     }
 }

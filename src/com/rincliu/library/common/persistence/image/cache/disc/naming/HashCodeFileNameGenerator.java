@@ -21,11 +21,9 @@ package com.rincliu.library.common.persistence.image.cache.disc.naming;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.3.1
  */
-public class HashCodeFileNameGenerator implements FileNameGenerator
-{
+public class HashCodeFileNameGenerator implements FileNameGenerator {
     @Override
-    public String generate(String imageUri)
-    {
+    public String generate(String imageUri) {
         return String.valueOf(imageUri.hashCode());
     }
 }

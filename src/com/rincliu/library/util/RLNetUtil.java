@@ -32,30 +32,22 @@ import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-public class RLNetUtil
-{
+public class RLNetUtil {
     private static String LOG_TAG = "NetWorkHelper";
 
     /**
      * @param context
      * @return
      */
-    public static boolean isNetworkAvailable(Context context)
-    {
+    public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity == null)
-        {
+        if (connectivity == null) {
             Log.w(LOG_TAG, "couldn't get connectivity manager");
-        }
-        else
-        {
+        } else {
             NetworkInfo[] info = connectivity.getAllNetworkInfo();
-            if (info != null)
-            {
-                for (int i = 0; i < info.length; i++)
-                {
-                    if (info[i].isAvailable())
-                    {
+            if (info != null) {
+                for (int i = 0; i < info.length; i++) {
+                    if (info[i].isAvailable()) {
                         Log.d(LOG_TAG, "network is available");
                         return true;
                     }
@@ -70,31 +62,21 @@ public class RLNetUtil
      * @param context
      * @return
      */
-    public static boolean isNetworkRoaming(Context context)
-    {
+    public static boolean isNetworkRoaming(Context context) {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity == null)
-        {
+        if (connectivity == null) {
             Log.w(LOG_TAG, "couldn't get connectivity manager");
-        }
-        else
-        {
+        } else {
             NetworkInfo info = connectivity.getActiveNetworkInfo();
-            if (info != null && info.getType() == ConnectivityManager.TYPE_MOBILE)
-            {
+            if (info != null && info.getType() == ConnectivityManager.TYPE_MOBILE) {
                 TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-                if (tm != null && tm.isNetworkRoaming())
-                {
+                if (tm != null && tm.isNetworkRoaming()) {
                     Log.d(LOG_TAG, "network is roaming");
                     return true;
-                }
-                else
-                {
+                } else {
                     Log.d(LOG_TAG, "network is not roaming");
                 }
-            }
-            else
-            {
+            } else {
                 Log.d(LOG_TAG, "not using mobile network");
             }
         }
@@ -106,8 +88,7 @@ public class RLNetUtil
      * @return
      * @throws Exception
      */
-    public static boolean isMobileDataEnable(Context context) throws Exception
-    {
+    public static boolean isMobileDataEnable(Context context) throws Exception {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         boolean isMobileDataEnable = false;
         isMobileDataEnable = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting();
@@ -119,29 +100,24 @@ public class RLNetUtil
      * @return
      * @throws Exception
      */
-    public static boolean isWifiDataEnable(Context context) throws Exception
-    {
+    public static boolean isWifiDataEnable(Context context) throws Exception {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         boolean isWifiDataEnable = false;
         isWifiDataEnable = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting();
         return isWifiDataEnable;
     }
-    
+
     /**
      * Returns MAC address of the given interface name.
      * 
      * @param interfaceName eth0, wlan0 or NULL=use first interface
      * @return mac address or empty string
      */
-    public static String getMACAddress(String interfaceName)
-    {
-        try
-        {
+    public static String getMACAddress(String interfaceName) {
+        try {
             List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface intf : interfaces)
-            {
-                if (interfaceName != null)
-                {
+            for (NetworkInterface intf : interfaces) {
+                if (interfaceName != null) {
                     if (!intf.getName().equalsIgnoreCase(interfaceName))
                         continue;
                 }
@@ -155,22 +131,20 @@ public class RLNetUtil
                     buf.deleteCharAt(buf.length() - 1);
                 return buf.toString();
             }
-        }
-        catch (Exception ex)
-        {
-        } // for now eat exceptions
+        } catch (Exception ex) {} // for now eat exceptions
         return "";
-//        try
-//        { // this is so Linux hack return
-//            loadFileAsString("/sys/class/net/" + interfaceName + "/address").toUpperCase().trim();
-//        }
-//        catch (IOException e)
-//        {
-//            e.printStackTrace();
-//            return null;
-//        }
+        // try
+        // { // this is so Linux hack return
+        // loadFileAsString("/sys/class/net/" + interfaceName +
+        // "/address").toUpperCase().trim();
+        // }
+        // catch (IOException e)
+        // {
+        // e.printStackTrace();
+        // return null;
+        // }
     }
-    
+
     /**
      * Load UTF8withBOM or any ansi text file.
      * 
@@ -178,43 +152,47 @@ public class RLNetUtil
      * @return
      * @throws java.io.IOException
      */
-//    private static String loadFileAsString(String filename) throws java.io.IOException
-//    {
-//        final int BUFLEN = 1024;
-//        BufferedInputStream is = new BufferedInputStream(new FileInputStream(filename), BUFLEN);
-//        try
-//        {
-//            ByteArrayOutputStream baos = new ByteArrayOutputStream(BUFLEN);
-//            byte[] bytes = new byte[BUFLEN];
-//            boolean isUTF8 = false;
-//            int read, count = 0;
-//            while ((read = is.read(bytes)) != -1)
-//            {
-//                if (count == 0 && bytes[0] == (byte) 0xEF && bytes[1] == (byte) 0xBB && bytes[2] == (byte) 0xBF)
-//                {
-//                    isUTF8 = true;
-//                    baos.write(bytes, 3, read - 3); // drop UTF8 bom marker
-//                }
-//                else
-//                {
-//                    baos.write(bytes, 0, read);
-//                }
-//                count += read;
-//            }
-//            return isUTF8 ? new String(baos.toByteArray(), "UTF-8") : new String(baos.toByteArray());
-//        }
-//        finally
-//        {
-//            try
-//            {
-//                is.close();
-//            }
-//            catch (Exception e)
-//            {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+    // private static String loadFileAsString(String filename) throws
+    // java.io.IOException
+    // {
+    // final int BUFLEN = 1024;
+    // BufferedInputStream is = new BufferedInputStream(new
+    // FileInputStream(filename), BUFLEN);
+    // try
+    // {
+    // ByteArrayOutputStream baos = new ByteArrayOutputStream(BUFLEN);
+    // byte[] bytes = new byte[BUFLEN];
+    // boolean isUTF8 = false;
+    // int read, count = 0;
+    // while ((read = is.read(bytes)) != -1)
+    // {
+    // if (count == 0 && bytes[0] == (byte) 0xEF && bytes[1] == (byte) 0xBB &&
+    // bytes[2] == (byte) 0xBF)
+    // {
+    // isUTF8 = true;
+    // baos.write(bytes, 3, read - 3); // drop UTF8 bom marker
+    // }
+    // else
+    // {
+    // baos.write(bytes, 0, read);
+    // }
+    // count += read;
+    // }
+    // return isUTF8 ? new String(baos.toByteArray(), "UTF-8") : new
+    // String(baos.toByteArray());
+    // }
+    // finally
+    // {
+    // try
+    // {
+    // is.close();
+    // }
+    // catch (Exception e)
+    // {
+    // e.printStackTrace();
+    // }
+    // }
+    // }
 
     /**
      * Get IP address from first non-localhost interface
@@ -222,29 +200,20 @@ public class RLNetUtil
      * @param ipv4 true=return ipv4, false=return ipv6
      * @return address or empty string
      */
-    public static String getIPAddress(boolean useIPv4)
-    {
-        try
-        {
+    public static String getIPAddress(boolean useIPv4) {
+        try {
             List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface intf : interfaces)
-            {
+            for (NetworkInterface intf : interfaces) {
                 List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
-                for (InetAddress addr : addrs)
-                {
-                    if (!addr.isLoopbackAddress())
-                    {
+                for (InetAddress addr : addrs) {
+                    if (!addr.isLoopbackAddress()) {
                         String sAddr = addr.getHostAddress().toUpperCase();
                         boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr);
-                        if (useIPv4)
-                        {
+                        if (useIPv4) {
                             if (isIPv4)
                                 return sAddr;
-                        }
-                        else
-                        {
-                            if (!isIPv4)
-                            {
+                        } else {
+                            if (!isIPv4) {
                                 int delim = sAddr.indexOf('%'); // drop ip6
                                                                 // port suffix
                                 return delim < 0 ? sAddr : sAddr.substring(0, delim);
@@ -253,9 +222,7 @@ public class RLNetUtil
                     }
                 }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return "";

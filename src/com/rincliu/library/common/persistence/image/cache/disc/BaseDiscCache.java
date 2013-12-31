@@ -28,8 +28,7 @@ import com.rincliu.library.common.persistence.image.core.DefaultConfigurationFac
  * @see FileNameGenerator
  * @since 1.0.0
  */
-public abstract class BaseDiscCache implements DiscCacheAware
-{
+public abstract class BaseDiscCache implements DiscCacheAware {
 
     private static final String ERROR_ARG_NULL = "\"%s\" argument must be not null";
 
@@ -37,19 +36,15 @@ public abstract class BaseDiscCache implements DiscCacheAware
 
     private final FileNameGenerator fileNameGenerator;
 
-    public BaseDiscCache(File cacheDir)
-    {
+    public BaseDiscCache(File cacheDir) {
         this(cacheDir, DefaultConfigurationFactory.createFileNameGenerator());
     }
 
-    public BaseDiscCache(File cacheDir, FileNameGenerator fileNameGenerator)
-    {
-        if (cacheDir == null)
-        {
+    public BaseDiscCache(File cacheDir, FileNameGenerator fileNameGenerator) {
+        if (cacheDir == null) {
             throw new IllegalArgumentException(String.format(ERROR_ARG_NULL, "cacheDir"));
         }
-        if (fileNameGenerator == null)
-        {
+        if (fileNameGenerator == null) {
             throw new IllegalArgumentException(String.format(ERROR_ARG_NULL, "fileNameGenerator"));
         }
 
@@ -58,20 +53,16 @@ public abstract class BaseDiscCache implements DiscCacheAware
     }
 
     @Override
-    public File get(String key)
-    {
+    public File get(String key) {
         String fileName = fileNameGenerator.generate(key);
         return new File(cacheDir, fileName);
     }
 
     @Override
-    public void clear()
-    {
+    public void clear() {
         File[] files = cacheDir.listFiles();
-        if (files != null)
-        {
-            for (File f : files)
-            {
+        if (files != null) {
+            for (File f : files) {
                 f.delete();
             }
         }

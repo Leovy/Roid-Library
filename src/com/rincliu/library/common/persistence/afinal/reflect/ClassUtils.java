@@ -28,8 +28,7 @@ import com.rincliu.library.common.persistence.afinal.db.table.OneToMany;
 import com.rincliu.library.common.persistence.afinal.db.table.Property;
 import com.rincliu.library.common.persistence.afinal.exception.DbException;
 
-public class ClassUtils
-{
+public class ClassUtils {
 
     /**
      * 根据实体类 获得 实体类对应的表名
@@ -37,19 +36,16 @@ public class ClassUtils
      * @param entity
      * @return
      */
-    public static String getTableName(Class<?> clazz)
-    {
+    public static String getTableName(Class<?> clazz) {
         Table table = clazz.getAnnotation(Table.class);
-        if (table == null || table.name().trim().length() == 0)
-        {
+        if (table == null || table.name().trim().length() == 0) {
             // 当没有注解的时候默认用类的名称作为表名,并把点（.）替换为下划线(_)
             return clazz.getName().replace('.', '_');
         }
         return table.name();
     }
 
-    public static Object getPrimaryKeyValue(Object entity)
-    {
+    public static Object getPrimaryKeyValue(Object entity) {
         return FieldUtils.getFieldValue(entity, ClassUtils.getPrimaryKeyField(entity.getClass()));
     }
 
@@ -59,48 +55,37 @@ public class ClassUtils
      * @param entity
      * @return
      */
-    public static String getPrimaryKeyColumn(Class<?> clazz)
-    {
+    public static String getPrimaryKeyColumn(Class<?> clazz) {
         String primaryKey = null;
         Field[] fields = clazz.getDeclaredFields();
-        if (fields != null)
-        {
+        if (fields != null) {
             Id idAnnotation = null;
             Field idField = null;
 
-            for (Field field : fields)
-            { // 获取ID注解
+            for (Field field : fields) { // 获取ID注解
                 idAnnotation = field.getAnnotation(Id.class);
-                if (idAnnotation != null)
-                {
+                if (idAnnotation != null) {
                     idField = field;
                     break;
                 }
             }
 
-            if (idAnnotation != null)
-            { // 有ID注解
+            if (idAnnotation != null) { // 有ID注解
                 primaryKey = idAnnotation.column();
                 if (primaryKey == null || primaryKey.trim().length() == 0)
                     primaryKey = idField.getName();
-            }
-            else
-            { // 没有ID注解,默认去找 _id 和 id 为主键，优先寻找 _id
-                for (Field field : fields)
-                {
+            } else { // 没有ID注解,默认去找 _id 和 id 为主键，优先寻找 _id
+                for (Field field : fields) {
                     if ("_id".equals(field.getName()))
                         return "_id";
                 }
 
-                for (Field field : fields)
-                {
+                for (Field field : fields) {
                     if ("id".equals(field.getName()))
                         return "id";
                 }
             }
-        }
-        else
-        {
+        } else {
             throw new RuntimeException("this model[" + clazz + "] has no field");
         }
         return primaryKey;
@@ -112,49 +97,37 @@ public class ClassUtils
      * @param entity
      * @return
      */
-    public static Field getPrimaryKeyField(Class<?> clazz)
-    {
+    public static Field getPrimaryKeyField(Class<?> clazz) {
         Field primaryKeyField = null;
         Field[] fields = clazz.getDeclaredFields();
-        if (fields != null)
-        {
+        if (fields != null) {
 
-            for (Field field : fields)
-            { // 获取ID注解
-                if (field.getAnnotation(Id.class) != null)
-                {
+            for (Field field : fields) { // 获取ID注解
+                if (field.getAnnotation(Id.class) != null) {
                     primaryKeyField = field;
                     break;
                 }
             }
 
-            if (primaryKeyField == null)
-            { // 没有ID注解
-                for (Field field : fields)
-                {
-                    if ("_id".equals(field.getName()))
-                    {
+            if (primaryKeyField == null) { // 没有ID注解
+                for (Field field : fields) {
+                    if ("_id".equals(field.getName())) {
                         primaryKeyField = field;
                         break;
                     }
                 }
             }
 
-            if (primaryKeyField == null)
-            { // 如果没有_id的字段
-                for (Field field : fields)
-                {
-                    if ("id".equals(field.getName()))
-                    {
+            if (primaryKeyField == null) { // 如果没有_id的字段
+                for (Field field : fields) {
+                    if ("id".equals(field.getName())) {
                         primaryKeyField = field;
                         break;
                     }
                 }
             }
 
-        }
-        else
-        {
+        } else {
             throw new RuntimeException("this model[" + clazz + "] has no field");
         }
         return primaryKeyField;
@@ -166,8 +139,7 @@ public class ClassUtils
      * @param entity
      * @return
      */
-    public static String getPrimaryKeyFieldName(Class<?> clazz)
-    {
+    public static String getPrimaryKeyFieldName(Class<?> clazz) {
         Field f = getPrimaryKeyField(clazz);
         return f == null ? null : f.getName();
     }
@@ -179,21 +151,16 @@ public class ClassUtils
      * @param selective 是否忽略 值为null的字段
      * @return
      */
-    public static List<Property> getPropertyList(Class<?> clazz)
-    {
+    public static List<Property> getPropertyList(Class<?> clazz) {
 
         List<Property> plist = new ArrayList<Property>();
-        try
-        {
+        try {
             Field[] fs = clazz.getDeclaredFields();
             String primaryKeyFieldName = getPrimaryKeyFieldName(clazz);
-            for (Field f : fs)
-            {
+            for (Field f : fs) {
                 // 必须是基本数据类型和没有标瞬时态的字段
-                if (!FieldUtils.isTransient(f))
-                {
-                    if (FieldUtils.isBaseDateType(f))
-                    {
+                if (!FieldUtils.isTransient(f)) {
+                    if (FieldUtils.isBaseDateType(f)) {
 
                         if (f.getName().equals(primaryKeyFieldName)) // 过滤主键
                             continue;
@@ -213,9 +180,7 @@ public class ClassUtils
                 }
             }
             return plist;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
@@ -227,17 +192,13 @@ public class ClassUtils
      * @param selective 是否忽略 值为null的字段
      * @return
      */
-    public static List<ManyToOne> getManyToOneList(Class<?> clazz)
-    {
+    public static List<ManyToOne> getManyToOneList(Class<?> clazz) {
 
         List<ManyToOne> mList = new ArrayList<ManyToOne>();
-        try
-        {
+        try {
             Field[] fs = clazz.getDeclaredFields();
-            for (Field f : fs)
-            {
-                if (!FieldUtils.isTransient(f) && FieldUtils.isManyToOne(f))
-                {
+            for (Field f : fs) {
+                if (!FieldUtils.isTransient(f) && FieldUtils.isManyToOne(f)) {
 
                     ManyToOne mto = new ManyToOne();
                     mto.setManyClass(f.getType());
@@ -251,9 +212,7 @@ public class ClassUtils
                 }
             }
             return mList;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
@@ -265,17 +224,13 @@ public class ClassUtils
      * @param selective 是否忽略 值为null的字段
      * @return
      */
-    public static List<OneToMany> getOneToManyList(Class<?> clazz)
-    {
+    public static List<OneToMany> getOneToManyList(Class<?> clazz) {
 
         List<OneToMany> oList = new ArrayList<OneToMany>();
-        try
-        {
+        try {
             Field[] fs = clazz.getDeclaredFields();
-            for (Field f : fs)
-            {
-                if (!FieldUtils.isTransient(f) && FieldUtils.isOneToMany(f))
-                {
+            for (Field f : fs) {
+                if (!FieldUtils.isTransient(f) && FieldUtils.isOneToMany(f)) {
 
                     OneToMany otm = new OneToMany();
 
@@ -284,15 +239,12 @@ public class ClassUtils
 
                     Type type = f.getGenericType();
 
-                    if (type instanceof ParameterizedType)
-                    {
+                    if (type instanceof ParameterizedType) {
                         ParameterizedType pType = (ParameterizedType) f.getGenericType();
                         Class<?> pClazz = (Class<?>) pType.getActualTypeArguments()[0];
                         if (pClazz != null)
                             otm.setOneClass(pClazz);
-                    }
-                    else
-                    {
+                    } else {
                         throw new DbException("getOneToManyList Exception:" + f.getName() + "'s type is null");
                     }
 
@@ -304,9 +256,7 @@ public class ClassUtils
                 }
             }
             return oList;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e);
         }
     }

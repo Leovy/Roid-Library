@@ -18,8 +18,7 @@ package com.rincliu.library.widget.gestureimageview;
 /**
  * @author Jason Polites
  */
-public class FlingAnimation implements Animation
-{
+public class FlingAnimation implements Animation {
 
     private float velocityX;
 
@@ -38,8 +37,7 @@ public class FlingAnimation implements Animation
      * , long)
      */
     @Override
-    public boolean update(GestureImageView view, long time)
-    {
+    public boolean update(GestureImageView view, long time) {
         float seconds = (float) time / 1000.0f;
 
         float dx = velocityX * seconds;
@@ -50,12 +48,10 @@ public class FlingAnimation implements Animation
 
         boolean active = (Math.abs(velocityX) > threshold && Math.abs(velocityY) > threshold);
 
-        if (listener != null)
-        {
+        if (listener != null) {
             listener.onMove(dx, dy);
 
-            if (!active)
-            {
+            if (!active) {
                 listener.onComplete();
             }
         }
@@ -63,23 +59,19 @@ public class FlingAnimation implements Animation
         return active;
     }
 
-    public void setVelocityX(float velocityX)
-    {
+    public void setVelocityX(float velocityX) {
         this.velocityX = velocityX;
     }
 
-    public void setVelocityY(float velocityY)
-    {
+    public void setVelocityY(float velocityY) {
         this.velocityY = velocityY;
     }
 
-    public void setFactor(float factor)
-    {
+    public void setFactor(float factor) {
         this.factor = factor;
     }
 
-    public void setListener(FlingAnimationListener listener)
-    {
+    public void setListener(FlingAnimationListener listener) {
         this.listener = listener;
     }
 }

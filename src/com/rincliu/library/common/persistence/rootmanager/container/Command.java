@@ -6,8 +6,7 @@ import java.io.OutputStream;
 import com.rincliu.library.common.persistence.rootmanager.Constants;
 import com.rincliu.library.common.persistence.rootmanager.utils.RootUtils;
 
-public abstract class Command
-{
+public abstract class Command {
 
     private String[] commands;
 
@@ -25,27 +24,22 @@ public abstract class Command
 
     public abstract void onFinished(int id);
 
-    public Command(String... commands)
-    {
+    public Command(String... commands) {
         this(Constants.COMMAND_TIMEOUT, commands);
     }
 
-    public Command(int timeout, String... commands)
-    {
+    public Command(int timeout, String... commands) {
         this.id = RootUtils.generateCommandID();
         this.timeout = timeout;
         this.commands = commands;
     }
 
-    public int getID()
-    {
+    public int getID() {
         return id;
     }
 
-    public void setExitCode(int code)
-    {
-        synchronized (this)
-        {
+    public void setExitCode(int code) {
+        synchronized (this) {
             exitCode = code;
             isFinished = true;
             onFinished(id);
@@ -53,30 +47,22 @@ public abstract class Command
         }
     }
 
-    public void terminate(String reason)
-    {
-        try
-        {
+    public void terminate(String reason) {
+        try {
             RootUtils.Log("Terminate all shells with reason " + reason);
             Shell.closeAll();
             setExitCode(-1);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
             RootUtils.Log("Terminate all shells and io exception happens");
         }
     }
 
-    public int waitForFinish(long timeout) throws InterruptedException
-    {
-        synchronized (this)
-        {
-            while (!isFinished)
-            {
+    public int waitForFinish(long timeout) throws InterruptedException {
+        synchronized (this) {
+            while (!isFinished) {
                 this.wait(timeout);
-                if (!isFinished)
-                {
+                if (!isFinished) {
                     isFinished = true;
                     RootUtils.Log("Timeout Exception has occurred.");
                     terminate("Timeout Exception");
@@ -86,25 +72,20 @@ public abstract class Command
         return exitCode;
     }
 
-    public int waitForFinish() throws InterruptedException
-    {
-        synchronized (this)
-        {
+    public int waitForFinish() throws InterruptedException {
+        synchronized (this) {
             waitForFinish(timeout);
         }
         return exitCode;
     }
 
-    public String getCommand()
-    {
-        if (commands == null || commands.length == 0)
-        {
+    public String getCommand() {
+        if (commands == null || commands.length == 0) {
             return "";
         }
 
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < commands.length; i++)
-        {
+        for (int i = 0; i < commands.length; i++) {
             sb.append(commands[i]);
             sb.append('\n');
         }
@@ -113,8 +94,7 @@ public abstract class Command
         return command;
     }
 
-    public void writeCommand(OutputStream out) throws IOException
-    {
+    public void writeCommand(OutputStream out) throws IOException {
         out.write(getCommand().getBytes());
     }
 

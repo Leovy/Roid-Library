@@ -39,8 +39,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.7.1
  */
-class ImageLoaderEngine
-{
+class ImageLoaderEngine {
 
     final ImageLoaderConfiguration configuration;
 
@@ -60,8 +59,7 @@ class ImageLoaderEngine
 
     private final AtomicBoolean slowNetwork = new AtomicBoolean(false);
 
-    ImageLoaderEngine(ImageLoaderConfiguration configuration)
-    {
+    ImageLoaderEngine(ImageLoaderConfiguration configuration) {
         this.configuration = configuration;
 
         taskExecutor = configuration.taskExecutor;
@@ -71,21 +69,15 @@ class ImageLoaderEngine
     }
 
     /** Submits task to execution pool */
-    void submit(final LoadAndDisplayImageTask task)
-    {
-        taskDistributor.execute(new Runnable()
-        {
+    void submit(final LoadAndDisplayImageTask task) {
+        taskDistributor.execute(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 boolean isImageCachedOnDisc = configuration.discCache.get(task.getLoadingUri()).exists();
                 initExecutorsIfNeed();
-                if (isImageCachedOnDisc)
-                {
+                if (isImageCachedOnDisc) {
                     taskExecutorForCachedImages.execute(task);
-                }
-                else
-                {
+                } else {
                     taskExecutor.execute(task);
                 }
             }
@@ -93,27 +85,22 @@ class ImageLoaderEngine
     }
 
     /** Submits task to execution pool */
-    void submit(ProcessAndDisplayImageTask task)
-    {
+    void submit(ProcessAndDisplayImageTask task) {
         initExecutorsIfNeed();
         taskExecutorForCachedImages.execute(task);
     }
 
-    private void initExecutorsIfNeed()
-    {
-        if (!configuration.customExecutor && ((ExecutorService) taskExecutor).isShutdown())
-        {
+    private void initExecutorsIfNeed() {
+        if (!configuration.customExecutor && ((ExecutorService) taskExecutor).isShutdown()) {
             taskExecutor = createTaskExecutor();
         }
         if (!configuration.customExecutorForCachedImages
-                && ((ExecutorService) taskExecutorForCachedImages).isShutdown())
-        {
+                && ((ExecutorService) taskExecutorForCachedImages).isShutdown()) {
             taskExecutorForCachedImages = createTaskExecutor();
         }
     }
 
-    private Executor createTaskExecutor()
-    {
+    private Executor createTaskExecutor() {
         return DefaultConfigurationFactory.createExecutor(configuration.threadPoolSize, configuration.threadPriority,
                 configuration.tasksProcessingType);
     }
@@ -122,8 +109,7 @@ class ImageLoaderEngine
      * Returns URI of image which is loading at this moment into passed
      * {@link ImageView}
      */
-    String getLoadingUriForView(ImageView imageView)
-    {
+    String getLoadingUriForView(ImageView imageView) {
         return cacheKeysForImageViews.get(imageView.hashCode());
     }
 
@@ -131,8 +117,7 @@ class ImageLoaderEngine
      * Associates <b>memoryCacheKey</b> with <b>imageView</b>. Then it helps
      * to define image URI is loaded into ImageView at exact moment.
      */
-    void prepareDisplayTaskFor(ImageView imageView, String memoryCacheKey)
-    {
+    void prepareDisplayTaskFor(ImageView imageView, String memoryCacheKey) {
         cacheKeysForImageViews.put(imageView.hashCode(), memoryCacheKey);
     }
 
@@ -143,8 +128,7 @@ class ImageLoaderEngine
      * @param imageView {@link ImageView} for which display task will be
      *            cancelled
      */
-    void cancelDisplayTaskFor(ImageView imageView)
-    {
+    void cancelDisplayTaskFor(ImageView imageView) {
         cacheKeysForImageViews.remove(imageView.hashCode());
     }
 
@@ -159,8 +143,7 @@ class ImageLoaderEngine
      *            download images from the network; <b>false</b> - to allow
      *            engine to download images from network.
      */
-    void denyNetworkDownloads(boolean denyNetworkDownloads)
-    {
+    void denyNetworkDownloads(boolean denyNetworkDownloads) {
         networkDenied.set(denyNetworkDownloads);
     }
 
@@ -174,8 +157,7 @@ class ImageLoaderEngine
      *            {@link FlushedInputStream} for network downloads;
      *            <b>false</b> - otherwise.
      */
-    void handleSlowNetwork(boolean handleSlowNetwork)
-    {
+    void handleSlowNetwork(boolean handleSlowNetwork) {
         slowNetwork.set(handleSlowNetwork);
     }
 
@@ -184,8 +166,7 @@ class ImageLoaderEngine
      * ImageLoader is {@link #resume() resumed}.<br />
      * Already running tasks are not paused.
      */
-    void pause()
-    {
+    void pause() {
         paused.set(true);
     }
 
@@ -193,10 +174,8 @@ class ImageLoaderEngine
      * Resumes engine work. Paused "load&display" tasks will continue its
      * work.
      */
-    void resume()
-    {
-        synchronized (paused)
-        {
+    void resume() {
+        synchronized (paused) {
             paused.set(false);
             paused.notifyAll();
         }
@@ -206,14 +185,11 @@ class ImageLoaderEngine
      * Stops engine, cancels all running and scheduled display image tasks.
      * Clears internal data.
      */
-    void stop()
-    {
-        if (!configuration.customExecutor)
-        {
+    void stop() {
+        if (!configuration.customExecutor) {
             ((ExecutorService) taskExecutor).shutdownNow();
         }
-        if (!configuration.customExecutorForCachedImages)
-        {
+        if (!configuration.customExecutorForCachedImages) {
             ((ExecutorService) taskExecutorForCachedImages).shutdownNow();
         }
 
@@ -221,29 +197,24 @@ class ImageLoaderEngine
         uriLocks.clear();
     }
 
-    ReentrantLock getLockForUri(String uri)
-    {
+    ReentrantLock getLockForUri(String uri) {
         ReentrantLock lock = uriLocks.get(uri);
-        if (lock == null)
-        {
+        if (lock == null) {
             lock = new ReentrantLock();
             uriLocks.put(uri, lock);
         }
         return lock;
     }
 
-    AtomicBoolean getPause()
-    {
+    AtomicBoolean getPause() {
         return paused;
     }
 
-    boolean isNetworkDenied()
-    {
+    boolean isNetworkDenied() {
         return networkDenied.get();
     }
 
-    boolean isSlowNetwork()
-    {
+    boolean isSlowNetwork() {
         return slowNetwork.get();
     }
 }

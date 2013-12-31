@@ -21,26 +21,21 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ScrollView;
 
-public class RLScrollView extends ScrollView
-{
+public class RLScrollView extends ScrollView {
 
-    public RLScrollView(Context context)
-    {
+    public RLScrollView(Context context) {
         super(context);
     }
 
-    public RLScrollView(Context context, AttributeSet attrs)
-    {
+    public RLScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public RLScrollView(Context context, AttributeSet attrs, int defStyle)
-    {
+    public RLScrollView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
-    public interface OnScrollChangedListener
-    {
+    public interface OnScrollChangedListener {
         public void onScrollChanged(int x, int y, int oldxX, int oldY);
     }
 
@@ -49,17 +44,14 @@ public class RLScrollView extends ScrollView
     /**
      * @param onScrollChangedListener
      */
-    public void setOnScrollListener(OnScrollChangedListener onScrollChangedListener)
-    {
+    public void setOnScrollListener(OnScrollChangedListener onScrollChangedListener) {
         this.onScrollChangedListener = onScrollChangedListener;
     }
 
     @Override
-    protected void onScrollChanged(int x, int y, int oldX, int oldY)
-    {
+    protected void onScrollChanged(int x, int y, int oldX, int oldY) {
         super.onScrollChanged(x, y, oldX, oldY);
-        if (onScrollChangedListener != null)
-        {
+        if (onScrollChangedListener != null) {
             onScrollChangedListener.onScrollChanged(x, y, oldX, oldY);
         }
     }
@@ -68,10 +60,8 @@ public class RLScrollView extends ScrollView
      * @param child
      * @return
      */
-    public boolean isChildVisible(View child)
-    {
-        if (child == null)
-        {
+    public boolean isChildVisible(View child) {
+        if (child == null) {
             return false;
         }
         Rect scrollBounds = new Rect();
@@ -82,14 +72,12 @@ public class RLScrollView extends ScrollView
     /**
      * @return
      */
-    public boolean isAtTop()
-    {
+    public boolean isAtTop() {
         return getScrollY() <= 0;
     }
 
     @Deprecated
-    public boolean isAtBottom()
-    {
+    public boolean isAtBottom() {
         return getChildAt(getChildCount() - 1).getBottom() + getPaddingBottom() == getHeight() + getScrollY();
     }
 }

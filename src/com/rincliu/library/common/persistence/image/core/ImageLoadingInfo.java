@@ -34,8 +34,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @see ImageLoadingListener
  * @since 1.3.1
  */
-final class ImageLoadingInfo
-{
+final class ImageLoadingInfo {
 
     final String uri;
 
@@ -52,8 +51,7 @@ final class ImageLoadingInfo
     final ReentrantLock loadFromUriLock;
 
     public ImageLoadingInfo(String uri, ImageView imageView, ImageSize targetSize, String memoryCacheKey,
-            DisplayImageOptions options, ImageLoadingListener listener, ReentrantLock loadFromUriLock)
-    {
+            DisplayImageOptions options, ImageLoadingListener listener, ReentrantLock loadFromUriLock) {
         this.uri = uri;
         this.imageViewRef = new WeakReference<ImageView>(imageView);
         this.targetSize = targetSize;

@@ -20,14 +20,10 @@ package com.rincliu.library.common.persistence.zxing.decoding;
  * This class provides the constants to use when sending an Intent to Barcode
  * Scanner. These strings are effectively API and cannot be changed.
  */
-public final class Intents
-{
-    private Intents()
-    {
-    }
+public final class Intents {
+    private Intents() {}
 
-    public static final class Scan
-    {
+    public static final class Scan {
         /**
          * Send this intent to open the Barcodes app in scanning mode, find a
          * barcode, and return the results.
@@ -100,13 +96,10 @@ public final class Intents
          */
         public static final String SAVE_HISTORY = "SAVE_HISTORY";
 
-        private Scan()
-        {
-        }
+        private Scan() {}
     }
 
-    public static final class Encode
-    {
+    public static final class Encode {
         /**
          * Send this intent to encode a piece of data as a QR code and display
          * it full screen, so that another person can scan the barcode from
@@ -135,13 +128,10 @@ public final class Intents
          */
         public static final String FORMAT = "ENCODE_FORMAT";
 
-        private Encode()
-        {
-        }
+        private Encode() {}
     }
 
-    public static final class SearchBookContents
-    {
+    public static final class SearchBookContents {
         /**
          * Use Google Book Search to search the contents of the book provided.
          */
@@ -157,13 +147,10 @@ public final class Intents
          */
         public static final String QUERY = "QUERY";
 
-        private SearchBookContents()
-        {
-        }
+        private SearchBookContents() {}
     }
 
-    public static final class WifiConnect
-    {
+    public static final class WifiConnect {
         /**
          * Internal intent used to trigger connection to a wi-fi network.
          */
@@ -184,13 +171,10 @@ public final class Intents
          */
         public static final String PASSWORD = "PASSWORD";
 
-        private WifiConnect()
-        {
-        }
+        private WifiConnect() {}
     }
 
-    public static final class Share
-    {
+    public static final class Share {
         /**
          * Give the user a choice of items to encode as a barcode, then render
          * it as a QR Code and display onscreen for a friend to scan with
@@ -198,8 +182,6 @@ public final class Intents
          */
         public static final String ACTION = "com.google.zxing.client.android.SHARE";
 
-        private Share()
-        {
-        }
+        private Share() {}
     }
 }

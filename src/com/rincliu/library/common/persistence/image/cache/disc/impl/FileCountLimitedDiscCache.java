@@ -30,8 +30,7 @@ import java.io.File;
  * @see LimitedDiscCache
  * @since 1.0.0
  */
-public class FileCountLimitedDiscCache extends LimitedDiscCache
-{
+public class FileCountLimitedDiscCache extends LimitedDiscCache {
     /**
      * @param cacheDir Directory for file caching. <b>Important:</b> Specify
      *            separate folder for cached files. It's needed for right
@@ -40,8 +39,7 @@ public class FileCountLimitedDiscCache extends LimitedDiscCache
      *            cache directory exceeds this limit then file with the most
      *            oldest last usage date will be deleted.
      */
-    public FileCountLimitedDiscCache(File cacheDir, int maxFileCount)
-    {
+    public FileCountLimitedDiscCache(File cacheDir, int maxFileCount) {
         this(cacheDir, DefaultConfigurationFactory.createFileNameGenerator(), maxFileCount);
     }
 
@@ -54,14 +52,12 @@ public class FileCountLimitedDiscCache extends LimitedDiscCache
      *            cache directory exceeds this limit then file with the most
      *            oldest last usage date will be deleted.
      */
-    public FileCountLimitedDiscCache(File cacheDir, FileNameGenerator fileNameGenerator, int maxFileCount)
-    {
+    public FileCountLimitedDiscCache(File cacheDir, FileNameGenerator fileNameGenerator, int maxFileCount) {
         super(cacheDir, fileNameGenerator, maxFileCount);
     }
 
     @Override
-    protected int getSize(File file)
-    {
+    protected int getSize(File file) {
         return 1;
     }
 }

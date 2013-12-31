@@ -23,8 +23,7 @@ import android.os.Looper;
 import com.rincliu.library.R;
 import com.rincliu.library.util.RLUiUtil;
 
-public class RLCrashHandler implements UncaughtExceptionHandler
-{
+public class RLCrashHandler implements UncaughtExceptionHandler {
     private Context mContext;
 
     private static RLCrashHandler instance;
@@ -32,10 +31,8 @@ public class RLCrashHandler implements UncaughtExceptionHandler
     /**
      * @return
      */
-    public static RLCrashHandler getInstance()
-    {
-        if (instance == null)
-        {
+    public static RLCrashHandler getInstance() {
+        if (instance == null) {
             instance = new RLCrashHandler();
         }
         return instance;
@@ -44,32 +41,25 @@ public class RLCrashHandler implements UncaughtExceptionHandler
     /**
      * @param context
      */
-    public void init(Context context)
-    {
+    public void init(Context context) {
         mContext = context;
         Thread.setDefaultUncaughtExceptionHandler(this);
     }
 
     @Override
-    public void uncaughtException(Thread thread, final Throwable ex)
-    {
+    public void uncaughtException(Thread thread, final Throwable ex) {
         ex.printStackTrace();
-        new Thread()
-        {
+        new Thread() {
             @Override
-            public void run()
-            {
+            public void run() {
                 Looper.prepare();
                 RLUiUtil.toast(mContext, R.string.exception_occured);
                 Looper.loop();
             }
         }.start();
-        try
-        {
+        try {
             Thread.sleep(3000);
-        }
-        catch (InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
         // Intent intent=new Intent(Intent.ACTION_MAIN);

@@ -19,8 +19,7 @@ import java.io.Serializable;
 
 import android.graphics.drawable.Drawable;
 
-public class RLAppInfo implements Serializable
-{
+public class RLAppInfo implements Serializable {
     private static final long serialVersionUID = 30332476274311364L;
 
     private String packageName;
@@ -51,143 +50,115 @@ public class RLAppInfo implements Serializable
 
     private String nativeLibDir;
 
-    public String getPackageName()
-    {
+    public String getPackageName() {
         return packageName;
     }
 
-    public void setPackageName(String packageName)
-    {
+    public void setPackageName(String packageName) {
         this.packageName = packageName;
     }
 
-    public String getAppName()
-    {
+    public String getAppName() {
         return appName;
     }
 
-    public void setAppName(String appName)
-    {
+    public void setAppName(String appName) {
         this.appName = appName;
     }
 
-    public String getVersionName()
-    {
+    public String getVersionName() {
         return versionName;
     }
 
-    public void setVersionName(String versionName)
-    {
+    public void setVersionName(String versionName) {
         this.versionName = versionName;
     }
 
-    public int getVersionCode()
-    {
+    public int getVersionCode() {
         return versionCode;
     }
 
-    public void setVersionCode(int versionCode)
-    {
+    public void setVersionCode(int versionCode) {
         this.versionCode = versionCode;
     }
 
-    public Drawable getAppIcon()
-    {
+    public Drawable getAppIcon() {
         return appIcon;
     }
 
-    public void setAppIcon(Drawable appIcon)
-    {
+    public void setAppIcon(Drawable appIcon) {
         this.appIcon = appIcon;
     }
 
-    public boolean isSys()
-    {
+    public boolean isSys() {
         return isSys;
     }
 
-    public void setSys(boolean isSys)
-    {
+    public void setSys(boolean isSys) {
         this.isSys = isSys;
     }
 
-    public String getDataDir()
-    {
+    public String getDataDir() {
         return dataDir;
     }
 
-    public void setDataDir(String dataDir)
-    {
+    public void setDataDir(String dataDir) {
         this.dataDir = dataDir;
     }
 
-    public String getPublicSourceDir()
-    {
+    public String getPublicSourceDir() {
         return publicSourceDir;
     }
 
-    public void setPublicSourceDir(String publicSourceDir)
-    {
+    public void setPublicSourceDir(String publicSourceDir) {
         this.publicSourceDir = publicSourceDir;
     }
 
-    public long getFirstInstallTime()
-    {
+    public long getFirstInstallTime() {
         return firstInstallTime;
     }
 
-    public void setFirstInstallTime(long firstInstallTime)
-    {
+    public void setFirstInstallTime(long firstInstallTime) {
         this.firstInstallTime = firstInstallTime;
     }
 
-    public long getLastUpdateTime()
-    {
+    public long getLastUpdateTime() {
         return lastUpdateTime;
     }
 
-    public void setLastUpdateTime(long lastUpdateTime)
-    {
+    public void setLastUpdateTime(long lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
     }
 
-    public String getProcessName()
-    {
+    public String getProcessName() {
         return processName;
     }
 
-    public void setProcessName(String processName)
-    {
+    public void setProcessName(String processName) {
         this.processName = processName;
     }
 
-    public int getTargetSdkVersion()
-    {
+    public int getTargetSdkVersion() {
         return targetSdkVersion;
     }
 
-    public void setTargetSdkVersion(int targetSdkVersion)
-    {
+    public void setTargetSdkVersion(int targetSdkVersion) {
         this.targetSdkVersion = targetSdkVersion;
     }
 
-    public String getTargetOsVersion()
-    {
+    public String getTargetOsVersion() {
         return targetOsVersion;
     }
 
-    public void setTargetOsVersion(String targetOsVersion)
-    {
+    public void setTargetOsVersion(String targetOsVersion) {
         this.targetOsVersion = targetOsVersion;
     }
 
-    public String getNativeLibDir()
-    {
+    public String getNativeLibDir() {
         return nativeLibDir;
     }
 
-    public void setNativeLibDir(String nativeLibDir)
-    {
+    public void setNativeLibDir(String nativeLibDir) {
         this.nativeLibDir = nativeLibDir;
     }
 }

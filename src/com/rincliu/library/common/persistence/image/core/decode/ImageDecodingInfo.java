@@ -32,8 +32,7 @@ import com.rincliu.library.common.persistence.image.core.download.ImageDownloade
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.8.3
  */
-public class ImageDecodingInfo
-{
+public class ImageDecodingInfo {
 
     private final String imageKey;
 
@@ -52,8 +51,7 @@ public class ImageDecodingInfo
     private final Options decodingOptions;
 
     public ImageDecodingInfo(String imageKey, String imageUri, ImageSize targetSize, ViewScaleType viewScaleType,
-            ImageDownloader downloader, DisplayImageOptions displayOptions)
-    {
+            ImageDownloader downloader, DisplayImageOptions displayOptions) {
         this.imageKey = imageKey;
         this.imageUri = imageUri;
         this.targetSize = targetSize;
@@ -68,8 +66,7 @@ public class ImageDecodingInfo
         copyOptions(displayOptions.getDecodingOptions(), decodingOptions);
     }
 
-    private void copyOptions(Options srcOptions, Options destOptions)
-    {
+    private void copyOptions(Options srcOptions, Options destOptions) {
         destOptions.inDensity = srcOptions.inDensity;
         destOptions.inDither = srcOptions.inDither;
         destOptions.inInputShareable = srcOptions.inInputShareable;
@@ -88,14 +85,12 @@ public class ImageDecodingInfo
     }
 
     @TargetApi(10)
-    private void copyOptions10(Options srcOptions, Options destOptions)
-    {
+    private void copyOptions10(Options srcOptions, Options destOptions) {
         destOptions.inPreferQualityOverSpeed = srcOptions.inPreferQualityOverSpeed;
     }
 
     @TargetApi(11)
-    private void copyOptions11(Options srcOptions, Options destOptions)
-    {
+    private void copyOptions11(Options srcOptions, Options destOptions) {
         destOptions.inBitmap = srcOptions.inBitmap;
         destOptions.inMutable = srcOptions.inMutable;
     }
@@ -105,14 +100,12 @@ public class ImageDecodingInfo
      *         {@linkplain MemoryCacheUtil#generateKey(String, ImageSize)
      *         image key} (used in memory cache).
      */
-    public String getImageKey()
-    {
+    public String getImageKey() {
         return imageKey;
     }
 
     /** @return Image URI for decoding (usually image from disc cache) */
-    public String getImageUri()
-    {
+    public String getImageUri() {
         return imageUri;
     }
 
@@ -121,8 +114,7 @@ public class ImageDecodingInfo
      *         according to {@linkplain ImageScaleType image scale type} and
      *         {@linkplain ViewScaleType view scale type}.
      */
-    public ImageSize getTargetSize()
-    {
+    public ImageSize getTargetSize() {
         return targetSize;
     }
 
@@ -130,8 +122,7 @@ public class ImageDecodingInfo
      * @return {@linkplain ImageScaleType Scale type for image sampling and
      *         scaling}. This parameter affects result size of decoded bitmap.
      */
-    public ImageScaleType getImageScaleType()
-    {
+    public ImageScaleType getImageScaleType() {
         return imageScaleType;
     }
 
@@ -139,26 +130,22 @@ public class ImageDecodingInfo
      * @return {@linkplain ViewScaleType View scale type}. This parameter
      *         affects result size of decoded bitmap.
      */
-    public ViewScaleType getViewScaleType()
-    {
+    public ViewScaleType getViewScaleType() {
         return viewScaleType;
     }
 
     /** @return Downloader for image loading */
-    public ImageDownloader getDownloader()
-    {
+    public ImageDownloader getDownloader() {
         return downloader;
     }
 
     /** @return Auxiliary object for downloader */
-    public Object getExtraForDownloader()
-    {
+    public Object getExtraForDownloader() {
         return extraForDownloader;
     }
 
     /** @return Decoding options */
-    public Options getDecodingOptions()
-    {
+    public Options getDecodingOptions() {
         return decodingOptions;
     }
 }

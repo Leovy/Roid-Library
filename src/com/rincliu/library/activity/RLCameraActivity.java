@@ -43,8 +43,7 @@ import com.rincliu.library.util.RLSysUtil;
 import com.rincliu.library.widget.RLOnClickListener;
 import com.rincliu.library.widget.dialog.RLLoadingDialog;
 
-public class RLCameraActivity extends RLActivity
-{
+public class RLCameraActivity extends RLActivity {
     private Camera camera;
 
     private byte[] mData;
@@ -65,8 +64,7 @@ public class RLCameraActivity extends RLActivity
 
     @Override
     @SuppressWarnings("deprecation")
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
@@ -74,20 +72,16 @@ public class RLCameraActivity extends RLActivity
         maxWidth = getIntent().getIntExtra("maxWidth", 320);
         maxHeight = getIntent().getIntExtra("maxHeight", 480);
         maxSize = getIntent().getLongExtra("maxSize", 500 * 1024);
-        if (savePath == null)
-        {
+        if (savePath == null) {
             throw new IllegalArgumentException("You should put a 'savePath' string into the intent.");
         }
-        if (!RLSysUtil.isExternalStorageAvailable())
-        {
+        if (!RLSysUtil.isExternalStorageAvailable()) {
             throw new IllegalStateException("External storage is not available.");
         }
-        if (!savePath.endsWith(File.separator))
-        {
+        if (!savePath.endsWith(File.separator)) {
             savePath += File.separator;
         }
-        if (!new File(savePath).exists())
-        {
+        if (!new File(savePath).exists()) {
             new File(savePath).mkdirs();
         }
         outputFile = savePath + System.currentTimeMillis() + ".jpg";
@@ -99,16 +93,13 @@ public class RLCameraActivity extends RLActivity
         iv_camera = (ImageView) findViewById(R.id.iv_camera);
         SurfaceView surfaceView = (SurfaceView) this.findViewById(R.id.sv_camera);
 
-        if (getIntent().getBooleanExtra("isAutoFlash", false))
-        {
+        if (getIntent().getBooleanExtra("isAutoFlash", false)) {
             iv_flash.setVisibility(View.GONE);
             flashMode = Parameters.FLASH_MODE_AUTO;
         }
-        iv_flash.setOnClickListener(new RLOnClickListener()
-        {
+        iv_flash.setOnClickListener(new RLOnClickListener() {
             @Override
-            public void onClickX(View view)
-            {
+            public void onClickX(View view) {
                 isFlashEnabled = !isFlashEnabled;
                 flashMode = isFlashEnabled ? Parameters.FLASH_MODE_ON : Parameters.FLASH_MODE_OFF;
                 Parameters params = camera.getParameters();
@@ -118,17 +109,13 @@ public class RLCameraActivity extends RLActivity
                         isFlashEnabled ? R.drawable.btn_camera_flash_on : R.drawable.btn_camera_flash_off));
             }
         });
-        iv_yes.setOnClickListener(new RLOnClickListener()
-        {
+        iv_yes.setOnClickListener(new RLOnClickListener() {
             @Override
-            public void onClickX(View arg0)
-            {
+            public void onClickX(View arg0) {
                 pd.show();
-                new Thread()
-                {
+                new Thread() {
                     @Override
-                    public void run()
-                    {
+                    public void run() {
                         BitmapFactory.Options opts = new BitmapFactory.Options();
                         opts.inJustDecodeBounds = true;
                         Bitmap srcBmp = BitmapFactory.decodeByteArray(mData, 0, mData.length, opts);
@@ -136,12 +123,9 @@ public class RLCameraActivity extends RLActivity
                         int w = opts.outWidth;
                         int h = opts.outHeight;
                         int size = 0;
-                        if (w <= maxWidth && h <= maxHeight)
-                        {
+                        if (w <= maxWidth && h <= maxHeight) {
                             size = 1;
-                        }
-                        else
-                        {
+                        } else {
                             double scale = w >= h ? w / maxWidth : h / maxHeight;
                             double log = Math.log(scale) / Math.log(2);
                             double logCeil = Math.ceil(log);
@@ -151,8 +135,7 @@ public class RLCameraActivity extends RLActivity
                         srcBmp = BitmapFactory.decodeByteArray(mData, 0, mData.length, opts);
                         Bitmap dstBmp;
                         float degrees = 0f;
-                        switch (getDisplayRotation())
-                        {
+                        switch (getDisplayRotation()) {
                             case Surface.ROTATION_0:
                                 degrees = 90f;
                                 break;
@@ -170,43 +153,32 @@ public class RLCameraActivity extends RLActivity
                         matrix.reset();
                         matrix.postRotate(degrees);
                         dstBmp = Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(), srcBmp.getHeight(), matrix, true);
-                        if (!srcBmp.isRecycled())
-                        {
+                        if (!srcBmp.isRecycled()) {
                             srcBmp.recycle();
                         }
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         int quality = 100;
                         dstBmp.compress(CompressFormat.JPEG, quality, baos);
-                        while (baos.toByteArray().length > maxSize)
-                        {
+                        while (baos.toByteArray().length > maxSize) {
                             baos.reset();
                             dstBmp.compress(CompressFormat.JPEG, quality, baos);
                             quality -= 10;
                         }
-                        try
-                        {
+                        try {
                             baos.writeTo(new FileOutputStream(outputFile));
-                        }
-                        catch (Exception e)
-                        {
+                        } catch (Exception e) {
                             e.printStackTrace();
                             exit(false);
-                        }
-                        finally
-                        {
-                            try
-                            {
+                        } finally {
+                            try {
                                 baos.flush();
                                 baos.close();
-                            }
-                            catch (IOException e)
-                            {
+                            } catch (IOException e) {
                                 e.printStackTrace();
                                 exit(false);
                             }
                         }
-                        if (!dstBmp.isRecycled())
-                        {
+                        if (!dstBmp.isRecycled()) {
                             dstBmp.recycle();
                         }
                         getIntent().putExtra("outputFile", outputFile);
@@ -216,11 +188,9 @@ public class RLCameraActivity extends RLActivity
             }
         });
 
-        iv_no.setOnClickListener(new RLOnClickListener()
-        {
+        iv_no.setOnClickListener(new RLOnClickListener() {
             @Override
-            public void onClickX(View arg0)
-            {
+            public void onClickX(View arg0) {
                 camera.startPreview();
                 iv_yes.setVisibility(View.GONE);
                 iv_no.setVisibility(View.GONE);
@@ -228,16 +198,12 @@ public class RLCameraActivity extends RLActivity
             }
         });
 
-        iv_camera.setOnClickListener(new View.OnClickListener()
-        {
+        iv_camera.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                camera.takePicture(null, null, new PictureCallback()
-                {
+            public void onClick(View v) {
+                camera.takePicture(null, null, new PictureCallback() {
                     @Override
-                    public void onPictureTaken(byte[] data, Camera camera)
-                    {
+                    public void onPictureTaken(byte[] data, Camera camera) {
                         iv_yes.setVisibility(View.VISIBLE);
                         iv_no.setVisibility(View.VISIBLE);
                         iv_camera.setVisibility(View.GONE);
@@ -250,20 +216,16 @@ public class RLCameraActivity extends RLActivity
         surfaceView.setFocusable(true);
         surfaceView.setFocusableInTouchMode(true);
         SurfaceHolder holder = surfaceView.getHolder();
-        if (android.os.Build.VERSION.SDK_INT < 11)
-        {
+        if (android.os.Build.VERSION.SDK_INT < 11) {
             holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         }
-        holder.addCallback(new SurfaceHolder.Callback()
-        {
+        holder.addCallback(new SurfaceHolder.Callback() {
             @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height)
-            {
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
                 Camera.Parameters params = camera.getParameters();
                 params.setFlashMode(flashMode);
                 params.setPictureFormat(ImageFormat.JPEG);
-                switch (getDisplayRotation())
-                {
+                switch (getDisplayRotation()) {
                     case Surface.ROTATION_0:
                         params.setPreviewSize(height, width);
                         camera.setDisplayOrientation(90);
@@ -288,23 +250,17 @@ public class RLCameraActivity extends RLActivity
             }
 
             @Override
-            public void surfaceCreated(SurfaceHolder holder)
-            {
-                if (camera == null)
-                {
+            public void surfaceCreated(SurfaceHolder holder) {
+                if (camera == null) {
                     camera = Camera.open();
                 }
-                try
-                {
+                try {
                     camera.setPreviewDisplay(holder);
                     camera.startPreview();
-                    camera.autoFocus(new AutoFocusCallback()
-                    {
+                    camera.autoFocus(new AutoFocusCallback() {
                         @Override
-                        public void onAutoFocus(boolean success, Camera camera)
-                        {
-                            if (success)
-                            {
+                        public void onAutoFocus(boolean success, Camera camera) {
+                            if (success) {
                                 Camera.Parameters params = camera.getParameters();
                                 params.setFlashMode(flashMode);
                                 params.setPictureFormat(ImageFormat.JPEG);
@@ -314,16 +270,13 @@ public class RLCameraActivity extends RLActivity
                             }
                         }
                     });
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     camera.release();
                 }
             }
 
             @Override
-            public void surfaceDestroyed(SurfaceHolder holder)
-            {
+            public void surfaceDestroyed(SurfaceHolder holder) {
                 camera.stopPreview();
                 camera.release();
                 mData = null;
@@ -334,16 +287,12 @@ public class RLCameraActivity extends RLActivity
 
     private final Handler handler = new Handler();
 
-    private void exit(final boolean isSuccess)
-    {
+    private void exit(final boolean isSuccess) {
         mData = null;
-        handler.post(new Runnable()
-        {
+        handler.post(new Runnable() {
             @Override
-            public void run()
-            {
-                if (pd.isShowing())
-                {
+            public void run() {
+                if (pd.isShowing()) {
                     pd.dismiss();
                 }
                 setResult(isSuccess ? RESULT_OK : RESULT_CANCELED, getIntent());
@@ -354,8 +303,7 @@ public class RLCameraActivity extends RLActivity
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         super.onBackPressed();
         exit(false);
     }

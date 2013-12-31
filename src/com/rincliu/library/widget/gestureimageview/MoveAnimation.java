@@ -18,8 +18,7 @@ package com.rincliu.library.widget.gestureimageview;
 /**
  * @author Jason Polites
  */
-public class MoveAnimation implements Animation
-{
+public class MoveAnimation implements Animation {
 
     private boolean firstFrame = true;
 
@@ -44,36 +43,29 @@ public class MoveAnimation implements Animation
      * , long)
      */
     @Override
-    public boolean update(GestureImageView view, long time)
-    {
+    public boolean update(GestureImageView view, long time) {
         totalTime += time;
 
-        if (firstFrame)
-        {
+        if (firstFrame) {
             firstFrame = false;
             startX = view.getImageX();
             startY = view.getImageY();
         }
 
-        if (totalTime < animationTimeMS)
-        {
+        if (totalTime < animationTimeMS) {
 
             float ratio = (float) totalTime / animationTimeMS;
 
             float newX = ((targetX - startX) * ratio) + startX;
             float newY = ((targetY - startY) * ratio) + startY;
 
-            if (moveAnimationListener != null)
-            {
+            if (moveAnimationListener != null) {
                 moveAnimationListener.onMove(newX, newY);
             }
 
             return true;
-        }
-        else
-        {
-            if (moveAnimationListener != null)
-            {
+        } else {
+            if (moveAnimationListener != null) {
                 moveAnimationListener.onMove(targetX, targetY);
             }
         }
@@ -81,44 +73,36 @@ public class MoveAnimation implements Animation
         return false;
     }
 
-    public void reset()
-    {
+    public void reset() {
         firstFrame = true;
         totalTime = 0;
     }
 
-    public float getTargetX()
-    {
+    public float getTargetX() {
         return targetX;
     }
 
-    public void setTargetX(float targetX)
-    {
+    public void setTargetX(float targetX) {
         this.targetX = targetX;
     }
 
-    public float getTargetY()
-    {
+    public float getTargetY() {
         return targetY;
     }
 
-    public void setTargetY(float targetY)
-    {
+    public void setTargetY(float targetY) {
         this.targetY = targetY;
     }
 
-    public long getAnimationTimeMS()
-    {
+    public long getAnimationTimeMS() {
         return animationTimeMS;
     }
 
-    public void setAnimationTimeMS(long animationTimeMS)
-    {
+    public void setAnimationTimeMS(long animationTimeMS) {
         this.animationTimeMS = animationTimeMS;
     }
 
-    public void setMoveAnimationListener(MoveAnimationListener moveAnimationListener)
-    {
+    public void setMoveAnimationListener(MoveAnimationListener moveAnimationListener) {
         this.moveAnimationListener = moveAnimationListener;
     }
 }

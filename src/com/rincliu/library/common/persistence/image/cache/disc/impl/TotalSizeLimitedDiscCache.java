@@ -30,8 +30,7 @@ import java.io.File;
  * @see LimitedDiscCache
  * @since 1.0.0
  */
-public class TotalSizeLimitedDiscCache extends LimitedDiscCache
-{
+public class TotalSizeLimitedDiscCache extends LimitedDiscCache {
 
     private static final int MIN_NORMAL_CACHE_SIZE_IN_MB = 2;
 
@@ -45,8 +44,7 @@ public class TotalSizeLimitedDiscCache extends LimitedDiscCache
      *            size exceeds this limit then file with the most oldest last
      *            usage date will be deleted.
      */
-    public TotalSizeLimitedDiscCache(File cacheDir, int maxCacheSize)
-    {
+    public TotalSizeLimitedDiscCache(File cacheDir, int maxCacheSize) {
         this(cacheDir, DefaultConfigurationFactory.createFileNameGenerator(), maxCacheSize);
     }
 
@@ -59,18 +57,15 @@ public class TotalSizeLimitedDiscCache extends LimitedDiscCache
      *            size exceeds this limit then file with the most oldest last
      *            usage date will be deleted.
      */
-    public TotalSizeLimitedDiscCache(File cacheDir, FileNameGenerator fileNameGenerator, int maxCacheSize)
-    {
+    public TotalSizeLimitedDiscCache(File cacheDir, FileNameGenerator fileNameGenerator, int maxCacheSize) {
         super(cacheDir, fileNameGenerator, maxCacheSize);
-        if (maxCacheSize < MIN_NORMAL_CACHE_SIZE)
-        {
+        if (maxCacheSize < MIN_NORMAL_CACHE_SIZE) {
             L.w("You set too small disc cache size (less than %1$d Mb)", MIN_NORMAL_CACHE_SIZE_IN_MB);
         }
     }
 
     @Override
-    protected int getSize(File file)
-    {
+    protected int getSize(File file) {
         return (int) file.length();
     }
 }
