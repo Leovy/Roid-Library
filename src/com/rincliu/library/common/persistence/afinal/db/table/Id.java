@@ -15,5 +15,4 @@
  */
 package com.rincliu.library.common.persistence.afinal.db.table;
 
-public class Id extends Property {
-}
+public class Id extends Property {}
