@@ -2,7 +2,7 @@ Common Modules
 ==========
 * Async http request: [AsyncHttpClient](https://github.com/loopj/android-async-http)；
 * Image loading/display/cache: [UniversalImageLoader](https://github.com/nostra13/Android-Universal-Image-Loader);
-* Other: FinalActivity(Supports view annotation) and FinalDB(A SQLite helper);
+* Other: <code>FinalActivity</code>(Supports view annotation) and <code>FinalDB</code>(A SQLite helper);
 
 3rd Party Modules
 ==========
@@ -17,16 +17,16 @@ Common Modules
 Widgets and Utils
 ==========
 * ROOT Utils: [RootManager](https://github.com/Chrisplus/RootManager)；
-* QR bar scanning: zxing；
+* QR bar scanning: <code>zxing</code>；
 * Global CrashHandler；
-* API compatibility Util: RLAPICompat；
-* RLCameraActivity: A custom camera.(Supports compress.)
-* View switcher: ViewFlow；
-* Sliding menu: MenuDrawer；
-* GestureImageView: Support to scale ImageView with gesture；
-* Custom dialogs：RLDialog、RLAlertDialog、RLListDialog、RLLoadingDialog;
-* Other custom widgets: RLFileExplorer、RLSpinner、RLWebView、RLOnClickListener；
-* Utils：RLBluetoothHelper、RLAppUtil、RLFileUtil、RLImgUtil、RLIntentUtil、RLJsonUtil、RLNetUtil、RLStrUtil、RLSysUtil、RLUiUtil；
+* API compatibility Util: <code>RLAPICompat</code>；
+* <code>RLCameraActivity</code>: A custom camera.(Supports compress.)
+* View switcher: <code>ViewFlow</code>；
+* Sliding menu: <code>MenuDrawer</code>；
+* <code>GestureImageView</code>: Support to scale ImageView with gesture；
+* Custom dialogs：<code>RLDialog</code>、<code>RLAlertDialog</code>、<code>RLListDialog</code>、<code>RLLoadingDialog</code>;
+* Other custom widgets: <code>RLFileExplorer</code>、<code>RLSpinner</code>、<code>RLWebView</code>、<code>RLOnClickListener</code>；
+* Utils：<code>RLBluetoothHelper</code>、<code>RLAppUtil</code>、<code>RLFileUtil</code>、<code>RLImgUtil</code>、<code>RLIntentUtil</code>、<code>RLJsonUtil</code>、<code>RLNetUtil</code>、<code>RLStrUtil</code>、<code>RLSysUtil</code>、<code>RLUiUtil</code>；
 
 Usage
 ==========
