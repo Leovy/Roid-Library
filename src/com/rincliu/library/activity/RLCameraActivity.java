@@ -66,23 +66,27 @@ public class RLCameraActivity extends RLActivity {
     @SuppressWarnings("deprecation")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        if (!RLSysUtil.isExternalStorageAvailable()) {
+            exit(false);
+        }
+        
         setContentView(R.layout.activity_camera);
 
         String savePath = getIntent().getStringExtra("savePath");
         maxWidth = getIntent().getIntExtra("maxWidth", 320);
         maxHeight = getIntent().getIntExtra("maxHeight", 480);
         maxSize = getIntent().getLongExtra("maxSize", 500 * 1024);
-        if (savePath == null) {
-            throw new IllegalArgumentException("You should put a 'savePath' string into the intent.");
-        }
-        if (!RLSysUtil.isExternalStorageAvailable()) {
-            throw new IllegalStateException("External storage is not available.");
+        
+        if (TextUtils.isEmpty(savePath)) {
+            savePath = Environment.getExternalStorageDirectory() + File.separator + Environment.DIRECTORY_DCIM;
+        } else {
+            if (!new File(savePath).exists()) {
+                new File(savePath).mkdirs();
+            }
         }
         if (!savePath.endsWith(File.separator)) {
             savePath += File.separator;
-        }
-        if (!new File(savePath).exists()) {
-            new File(savePath).mkdirs();
         }
         outputFile = savePath + System.currentTimeMillis() + ".jpg";
 
