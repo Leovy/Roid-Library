@@ -264,8 +264,14 @@ public class RLCameraActivity extends RLActivity {
                                 Camera.Parameters params = camera.getParameters();
                                 params.setFlashMode(flashMode);
                                 params.setPictureFormat(ImageFormat.JPEG);
-                                Size size = params.getSupportedPreviewSizes().get(0);
-                                params.setPreviewSize(size.width, size.height);
+                                int maxPreviewWidth = 0, maxPreviewHeight = 0;
+                                for (Size size : params.getSupportedPreviewSizes()) {
+                                    if (size.width >= maxWidth || size.height >= maxHeight) {
+                                        maxPreviewWidth = size.width;
+                                        maxPreviewHeight = size.height;
+                                    }
+                                }
+                                params.setPreviewSize(maxPreviewWidth, maxPreviewHeight);
                                 camera.setParameters(params);
                             }
                         }
