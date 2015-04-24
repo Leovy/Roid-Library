@@ -243,24 +243,19 @@ public class RLCameraActivity extends RLActivity {
                 params.setPictureFormat(ImageFormat.JPEG);
                 switch (getDisplayRotation()) {
                     case Surface.ROTATION_0:
-                        params.setPreviewSize(height, width);
                         camera.setDisplayOrientation(90);
                         break;
                     case Surface.ROTATION_90:
-                        params.setPreviewSize(width, height);
                         camera.setDisplayOrientation(0);
                         break;
                     case Surface.ROTATION_180:
-                        params.setPreviewSize(height, width);
                         camera.setDisplayOrientation(270);
                         break;
                     case Surface.ROTATION_270:
-                        params.setPreviewSize(width, height);
                         camera.setDisplayOrientation(180);
                         break;
                 }
-                Size size = params.getSupportedPreviewSizes().get(0);
-                params.setPreviewSize(size.width, size.height);
+                setBestPreviewSize(params);
                 camera.setParameters(params);
                 camera.startPreview();
             }
@@ -280,14 +275,7 @@ public class RLCameraActivity extends RLActivity {
                                 Camera.Parameters params = camera.getParameters();
                                 params.setFlashMode(flashMode);
                                 params.setPictureFormat(ImageFormat.JPEG);
-                                int maxPreviewWidth = 0, maxPreviewHeight = 0;
-                                for (Size size : params.getSupportedPreviewSizes()) {
-                                    if (size.width >= maxWidth || size.height >= maxHeight) {
-                                        maxPreviewWidth = size.width;
-                                        maxPreviewHeight = size.height;
-                                    }
-                                }
-                                params.setPreviewSize(maxPreviewWidth, maxPreviewHeight);
+                                setBestPreviewSize(params);
                                 camera.setParameters(params);
                             }
                         }
@@ -305,6 +293,20 @@ public class RLCameraActivity extends RLActivity {
                 camera = null;
             }
         });
+    }
+    
+    private void setBestPreviewSize(Camera.Parameters params)
+    {
+        int maxPreviewWidth = 0, maxPreviewHeight = 0;
+        for (Size size : params.getSupportedPreviewSizes())
+        {
+            if (size.width >= maxWidth || size.height >= maxHeight)
+            {
+                maxPreviewWidth = size.width;
+                maxPreviewHeight = size.height;
+            }
+        }
+        params.setPreviewSize(maxPreviewWidth, maxPreviewHeight);
     }
 
     private final Handler handler = new Handler();
