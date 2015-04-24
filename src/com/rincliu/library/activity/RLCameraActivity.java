@@ -30,6 +30,9 @@ import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.Size;
+import android.media.MediaScannerConnection;
+import android.media.MediaScannerConnection.OnScanCompletedListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Surface;
@@ -186,7 +189,16 @@ public class RLCameraActivity extends RLActivity {
                             dstBmp.recycle();
                         }
                         getIntent().putExtra("outputFile", outputFile);
-                        exit(true);
+                        
+                        String path = new File(outputFile).getParent();
+                        String mime = "image/jpg";
+                        MediaScannerConnection.scanFile(RLCameraActivity.this, new String[] {path}, new String[] {mime},
+                                new OnScanCompletedListener() {
+                                    @Override
+                                    public void onScanCompleted(String arg0, Uri arg1) {
+                                        exit(true);
+                                    }
+                                });
                     }
                 }.start();
             }
