@@ -114,21 +114,28 @@ public class RLImgUtil {
         opts.inJustDecodeBounds = false;
         int w = opts.outWidth;
         int h = opts.outHeight;
-        int size = 0;
-        if (w <= maxWidth && h <= maxHeight) {
-            size = 1;
-        } else {
+        int sampleSize = 0;
+        if (w > maxWidth || h > maxHeight) {
             // The decoder uses a final value based on powers of 2,
             // any other value will be rounded down to the nearest power of 2.
             // So we use a ceil log value to keep both of them under limits.
             // See doc:
             // http://developer.android.com/reference/android/graphics/BitmapFactory.Options.html#inSampleSize
-            double scale = w >= h ? w / maxWidth : h / maxHeight;
+            double scale = 1;
+            if (w > maxWidth) {
+                if (h > maxHeight) {
+                    scale = w > h ? w / maxWidth : h / maxHeight;
+                } else {
+                    scale = w / maxWidth;
+                }
+            } else {
+                scale = h / maxHeight;
+            }
             double log = Math.log(scale) / Math.log(2);
             double logCeil = Math.ceil(log);
-            size = (int) Math.pow(2, logCeil);
+            sampleSize = (int) Math.pow(2, logCeil);
         }
-        opts.inSampleSize = size;
+        opts.inSampleSize = sampleSize;
         bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, opts);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         int quality = 100;
@@ -221,7 +228,7 @@ public class RLImgUtil {
      * @param bytes
      * @return
      */
-    public static Bitmap bytes2Bimap(byte[] bytes) {
+    public static Bitmap bytes2Bitmap(byte[] bytes) {
         if (bytes.length != 0) {
             return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         } else {
