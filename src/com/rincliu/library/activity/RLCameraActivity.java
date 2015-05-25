@@ -77,9 +77,11 @@ public class RLCameraActivity extends RLActivity {
         setContentView(R.layout.activity_camera);
 
         String savePath = getIntent().getStringExtra("savePath");
-        maxWidth = getIntent().getIntExtra("maxWidth", 320);
-        maxHeight = getIntent().getIntExtra("maxHeight", 480);
-        maxSize = getIntent().getLongExtra("maxSize", 500 * 1024);
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        maxWidth = getIntent().getIntExtra("maxWidth", dm.widthPixels);
+        maxHeight = getIntent().getIntExtra("maxHeight", dm.heightPixels);
+        maxSize = getIntent().getLongExtra("maxSize", 4 * dm.widthPixels * dm.heightPixels);
         
         if (TextUtils.isEmpty(savePath)) {
             savePath = Environment.getExternalStorageDirectory() + File.separator + Environment.DIRECTORY_DCIM;
@@ -130,9 +132,7 @@ public class RLCameraActivity extends RLActivity {
                         int w = opts.outWidth;
                         int h = opts.outHeight;
                         int size = 0;
-                        if (w <= maxWidth && h <= maxHeight) {
-                            size = 1;
-                        } else {
+                        if (w > maxWidth || h > maxHeight) {
                             double scale = w >= h ? w / maxWidth : h / maxHeight;
                             double log = Math.log(scale) / Math.log(2);
                             double logCeil = Math.ceil(log);
