@@ -17,6 +17,7 @@ package com.rincliu.library.util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -24,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import android.os.Environment;
+import android.util.Base64;
+import android.util.Base64OutputStream;
 
 public class RLFileUtil {
 
@@ -211,5 +214,36 @@ public class RLFileUtil {
             }
         }
         return size;
+    }
+    
+    /**
+     * 
+     * @param file
+     * @return
+     */
+    public static String fileToBase64(String file) {
+        String result= null;
+        try {
+            FileInputStream fis = new FileInputStream(new File(file));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            Base64OutputStream base64out = new Base64OutputStream(baos, Base64.NO_WRAP);
+            byte[] buffer = new byte[3 * 512];
+            int len = 0;
+            while ((len = fis.read(buffer)) >= 0) {
+                base64out.write(buffer, 0, len);
+            }
+            base64out.flush();
+            base64out.close();
+            /*
+             * Why should we close Base64OutputStream before processing the data:
+             * http://stackoverflow.com/questions/24798745/android-file-to-base64-using-streaming-sometimes-missed-2-bytes
+             */
+            result = new String(baos.toByteArray(), "UTF-8");
+            baos.close();
+            fis.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
