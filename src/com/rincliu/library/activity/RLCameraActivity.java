@@ -300,7 +300,7 @@ public class RLCameraActivity extends RLActivity {
         int maxPreviewWidth = 0, maxPreviewHeight = 0;
         for (Size size : params.getSupportedPreviewSizes())
         {
-            if (size.width >= maxWidth || size.height >= maxHeight)
+            if (size.width >= maxPreviewWidth || size.height >= maxPreviewHeight)
             {
                 maxPreviewWidth = size.width;
                 maxPreviewHeight = size.height;
