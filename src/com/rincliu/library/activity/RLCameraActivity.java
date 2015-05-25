@@ -133,7 +133,16 @@ public class RLCameraActivity extends RLActivity {
                         int h = opts.outHeight;
                         int size = 0;
                         if (w > maxWidth || h > maxHeight) {
-                            double scale = w >= h ? w / maxWidth : h / maxHeight;
+                            double scale = 1;
+                            if (w > maxWidth) {
+                                if (h > maxHeight) {
+                                    scale = w > h ? w / maxWidth : h / maxHeight;
+                                } else {
+                                    scale = w / maxWidth;
+                                }
+                            } else {
+                                scale = h / maxHeight;
+                            }
                             double log = Math.log(scale) / Math.log(2);
                             double logCeil = Math.ceil(log);
                             size = (int) Math.pow(2, logCeil);
