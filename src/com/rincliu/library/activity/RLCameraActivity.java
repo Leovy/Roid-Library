@@ -169,9 +169,6 @@ public class RLCameraActivity extends RLActivity {
                         matrix.reset();
                         matrix.postRotate(degrees);
                         dstBmp = Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(), srcBmp.getHeight(), matrix, true);
-                        if (!srcBmp.isRecycled()) {
-                            srcBmp.recycle();
-                        }
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         int quality = 100;
                         dstBmp.compress(CompressFormat.JPEG, quality, baos);
@@ -196,6 +193,9 @@ public class RLCameraActivity extends RLActivity {
                         }
                         if (!dstBmp.isRecycled()) {
                             dstBmp.recycle();
+                        }
+                        if (!srcBmp.isRecycled()) {
+                            srcBmp.recycle();
                         }
                         getIntent().putExtra("outputFile", outputFile);
                         
