@@ -5,7 +5,7 @@
         <item name="android:windowNoTitle">true</item>
     </style>
     
-    <style name="LAUNCH_PAGE_THEME" parent="COMMON_PAGE_THEME">
+    <style name="FULLSCREEN_PAGE_THEME" parent="COMMON_PAGE_THEME">
         <item name="android:windowFullscreen">true</item>
     </style>
     
