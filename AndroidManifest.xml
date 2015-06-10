@@ -165,9 +165,9 @@
         <!-- #################### RLCameraActivity START #################### -->
         <activity
             android:name="com.rincliu.library.activity.RLCameraActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="orientation|screenSize"
             android:screenOrientation="sensor"
-            android:theme="@style/COMMON_PAGE_THEME" />
+            android:theme="@style/FULLSCREEN_PAGE_THEME" />
         <!-- #################### RLCameraActivity START #################### -->
 
 
