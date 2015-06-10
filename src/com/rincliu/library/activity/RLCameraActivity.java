@@ -220,6 +220,7 @@ public class RLCameraActivity extends RLActivity {
                 iv_yes.setVisibility(View.GONE);
                 iv_no.setVisibility(View.GONE);
                 iv_camera.setVisibility(View.VISIBLE);
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
             }
         });
 
@@ -233,6 +234,21 @@ public class RLCameraActivity extends RLActivity {
                         iv_no.setVisibility(View.VISIBLE);
                         iv_camera.setVisibility(View.GONE);
                         mData = data;
+                        switch (getDisplayRotation())
+                        {
+                            case Surface.ROTATION_0:
+                                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                                break;
+                            case Surface.ROTATION_90:
+                                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                                break;
+                            case Surface.ROTATION_180:
+                                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                                break;
+                            case Surface.ROTATION_270:
+                                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                                break;
+                        }
                     }
                 });
             }
